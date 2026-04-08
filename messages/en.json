@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Ora Mundi",
+    "prayingNow": "{count} praying now",
+    "connectingHearts": "Connecting Hearts Worldwide",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "createAccount": "Create Account",
+    "continue": "Continue",
+    "back": "Back",
+    "or": "or",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "map": "Map",
+    "pray": "Pray",
+    "intentions": "Intentions",
+    "profile": "Profile"
+  },
+  "auth": {
+    "welcome": "Welcome to the Sanctuary",
+    "email": "Email address",
+    "password": "Password",
+    "displayName": "Display name",
+    "continueWithGoogle": "Continue with Google",
+    "joinTheCircle": "Join the Circle",
+    "alreadyHaveAccount": "Already have an account? Sign in"
+  },
+  "onboarding": {
+    "step1Title": "You never pray alone.",
+    "step1Sub": "Join thousands who pray the Rosary every day — together, across the world.",
+    "step2Title": "Make prayer visible.",
+    "step2Sub": "See real-time prayer on a live world map. Every rosary lights up a candle.",
+    "step3Title": "Carry each other in prayer.",
+    "step3Sub": "Share intentions, pray for others, and let the world carry you in prayer.",
+    "getStarted": "Get Started"
+  },
+  "map": {
+    "guidedPrayer": "Guided Prayer",
+    "quickLog": "Quick Log",
+    "theHolyRosary": "The Holy Rosary",
+    "today": "Today: {mystery}",
+    "startRosary": "Start Rosary"
+  },
+  "pray": {
+    "decadeOf": "Decade {current} of {total}",
+    "beadOf": "Bead {current} of {total}",
+    "apostlesCreed": "Apostles' Creed",
+    "ourFather": "Our Father",
+    "hailMary": "Hail Mary",
+    "gloryBe": "Glory Be",
+    "fatimaPrayer": "Fatima Prayer",
+    "hailHolyQueen": "Hail Holy Queen",
+    "pause": "Pause",
+    "resume": "Resume",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish"
+  },
+  "intentions": {
+    "sacredIntentions": "Sacred Intentions",
+    "all": "All",
+    "myIntentions": "My Intentions",
+    "shareIntention": "Share Your Intention",
+    "placeholder": "What would you like others to pray for?",
+    "postAnonymously": "Post anonymously",
+    "share": "Share Intention",
+    "pray": "Pray",
+    "prayed": "Prayed",
+    "noIntentions": "No intentions yet. Be the first to share.",
+    "noMyIntentions": "You haven't shared any intentions yet.",
+    "bibleQuote": "\"Bear one another's burdens, and so fulfill the law of Christ.\"",
+    "bibleRef": "Galatians 6:2"
+  },
+  "profile": {
+    "welcomeHome": "Welcome home,",
+    "dayStreak": "{count}-day Streak",
+    "streakWeek": "You've been praying every day this week!",
+    "streakKeepGoing": "Keep going! {remaining} more days to a full week.",
+    "rosaries": "Rosaries",
+    "minutes": "Minutes",
+    "intentionsCount": "Intentions",
+    "todaysMystery": "Today's Mystery",
+    "prayNow": "Pray Now",
+    "prayerHistory": "Prayer History",
+    "noPrayers": "No prayers yet. Start your first rosary!",
+    "inProgress": "In progress",
+    "completed": "Completed",
+    "padrepio": "\"Pray, hope and don't worry. Worry is useless. God is merciful and will hear your prayer.\""
+  },
+  "mysteries": {
+    "joyful": "Joyful Mysteries",
+    "luminous": "Luminous Mysteries",
+    "sorrowful": "Sorrowful Mysteries",
+    "glorious": "Glorious Mysteries"
+  }
+}

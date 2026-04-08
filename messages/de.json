@@ -1,0 +1,99 @@
+{
+  "common": {
+    "appName": "Ora Mundi",
+    "prayingNow": "{count} beten gerade",
+    "connectingHearts": "Herzen weltweit verbunden",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "createAccount": "Konto erstellen",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "or": "oder",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "loading": "Laden..."
+  },
+  "nav": {
+    "map": "Karte",
+    "pray": "Beten",
+    "intentions": "Anliegen",
+    "profile": "Profil"
+  },
+  "auth": {
+    "welcome": "Willkommen im Heiligtum",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "displayName": "Anzeigename",
+    "continueWithGoogle": "Weiter mit Google",
+    "joinTheCircle": "Dem Kreis beitreten",
+    "alreadyHaveAccount": "Bereits ein Konto? Anmelden"
+  },
+  "onboarding": {
+    "step1Title": "Du betest nie allein.",
+    "step1Sub": "Schließe dich Tausenden an, die jeden Tag gemeinsam den Rosenkranz beten — weltweit.",
+    "step2Title": "Gebet sichtbar machen.",
+    "step2Sub": "Sieh Echtzeit-Gebet auf einer Weltkarte. Jeder Rosenkranz entzündet eine Kerze.",
+    "step3Title": "Tragt einander im Gebet.",
+    "step3Sub": "Teile Gebetsanliegen, bete für andere und lass die Welt für dich beten.",
+    "getStarted": "Jetzt Starten"
+  },
+  "map": {
+    "guidedPrayer": "Geführtes Gebet",
+    "quickLog": "Schnell-Eintrag",
+    "theHolyRosary": "Der Heilige Rosenkranz",
+    "today": "Heute: {mystery}",
+    "startRosary": "Rosenkranz starten"
+  },
+  "pray": {
+    "decadeOf": "Gesätz {current} von {total}",
+    "beadOf": "Perle {current} von {total}",
+    "apostlesCreed": "Apostolisches Glaubensbekenntnis",
+    "ourFather": "Vater unser",
+    "hailMary": "Gegrüßet seist du, Maria",
+    "gloryBe": "Ehre sei dem Vater",
+    "fatimaPrayer": "Fatima-Gebet",
+    "hailHolyQueen": "Salve Regina",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "finish": "Fertig"
+  },
+  "intentions": {
+    "sacredIntentions": "Heilige Anliegen",
+    "all": "Alle",
+    "myIntentions": "Meine Anliegen",
+    "shareIntention": "Dein Gebetsanliegen teilen",
+    "placeholder": "Wofür möchtest du, dass andere beten?",
+    "postAnonymously": "Anonym posten",
+    "share": "Anliegen teilen",
+    "pray": "Beten",
+    "prayed": "Gebetet",
+    "noIntentions": "Noch keine Anliegen. Sei der Erste.",
+    "noMyIntentions": "Du hast noch keine Anliegen geteilt.",
+    "bibleQuote": "\u201EEiner trage des andern Last, so werdet ihr das Gesetz Christi erf\u00FCllen.\u201C",
+    "bibleRef": "Galater 6,2"
+  },
+  "profile": {
+    "welcomeHome": "Willkommen zuhause,",
+    "dayStreak": "{count}-Tage-Serie",
+    "streakWeek": "Du hast diese Woche jeden Tag gebetet!",
+    "streakKeepGoing": "Weiter so! Noch {remaining} Tage bis zur vollen Woche.",
+    "rosaries": "Rosenkränze",
+    "minutes": "Minuten",
+    "intentionsCount": "Anliegen",
+    "todaysMystery": "Heutiges Geheimnis",
+    "prayNow": "Jetzt beten",
+    "prayerHistory": "Gebetsverlauf",
+    "noPrayers": "Noch keine Gebete. Starte deinen ersten Rosenkranz!",
+    "inProgress": "Läuft",
+    "completed": "Abgeschlossen",
+    "padrepio": "\u201EBete, hoffe und sorge dich nicht. Sorgen sind nutzlos. Gott ist barmherzig und wird dein Gebet erh\u00F6ren.\u201C"
+  },
+  "mysteries": {
+    "joyful": "Freudenreicher Rosenkranz",
+    "luminous": "Lichtreicher Rosenkranz",
+    "sorrowful": "Schmerzhafter Rosenkranz",
+    "glorious": "Glorreicher Rosenkranz"
+  }
+}

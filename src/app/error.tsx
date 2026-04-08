@@ -1,0 +1,29 @@
+"use client";
+
+import { MaterialIcon } from "@/components/material-icon";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6">
+      <MaterialIcon name="error_outline" size={64} className="text-error/40 mb-4" />
+      <h2 className="font-headline italic text-2xl text-on-surface mb-2">
+        Something went wrong
+      </h2>
+      <p className="text-on-surface-variant text-sm text-center mb-6 max-w-xs">
+        {error.message || "An unexpected error occurred. Please try again."}
+      </p>
+      <button
+        onClick={reset}
+        className="px-6 py-3 bg-primary-container text-on-primary-container font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}

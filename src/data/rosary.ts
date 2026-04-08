@@ -1,0 +1,211 @@
+export type MysteryType = "joyful" | "luminous" | "sorrowful" | "glorious";
+
+export interface Mystery {
+  title: { de: string; en: string };
+  subtitle: { de: string; en: string };
+  scripture: { de: string; en: string };
+  fruit: { de: string; en: string };
+}
+
+export interface MysterySet {
+  type: MysteryType;
+  name: { de: string; en: string };
+  icon: string;
+  mysteries: Mystery[];
+  day: string[];
+}
+
+export const MYSTERY_SETS: MysterySet[] = [
+  {
+    type: "joyful",
+    name: { de: "Freudenreicher Rosenkranz", en: "Joyful Mysteries" },
+    icon: "sentiment_very_satisfied",
+    day: ["monday", "saturday"],
+    mysteries: [
+      {
+        title: { de: "Die Verkündigung des Herrn", en: "The Annunciation" },
+        subtitle: { de: "Der Engel Gabriel wird zu Maria gesandt", en: "The Angel Gabriel is sent to Mary" },
+        scripture: { de: "Lk 1,26-38", en: "Luke 1:26-38" },
+        fruit: { de: "Demut", en: "Humility" },
+      },
+      {
+        title: { de: "Der Besuch Marias bei Elisabeth", en: "The Visitation" },
+        subtitle: { de: "Maria besucht ihre Cousine Elisabeth", en: "Mary visits her cousin Elizabeth" },
+        scripture: { de: "Lk 1,39-56", en: "Luke 1:39-56" },
+        fruit: { de: "Nächstenliebe", en: "Charity" },
+      },
+      {
+        title: { de: "Die Geburt Jesu", en: "The Nativity" },
+        subtitle: { de: "Jesus wird in Bethlehem geboren", en: "Jesus is born in Bethlehem" },
+        scripture: { de: "Lk 2,1-20", en: "Luke 2:1-20" },
+        fruit: { de: "Armut im Geiste", en: "Poverty of Spirit" },
+      },
+      {
+        title: { de: "Die Darstellung Jesu im Tempel", en: "The Presentation" },
+        subtitle: { de: "Jesus wird im Tempel dargestellt", en: "Jesus is presented in the Temple" },
+        scripture: { de: "Lk 2,22-40", en: "Luke 2:22-40" },
+        fruit: { de: "Gehorsam", en: "Obedience" },
+      },
+      {
+        title: { de: "Die Auffindung Jesu im Tempel", en: "Finding Jesus in the Temple" },
+        subtitle: { de: "Der zwölfjährige Jesus im Tempel", en: "The twelve-year-old Jesus in the Temple" },
+        scripture: { de: "Lk 2,41-52", en: "Luke 2:41-52" },
+        fruit: { de: "Freude an Gott", en: "Joy in Finding Jesus" },
+      },
+    ],
+  },
+  {
+    type: "luminous",
+    name: { de: "Lichtreicher Rosenkranz", en: "Luminous Mysteries" },
+    icon: "light_mode",
+    day: ["thursday"],
+    mysteries: [
+      {
+        title: { de: "Die Taufe Jesu im Jordan", en: "The Baptism of Jesus" },
+        subtitle: { de: "Jesus wird von Johannes getauft", en: "Jesus is baptized by John" },
+        scripture: { de: "Mt 3,13-17", en: "Matthew 3:13-17" },
+        fruit: { de: "Offenheit für den Heiligen Geist", en: "Openness to the Holy Spirit" },
+      },
+      {
+        title: { de: "Die Hochzeit zu Kana", en: "The Wedding at Cana" },
+        subtitle: { de: "Jesus verwandelt Wasser in Wein", en: "Jesus changes water into wine" },
+        scripture: { de: "Joh 2,1-12", en: "John 2:1-12" },
+        fruit: { de: "Vertrauen auf Marias Fürsprache", en: "Trust in Mary's intercession" },
+      },
+      {
+        title: { de: "Die Verkündigung des Reiches Gottes", en: "The Proclamation of the Kingdom" },
+        subtitle: { de: "Jesus verkündet das Reich Gottes", en: "Jesus proclaims the Kingdom of God" },
+        scripture: { de: "Mk 1,14-15", en: "Mark 1:14-15" },
+        fruit: { de: "Umkehr", en: "Conversion" },
+      },
+      {
+        title: { de: "Die Verklärung Jesu", en: "The Transfiguration" },
+        subtitle: { de: "Jesus wird auf dem Berg verklärt", en: "Jesus is transfigured on the mountain" },
+        scripture: { de: "Mt 17,1-8", en: "Matthew 17:1-8" },
+        fruit: { de: "Sehnsucht nach Heiligkeit", en: "Desire for Holiness" },
+      },
+      {
+        title: { de: "Die Einsetzung der Eucharistie", en: "The Institution of the Eucharist" },
+        subtitle: { de: "Jesus setzt die Eucharistie ein", en: "Jesus institutes the Eucharist" },
+        scripture: { de: "Mt 26,26-28", en: "Matthew 26:26-28" },
+        fruit: { de: "Eucharistische Anbetung", en: "Eucharistic Adoration" },
+      },
+    ],
+  },
+  {
+    type: "sorrowful",
+    name: { de: "Schmerzhafter Rosenkranz", en: "Sorrowful Mysteries" },
+    icon: "water_drop",
+    day: ["tuesday", "friday"],
+    mysteries: [
+      {
+        title: { de: "Das Gebet am Ölberg", en: "The Agony in the Garden" },
+        subtitle: { de: "Jesus betet im Garten Getsemani", en: "Jesus prays in the Garden of Gethsemane" },
+        scripture: { de: "Mt 26,36-46", en: "Matthew 26:36-46" },
+        fruit: { de: "Reue über die Sünden", en: "Contrition for our sins" },
+      },
+      {
+        title: { de: "Die Geißelung Jesu", en: "The Scourging at the Pillar" },
+        subtitle: { de: "Jesus wird gegeißelt", en: "Jesus is scourged at the pillar" },
+        scripture: { de: "Joh 19,1", en: "John 19:1" },
+        fruit: { de: "Abtötung der Sinne", en: "Mortification" },
+      },
+      {
+        title: { de: "Die Dornenkrönung", en: "The Crowning with Thorns" },
+        subtitle: { de: "Jesus wird mit Dornen gekrönt", en: "Jesus is crowned with thorns" },
+        scripture: { de: "Mt 27,27-31", en: "Matthew 27:27-31" },
+        fruit: { de: "Mut", en: "Courage" },
+      },
+      {
+        title: { de: "Die Kreuztragung", en: "The Carrying of the Cross" },
+        subtitle: { de: "Jesus trägt sein Kreuz", en: "Jesus carries his cross" },
+        scripture: { de: "Joh 19,17", en: "John 19:17" },
+        fruit: { de: "Geduld", en: "Patience" },
+      },
+      {
+        title: { de: "Die Kreuzigung und der Tod Jesu", en: "The Crucifixion" },
+        subtitle: { de: "Jesus stirbt am Kreuz", en: "Jesus dies on the cross" },
+        scripture: { de: "Joh 19,18-30", en: "John 19:18-30" },
+        fruit: { de: "Selbstverleugnung", en: "Self-denial" },
+      },
+    ],
+  },
+  {
+    type: "glorious",
+    name: { de: "Glorreicher Rosenkranz", en: "Glorious Mysteries" },
+    icon: "auto_awesome",
+    day: ["wednesday", "sunday"],
+    mysteries: [
+      {
+        title: { de: "Die Auferstehung Jesu", en: "The Resurrection" },
+        subtitle: { de: "Jesus ersteht von den Toten", en: "Jesus rises from the dead" },
+        scripture: { de: "Mt 28,1-10", en: "Matthew 28:1-10" },
+        fruit: { de: "Glaube", en: "Faith" },
+      },
+      {
+        title: { de: "Die Himmelfahrt Jesu", en: "The Ascension" },
+        subtitle: { de: "Jesus fährt in den Himmel auf", en: "Jesus ascends into heaven" },
+        scripture: { de: "Apg 1,9-11", en: "Acts 1:9-11" },
+        fruit: { de: "Hoffnung", en: "Hope" },
+      },
+      {
+        title: { de: "Die Sendung des Heiligen Geistes", en: "The Descent of the Holy Spirit" },
+        subtitle: { de: "Der Heilige Geist kommt herab", en: "The Holy Spirit descends upon the Apostles" },
+        scripture: { de: "Apg 2,1-13", en: "Acts 2:1-13" },
+        fruit: { de: "Liebe zu Gott", en: "Love of God" },
+      },
+      {
+        title: { de: "Die Aufnahme Mariens in den Himmel", en: "The Assumption" },
+        subtitle: { de: "Maria wird in den Himmel aufgenommen", en: "Mary is taken up into heaven" },
+        scripture: { de: "Offb 12,1", en: "Revelation 12:1" },
+        fruit: { de: "Gnade eines guten Todes", en: "Grace of a Happy Death" },
+      },
+      {
+        title: { de: "Die Krönung Mariens im Himmel", en: "The Coronation of Mary" },
+        subtitle: { de: "Maria wird zur Königin des Himmels gekrönt", en: "Mary is crowned Queen of Heaven" },
+        scripture: { de: "Offb 12,1", en: "Revelation 12:1" },
+        fruit: { de: "Vertrauen auf Marias Fürsprache", en: "Trust in Mary's intercession" },
+      },
+    ],
+  },
+];
+
+export const PRAYERS = {
+  ourFather: {
+    de: "Vater unser im Himmel, geheiligt werde dein Name. Dein Reich komme. Dein Wille geschehe, wie im Himmel so auf Erden. Unser tägliches Brot gib uns heute. Und vergib uns unsere Schuld, wie auch wir vergeben unsern Schuldigern. Und führe uns nicht in Versuchung, sondern erlöse uns von dem Bösen. Amen.",
+    en: "Our Father, who art in heaven, hallowed be thy name; thy kingdom come; thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.",
+  },
+  hailMary: {
+    de: "Gegrüßet seist du, Maria, voll der Gnade, der Herr ist mit dir. Du bist gebenedeit unter den Frauen, und gebenedeit ist die Frucht deines Leibes, Jesus. Heilige Maria, Mutter Gottes, bitte für uns Sünder, jetzt und in der Stunde unseres Todes. Amen.",
+    en: "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.",
+  },
+  gloryBe: {
+    de: "Ehre sei dem Vater und dem Sohn und dem Heiligen Geist, wie im Anfang, so auch jetzt und alle Zeit und in Ewigkeit. Amen.",
+    en: "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
+  },
+  apostlesCreed: {
+    de: "Ich glaube an Gott, den Vater, den Allmächtigen, den Schöpfer des Himmels und der Erde, und an Jesus Christus, seinen eingeborenen Sohn, unsern Herrn, empfangen durch den Heiligen Geist, geboren von der Jungfrau Maria, gelitten unter Pontius Pilatus, gekreuzigt, gestorben und begraben, hinabgestiegen in das Reich des Todes, am dritten Tage auferstanden von den Toten, aufgefahren in den Himmel; er sitzt zur Rechten Gottes, des allmächtigen Vaters; von dort wird er kommen, zu richten die Lebenden und die Toten. Ich glaube an den Heiligen Geist, die heilige katholische Kirche, Gemeinschaft der Heiligen, Vergebung der Sünden, Auferstehung der Toten und das ewige Leben. Amen.",
+    en: "I believe in God, the Father Almighty, Creator of heaven and earth, and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died and was buried; He descended into hell; on the third day He rose again from the dead; He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there He will come to judge the living and the dead. I believe in the Holy Spirit, the Holy Catholic Church, the communion of Saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
+  },
+  hailHolyQueen: {
+    de: "Sei gegrüßt, o Königin, Mutter der Barmherzigkeit; unser Leben, unsre Wonne und unsre Hoffnung, sei gegrüßt! Zu dir rufen wir verbannte Kinder Evas; zu dir seufzen wir trauernd und weinend in diesem Tal der Tränen. Wohlan denn, unsre Fürsprecherin, wende deine barmherzigen Augen uns zu, und nach diesem Elend zeige uns Jesus, die gebenedeite Frucht deines Leibes. O gütige, o milde, o süße Jungfrau Maria!",
+    en: "Hail, Holy Queen, Mother of Mercy, our life, our sweetness and our hope! To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn, then, most gracious Advocate, thine eyes of mercy toward us, and after this, our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary!",
+  },
+  fatimaPrayer: {
+    de: "O mein Jesus, verzeih uns unsere Sünden, bewahre uns vor dem Feuer der Hölle, führe alle Seelen in den Himmel, besonders jene, die deiner Barmherzigkeit am meisten bedürfen.",
+    en: "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy.",
+  },
+} as const;
+
+export function getTodaysMysteryType(): MysteryType {
+  const days: MysteryType[] = [
+    "glorious",   // Sunday
+    "joyful",     // Monday
+    "sorrowful",  // Tuesday
+    "glorious",   // Wednesday
+    "luminous",   // Thursday
+    "sorrowful",  // Friday
+    "joyful",     // Saturday
+  ];
+  return days[new Date().getDay()];
+}
