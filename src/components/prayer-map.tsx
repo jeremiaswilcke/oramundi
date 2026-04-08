@@ -67,7 +67,7 @@ export function PrayerMap({ prayers, mapToken }: PrayerMapProps) {
       zoom: 1.5,
       minZoom: 1,
       maxZoom: 8,
-      attributionControl: false,
+      attributionControl: { compact: true },
       geolocateControl: false,
       maptilerLogo: false,
     });
