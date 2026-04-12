@@ -135,6 +135,20 @@ export default function PrayPage() {
     return t(keys[step.type]);
   }
 
+  function getHailMaryWithInsertion(): string {
+    const ins = mystery.insertion[locale];
+    if (locale === "de") {
+      return PRAYERS.hailMary.de.replace(
+        "deines Leibes, Jesus.",
+        `deines Leibes, ${ins}.`
+      );
+    }
+    return PRAYERS.hailMary.en.replace(
+      "thy womb, Jesus.",
+      `thy womb, ${ins}.`
+    );
+  }
+
   function getPrayerText(): string {
     if (mysteryType === "mercy") {
       if (step.type === "our-father") return PRAYERS.eternalFather[locale];
@@ -143,7 +157,7 @@ export default function PrayPage() {
     switch (step.type) {
       case "creed": return PRAYERS.apostlesCreed[locale];
       case "our-father": return PRAYERS.ourFather[locale];
-      case "hail-mary": return PRAYERS.hailMary[locale];
+      case "hail-mary": return getHailMaryWithInsertion();
       case "glory-be": return PRAYERS.gloryBe[locale];
       case "fatima": return PRAYERS.fatimaPrayer[locale];
       case "hail-holy-queen": return PRAYERS.hailHolyQueen[locale];

@@ -49,7 +49,8 @@
     "quickLog": "Quick Log",
     "theHolyRosary": "The Holy Rosary",
     "today": "Today: {mystery}",
-    "startRosary": "Start Rosary"
+    "startRosary": "Start Rosary",
+    "quickLog": "Prayed"
   },
   "pray": {
     "decadeOf": "Decade {current} of {total}",

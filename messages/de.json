@@ -49,7 +49,8 @@
     "quickLog": "Schnell-Eintrag",
     "theHolyRosary": "Der Heilige Rosenkranz",
     "today": "Heute: {mystery}",
-    "startRosary": "Rosenkranz starten"
+    "startRosary": "Rosenkranz starten",
+    "quickLog": "Gebetet"
   },
   "pray": {
     "decadeOf": "Gesätz {current} von {total}",

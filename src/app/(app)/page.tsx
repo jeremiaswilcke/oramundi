@@ -44,6 +44,32 @@ export default function MapPage() {
   const displayPrayers = count > 0 ? livePrayers : mockSubset;
   const displayCount = count > 0 ? count : mockCount;
 
+  // Quick log
+  const [quickLogging, setQuickLogging] = useState(false);
+  async function handleQuickLog() {
+    setQuickLogging(true);
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const now = new Date();
+      const startedAt = new Date(now.getTime() - 20 * 60000).toISOString();
+      await supabase.from("prayer_sessions").insert({
+        user_id: user.id,
+        mystery_type: todayType,
+        mode: "quick",
+        started_at: startedAt,
+        ended_at: now.toISOString(),
+        completed: true,
+      });
+      // Refresh global stats
+      const { data } = await supabase.from("global_stats").select("total_rosaries").single();
+      if (data) setGlobalRosaries(data.total_rosaries);
+    } finally {
+      setQuickLogging(false);
+    }
+  }
+
   // Global stats
   const [globalRosaries, setGlobalRosaries] = useState(0);
   useEffect(() => {
@@ -65,15 +91,15 @@ export default function MapPage() {
         <PrayerMap prayers={displayPrayers} mapToken={MAP_TOKEN} />
       ) : (
         /* Fallback SVG map when no token */
-        <div className="absolute inset-0 bg-surface-container-low map-mesh">
-          <div className="absolute inset-0 opacity-[0.15]">
+        <div className="absolute inset-0 bg-surface-container-low">
+          <div className="absolute inset-0 opacity-40">
             <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-              <ellipse cx="25" cy="30" rx="12" ry="15" fill="currentColor" className="text-outline-variant" />
-              <ellipse cx="30" cy="48" rx="6" ry="10" fill="currentColor" className="text-outline-variant" />
-              <ellipse cx="50" cy="28" rx="8" ry="12" fill="currentColor" className="text-outline-variant" />
-              <ellipse cx="52" cy="45" rx="5" ry="8" fill="currentColor" className="text-outline-variant" />
-              <ellipse cx="72" cy="32" rx="14" ry="12" fill="currentColor" className="text-outline-variant" />
-              <ellipse cx="82" cy="50" rx="8" ry="7" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="25" cy="30" rx="12" ry="15" fill="#c4c8bf" />
+              <ellipse cx="30" cy="48" rx="6" ry="10" fill="#c4c8bf" />
+              <ellipse cx="50" cy="28" rx="8" ry="12" fill="#c4c8bf" />
+              <ellipse cx="52" cy="45" rx="5" ry="8" fill="#c4c8bf" />
+              <ellipse cx="72" cy="32" rx="14" ry="12" fill="#c4c8bf" />
+              <ellipse cx="82" cy="50" rx="8" ry="7" fill="#c4c8bf" />
             </svg>
           </div>
           {displayPrayers.map((p) => (
@@ -137,19 +163,33 @@ export default function MapPage() {
             </h2>
           </div>
 
-          {/* Start Rosary Button */}
-          <Link
-            href={mode === "guided" ? "/pray" : "/pray?mode=quick"}
-            className="pointer-events-auto group relative px-12 py-5 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-container" />
-            <div className="relative flex items-center gap-3 text-on-primary">
-              <MaterialIcon name="auto_awesome" filled size={20} />
-              <span className="font-medium tracking-wide uppercase text-sm">
-                {t("startRosary")}
-              </span>
-            </div>
-          </Link>
+          {/* Buttons */}
+          <div className="pointer-events-auto flex gap-3">
+            <Link
+              href="/pray"
+              className="group relative px-10 py-4 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-container" />
+              <div className="relative flex items-center gap-3 text-on-primary">
+                <MaterialIcon name="auto_awesome" filled size={20} />
+                <span className="font-medium tracking-wide uppercase text-sm">
+                  {t("startRosary")}
+                </span>
+              </div>
+            </Link>
+            <button
+              onClick={handleQuickLog}
+              disabled={quickLogging}
+              className="px-6 py-4 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface-variant hover:text-primary transition-all active:scale-95 editorial-shadow disabled:opacity-50"
+            >
+              <div className="flex items-center gap-2">
+                <MaterialIcon name="check_circle" size={20} />
+                <span className="font-medium tracking-wide uppercase text-sm">
+                  {quickLogging ? tc("loading") : t("quickLog")}
+                </span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
