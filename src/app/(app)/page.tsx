@@ -35,6 +35,7 @@ export default function MapPage() {
   const t = useTranslations("map");
   const tc = useTranslations("common");
   const td = useTranslations("dashboard");
+  const tl = useTranslations("library");
   const locale = useLocale() as "de" | "en";
 
   // Randomize fallback count once per page load (1–12)
@@ -164,7 +165,7 @@ export default function MapPage() {
           </div>
 
           {/* Buttons */}
-          <div className="pointer-events-auto flex gap-3">
+          <div className="pointer-events-auto flex gap-3 mb-3">
             <Link
               href="/pray"
               className="group relative px-10 py-4 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95"
@@ -190,6 +191,12 @@ export default function MapPage() {
               </div>
             </button>
           </div>
+          <Link
+            href="/library"
+            className="pointer-events-auto text-on-surface-variant text-xs tracking-widest uppercase font-medium hover:text-primary transition-colors"
+          >
+            {tl("openLibrary")} &rarr;
+          </Link>
         </div>
       </div>
     </div>

@@ -19,6 +19,13 @@
     "journal": "Intentions",
     "settings": "Settings"
   },
+  "library": {
+    "title": "Prayer Treasury",
+    "subtitle": "Litanies, liturgy of the hours, and other prayers",
+    "litanies": "Litanies",
+    "hours": "Liturgy of the Hours",
+    "openLibrary": "More Prayers"
+  },
   "dashboard": {
     "soulCollective": "Soul Collective",
     "believersReflecting": "Believers currently in reflection",

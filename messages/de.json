@@ -19,6 +19,13 @@
     "journal": "Intention",
     "settings": "Einstellungen"
   },
+  "library": {
+    "title": "Gebetsschatz",
+    "subtitle": "Litaneien, Stundengebet und weitere Gebete der Kirche",
+    "litanies": "Litaneien",
+    "hours": "Stundengebet",
+    "openLibrary": "Weitere Gebete"
+  },
   "dashboard": {
     "soulCollective": "Seelengemeinschaft",
     "believersReflecting": "Gläubige gerade im Gebet",
