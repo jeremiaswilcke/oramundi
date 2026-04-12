@@ -14,9 +14,9 @@
     "loading": "Loading..."
   },
   "nav": {
-    "sanctuary": "Sanctuary",
-    "rituals": "Rituals",
-    "journal": "Journal",
+    "sanctuary": "Map",
+    "rituals": "Pray",
+    "journal": "Intentions",
     "settings": "Settings"
   },
   "dashboard": {
@@ -60,6 +60,8 @@
     "gloryBe": "Glory Be",
     "fatimaPrayer": "Fatima Prayer",
     "hailHolyQueen": "Hail Holy Queen",
+    "chooseMystery": "Choose Mystery",
+    "todaysDefault": "Today's default",
     "pause": "Pause",
     "resume": "Resume",
     "next": "Next",

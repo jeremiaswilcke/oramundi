@@ -6,9 +6,9 @@ import { useTranslations } from "next-intl";
 import { MaterialIcon } from "./material-icon";
 
 const NAV_ITEMS = [
-  { href: "/", icon: "auto_awesome", labelKey: "sanctuary" },
-  { href: "/pray", icon: "auto_stories", labelKey: "rituals" },
-  { href: "/intentions", icon: "edit_note", labelKey: "journal" },
+  { href: "/", icon: "map", labelKey: "sanctuary" },
+  { href: "/pray", icon: "self_improvement", labelKey: "rituals" },
+  { href: "/intentions", icon: "favorite", labelKey: "journal" },
   { href: "/profile", icon: "settings", labelKey: "settings" },
 ] as const;
 

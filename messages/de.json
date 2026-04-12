@@ -14,9 +14,9 @@
     "loading": "Laden..."
   },
   "nav": {
-    "sanctuary": "Heiligtum",
-    "rituals": "Rituale",
-    "journal": "Tagebuch",
+    "sanctuary": "Karte",
+    "rituals": "Beten",
+    "journal": "Intention",
     "settings": "Einstellungen"
   },
   "dashboard": {
@@ -60,6 +60,8 @@
     "gloryBe": "Ehre sei dem Vater",
     "fatimaPrayer": "Fatima-Gebet",
     "hailHolyQueen": "Salve Regina",
+    "chooseMystery": "Geheimnis wählen",
+    "todaysDefault": "Heute empfohlen",
     "pause": "Pause",
     "resume": "Fortsetzen",
     "next": "Weiter",
