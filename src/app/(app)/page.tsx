@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
@@ -35,8 +35,12 @@ export default function MapPage() {
   const tc = useTranslations("common");
   const locale = useLocale() as "de" | "en";
 
-  const displayPrayers = livePrayers.length > 0 ? livePrayers : MOCK_PRAYERS;
-  const displayCount = count > 0 ? count : MOCK_PRAYERS.length;
+  // Randomize fallback count once per page load (1–12)
+  const mockCount = useMemo(() => Math.floor(Math.random() * 12) + 1, []);
+  const mockSubset = useMemo(() => MOCK_PRAYERS.slice(0, mockCount), [mockCount]);
+
+  const displayPrayers = count > 0 ? livePrayers : mockSubset;
+  const displayCount = count > 0 ? count : mockCount;
 
   return (
     <div className="relative h-[calc(100vh-7.5rem)] overflow-hidden">

@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <TopAppBar prayingCount={count > 0 ? count : 12} />
+      <TopAppBar prayingCount={count > 0 ? count : undefined} />
       <main className="flex-1 pt-14 pb-16">{children}</main>
       <BottomNav />
     </>
