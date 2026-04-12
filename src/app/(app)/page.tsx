@@ -8,7 +8,7 @@ import { usePrayerPresence } from "@/lib/realtime";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import Link from "next/link";
 
-const MAP_TOKEN = process.env.NEXT_PUBLIC_MAP_TOKEN ?? "";
+const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
 
 // Fallback mock dots when no real prayers exist
 const MOCK_PRAYERS = [
