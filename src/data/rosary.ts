@@ -1,4 +1,4 @@
-export type MysteryType = "joyful" | "luminous" | "sorrowful" | "glorious";
+export type MysteryType = "joyful" | "luminous" | "sorrowful" | "glorious" | "mercy" | "joseph";
 
 export interface Mystery {
   title: { de: string; en: string };
@@ -168,6 +168,82 @@ export const MYSTERY_SETS: MysterySet[] = [
       },
     ],
   },
+  {
+    type: "mercy",
+    name: { de: "Barmherzigkeitsrosenkranz", en: "Chaplet of Divine Mercy" },
+    icon: "cardiology",
+    day: [],
+    mysteries: [
+      {
+        title: { de: "Erstes Gesätz", en: "First Decade" },
+        subtitle: { de: "Für alle Sünder der ganzen Welt", en: "For all sinners in the whole world" },
+        scripture: { de: "Joh 3,16", en: "John 3:16" },
+        fruit: { de: "Vertrauen auf Gottes Barmherzigkeit", en: "Trust in God's Mercy" },
+      },
+      {
+        title: { de: "Zweites Gesätz", en: "Second Decade" },
+        subtitle: { de: "Für die Priester und Ordensleute", en: "For priests and religious" },
+        scripture: { de: "Mt 9,38", en: "Matthew 9:38" },
+        fruit: { de: "Heiligung der Priester", en: "Sanctification of priests" },
+      },
+      {
+        title: { de: "Drittes Gesätz", en: "Third Decade" },
+        subtitle: { de: "Für alle frommen und treuen Seelen", en: "For all devout and faithful souls" },
+        scripture: { de: "Ps 103,8", en: "Psalm 103:8" },
+        fruit: { de: "Treue im Glauben", en: "Faithfulness" },
+      },
+      {
+        title: { de: "Viertes Gesätz", en: "Fourth Decade" },
+        subtitle: { de: "Für jene, die Gott noch nicht kennen", en: "For those who do not yet know God" },
+        scripture: { de: "1 Tim 2,4", en: "1 Timothy 2:4" },
+        fruit: { de: "Bekehrung der Ungläubigen", en: "Conversion of unbelievers" },
+      },
+      {
+        title: { de: "Fünftes Gesätz", en: "Fifth Decade" },
+        subtitle: { de: "Für die Seelen im Fegfeuer", en: "For the souls in purgatory" },
+        scripture: { de: "2 Makk 12,46", en: "2 Maccabees 12:46" },
+        fruit: { de: "Erlösung der Armen Seelen", en: "Release of the Poor Souls" },
+      },
+    ],
+  },
+  {
+    type: "joseph",
+    name: { de: "Josephsrosenkranz", en: "Rosary of St. Joseph" },
+    icon: "carpenter",
+    day: [],
+    mysteries: [
+      {
+        title: { de: "Jesus, der den hl. Josef zu deinem Bräutigam erwählt hat", en: "Jesus, who chose St. Joseph as your spouse" },
+        subtitle: { de: "Josef wird zum Bräutigam Mariens erwählt", en: "Joseph is chosen as the spouse of Mary" },
+        scripture: { de: "Mt 1,18-19", en: "Matthew 1:18-19" },
+        fruit: { de: "Reinheit des Herzens", en: "Purity of heart" },
+      },
+      {
+        title: { de: "Jesus, der den hl. Josef als seinen Nährvater geliebt hat", en: "Jesus, who loved St. Joseph as his foster father" },
+        subtitle: { de: "Josef als Nährvater des Jesuskindes", en: "Joseph as foster father of the Child Jesus" },
+        scripture: { de: "Lk 2,4-7", en: "Luke 2:4-7" },
+        fruit: { de: "Väterliche Liebe", en: "Fatherly love" },
+      },
+      {
+        title: { de: "Jesus, der dem hl. Josef gehorsam gewesen ist", en: "Jesus, who was obedient to St. Joseph" },
+        subtitle: { de: "Jesus war Josef und Maria untertan", en: "Jesus was subject to Joseph and Mary" },
+        scripture: { de: "Lk 2,51", en: "Luke 2:51" },
+        fruit: { de: "Gehorsam", en: "Obedience" },
+      },
+      {
+        title: { de: "Jesus, der mit dem hl. Josef gebetet und gearbeitet hat", en: "Jesus, who prayed and worked with St. Joseph" },
+        subtitle: { de: "Das gemeinsame Leben in Nazaret", en: "Life together in Nazareth" },
+        scripture: { de: "Mt 13,55", en: "Matthew 13:55" },
+        fruit: { de: "Treue in der Arbeit", en: "Faithfulness in work" },
+      },
+      {
+        title: { de: "Jesus, der den hl. Josef zum Schutzpatron seiner heiligen Kirche erwählt hat", en: "Jesus, who chose St. Joseph as patron of the Holy Church" },
+        subtitle: { de: "Josef als Beschützer der Kirche", en: "Joseph as protector of the Church" },
+        scripture: { de: "Mt 2,13-15", en: "Matthew 2:13-15" },
+        fruit: { de: "Vertrauen auf Gottes Führung", en: "Trust in God's guidance" },
+      },
+    ],
+  },
 ];
 
 export const PRAYERS = {
@@ -194,6 +270,20 @@ export const PRAYERS = {
   fatimaPrayer: {
     de: "O mein Jesus, verzeih uns unsere Sünden, bewahre uns vor dem Feuer der Hölle, führe alle Seelen in den Himmel, besonders jene, die deiner Barmherzigkeit am meisten bedürfen.",
     en: "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to Heaven, especially those most in need of Thy mercy.",
+  },
+  // Divine Mercy prayers
+  eternalFather: {
+    de: "Ewiger Vater, ich opfere Dir auf den Leib und das Blut, die Seele und die Gottheit Deines über alles geliebten Sohnes, unseres Herrn Jesus Christus, zur Sühne für unsere Sünden und die Sünden der ganzen Welt.",
+    en: "Eternal Father, I offer You the Body and Blood, Soul and Divinity of Your dearly beloved Son, Our Lord Jesus Christ, in atonement for our sins and those of the whole world.",
+  },
+  divineMercy: {
+    de: "Um Seines schmerzhaften Leidens willen, hab Erbarmen mit uns und mit der ganzen Welt.",
+    en: "For the sake of His sorrowful Passion, have mercy on us and on the whole world.",
+  },
+  // St. Joseph prayers
+  josephPrayer: {
+    de: "Heiliger Josef, du treuer Hüter Jesu und keuscher Bräutigam Mariens, bitte für uns und für die Sterbenden dieses Tages (dieser Nacht). Amen.",
+    en: "Saint Joseph, faithful guardian of Jesus and chaste spouse of Mary, pray for us and for the dying of this day (this night). Amen.",
   },
 } as const;
 

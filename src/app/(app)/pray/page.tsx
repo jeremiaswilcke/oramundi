@@ -120,6 +120,10 @@ export default function PrayPage() {
   }, [currentStep]);
 
   function getPrayerTitle(): string {
+    if (mysteryType === "mercy") {
+      if (step.type === "our-father") return locale === "de" ? "Ewiger Vater" : "Eternal Father";
+      if (step.type === "hail-mary") return locale === "de" ? "Barmherzigkeit" : "Divine Mercy";
+    }
     const keys: Record<PrayerStep["type"], string> = {
       "creed": "apostlesCreed",
       "our-father": "ourFather",
@@ -132,6 +136,10 @@ export default function PrayPage() {
   }
 
   function getPrayerText(): string {
+    if (mysteryType === "mercy") {
+      if (step.type === "our-father") return PRAYERS.eternalFather[locale];
+      if (step.type === "hail-mary") return PRAYERS.divineMercy[locale];
+    }
     switch (step.type) {
       case "creed": return PRAYERS.apostlesCreed[locale];
       case "our-father": return PRAYERS.ourFather[locale];

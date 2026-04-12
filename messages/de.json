@@ -103,7 +103,9 @@
     "joyful": "Freudenreicher Rosenkranz",
     "luminous": "Lichtreicher Rosenkranz",
     "sorrowful": "Schmerzhafter Rosenkranz",
-    "glorious": "Glorreicher Rosenkranz"
+    "glorious": "Glorreicher Rosenkranz",
+    "mercy": "Barmherzigkeitsrosenkranz",
+    "joseph": "Josephsrosenkranz"
   },
   "error": {
     "somethingWentWrong": "Etwas ist schiefgelaufen",
