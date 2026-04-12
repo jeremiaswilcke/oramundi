@@ -9,7 +9,7 @@ import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
+const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "ybWg0XgugDk1LNoPvkfL";
 
 // Fallback mock dots when no real prayers exist
 const MOCK_PRAYERS = [
