@@ -47,15 +47,20 @@ export default function MapPage() {
 
   // Quick log
   const [quickLogging, setQuickLogging] = useState(false);
+  const [quickLogSuccess, setQuickLogSuccess] = useState(false);
   async function handleQuickLog() {
     setQuickLogging(true);
+    setQuickLogSuccess(false);
     try {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        alert("Bitte melde dich an, um Gebete zu speichern.");
+        return;
+      }
       const now = new Date();
       const startedAt = new Date(now.getTime() - 20 * 60000).toISOString();
-      await supabase.from("prayer_sessions").insert({
+      const { error } = await supabase.from("prayer_sessions").insert({
         user_id: user.id,
         mystery_type: todayType,
         mode: "quick",
@@ -63,6 +68,12 @@ export default function MapPage() {
         ended_at: now.toISOString(),
         completed: true,
       });
+      if (error) {
+        alert(`Fehler beim Speichern: ${error.message}`);
+        return;
+      }
+      setQuickLogSuccess(true);
+      setTimeout(() => setQuickLogSuccess(false), 3000);
       // Refresh global stats
       const { data } = await supabase.from("global_stats").select("total_rosaries").single();
       if (data) setGlobalRosaries(data.total_rosaries);
@@ -181,12 +192,16 @@ export default function MapPage() {
             <button
               onClick={handleQuickLog}
               disabled={quickLogging}
-              className="px-6 py-4 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface-variant hover:text-primary transition-all active:scale-95 editorial-shadow disabled:opacity-50"
+              className={`px-6 py-4 rounded-full backdrop-blur-md transition-all active:scale-95 editorial-shadow disabled:opacity-50 ${
+                quickLogSuccess
+                  ? "bg-primary text-on-primary"
+                  : "bg-surface-container-lowest/90 text-on-surface-variant hover:text-primary"
+              }`}
             >
               <div className="flex items-center gap-2">
-                <MaterialIcon name="check_circle" size={20} />
+                <MaterialIcon name={quickLogSuccess ? "check" : "check_circle"} filled={quickLogSuccess} size={20} />
                 <span className="font-medium tracking-wide uppercase text-sm">
-                  {quickLogging ? tc("loading") : t("quickLog")}
+                  {quickLogging ? tc("loading") : quickLogSuccess ? "Gespeichert" : t("quickLog")}
                 </span>
               </div>
             </button>
