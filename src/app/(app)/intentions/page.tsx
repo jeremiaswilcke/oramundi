@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,6 +24,8 @@ export default function IntentionsPage() {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations("intentions");
+  const tc = useTranslations("common");
 
   useEffect(() => {
     loadIntentions();
@@ -166,11 +169,8 @@ export default function IntentionsPage() {
     <div className="flex flex-col min-h-[calc(100vh-7.5rem)]">
       {/* Header */}
       <div className="px-6 pt-6 pb-4">
-        <h1 className="font-headline italic text-5xl text-primary-fixed sacred-glow mb-1">
-          Sacred
-        </h1>
-        <h1 className="font-headline italic text-5xl text-on-surface mb-4">
-          Intentions
+        <h1 className="font-headline italic text-5xl text-primary-fixed sacred-glow mb-4">
+          {t("sacredIntentions")}
         </h1>
 
         {/* Tabs */}
@@ -183,7 +183,7 @@ export default function IntentionsPage() {
                 : "text-on-surface-variant"
             }`}
           >
-            All
+            {t("all")}
           </button>
           <button
             onClick={() => setTab("mine")}
@@ -193,7 +193,7 @@ export default function IntentionsPage() {
                 : "text-on-surface-variant"
             }`}
           >
-            My Intentions
+            {t("myIntentions")}
           </button>
         </div>
       </div>
@@ -207,10 +207,10 @@ export default function IntentionsPage() {
           <div className="relative">
             <MaterialIcon name="format_quote" size={32} className="text-primary/40 mb-2" />
             <p className="font-headline italic text-lg text-primary-fixed leading-relaxed mb-3">
-              &ldquo;Bear one another&apos;s burdens, and so fulfill the law of Christ.&rdquo;
+              {t("bibleQuote")}
             </p>
             <p className="text-on-surface-variant text-xs tracking-widest uppercase font-semibold">
-              Galatians 6:2
+              {t("bibleRef")}
             </p>
           </div>
         </div>
@@ -223,8 +223,8 @@ export default function IntentionsPage() {
             <MaterialIcon name="favorite_border" size={48} className="text-on-surface-variant/30 mb-3" />
             <p className="text-on-surface-variant text-sm">
               {tab === "mine"
-                ? "You haven't shared any intentions yet."
-                : "No intentions yet. Be the first to share."}
+                ? t("noMyIntentions")
+                : t("noIntentions")}
             </p>
           </div>
         )}
@@ -286,7 +286,7 @@ export default function IntentionsPage() {
                         size={14}
                         filled={intention.has_prayed}
                       />
-                      {intention.has_prayed ? "Prayed" : "Pray"}
+                      {intention.has_prayed ? t("prayed") : t("pray")}
                     </button>
 
                     {/* Flag button (not own intentions) */}
@@ -310,7 +310,7 @@ export default function IntentionsPage() {
       <button
         onClick={() => setShowNewForm(true)}
         className="fixed bottom-20 right-4 w-16 h-16 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-2xl transition-all active:scale-90 z-40"
-        aria-label="New intention"
+        aria-label={t("shareIntention")}
       >
         <MaterialIcon name="add" size={28} />
       </button>
@@ -325,10 +325,10 @@ export default function IntentionsPage() {
           <div className="relative glass-panel w-full max-w-lg rounded-t-[32px] p-6 border-t border-outline-variant/20">
             <div className="w-12 h-1 bg-outline-variant/40 rounded-full mx-auto mb-6" />
             <h3 className="font-headline italic text-2xl text-primary-fixed sacred-glow mb-4">
-              Share Your Intention
+              {t("shareIntention")}
             </h3>
             <textarea
-              placeholder="What would you like others to pray for?"
+              placeholder={t("placeholder")}
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
               className="w-full h-32 bg-surface-container rounded-2xl p-4 text-on-surface placeholder:text-on-surface-variant/40 resize-none outline-none border border-outline-variant/20 focus:border-primary/40 transition-colors font-headline italic"
@@ -342,7 +342,7 @@ export default function IntentionsPage() {
                   onChange={(e) => setIsAnonymous(e.target.checked)}
                   className="accent-primary"
                 />
-                Post anonymously
+                {t("postAnonymously")}
               </label>
               <span className="text-[10px] text-on-surface-variant">
                 {newContent.length}/500
@@ -353,7 +353,7 @@ export default function IntentionsPage() {
               disabled={!newContent.trim() || isPending}
               className="w-full py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
-              {isPending ? "Sharing..." : "Share Intention"}
+              {isPending ? tc("loading") : t("share")}
             </button>
           </div>
         </div>

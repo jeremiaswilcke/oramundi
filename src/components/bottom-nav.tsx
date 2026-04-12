@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { MaterialIcon } from "./material-icon";
 
 const NAV_ITEMS = [
-  { href: "/", icon: "map", label: "Map" },
-  { href: "/pray", icon: "self_improvement", label: "Pray" },
-  { href: "/intentions", icon: "favorite", label: "Intentions" },
-  { href: "/profile", icon: "person", label: "Profile" },
+  { href: "/", icon: "map", labelKey: "map" },
+  { href: "/pray", icon: "self_improvement", labelKey: "pray" },
+  { href: "/intentions", icon: "favorite", labelKey: "intentions" },
+  { href: "/profile", icon: "person", labelKey: "profile" },
 ] as const;
 
 export function BottomNav() {
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-t border-outline-variant/20">
@@ -40,7 +42,7 @@ export function BottomNav() {
                 weight={isActive ? 600 : 400}
               />
               <span className="text-[0.625rem] font-semibold tracking-widest uppercase">
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </Link>
           );

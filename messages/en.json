@@ -95,5 +95,15 @@
     "luminous": "Luminous Mysteries",
     "sorrowful": "Sorrowful Mysteries",
     "glorious": "Glorious Mysteries"
+  },
+  "error": {
+    "somethingWentWrong": "Something went wrong",
+    "defaultMessage": "An unexpected error occurred. Please try again.",
+    "tryAgain": "Try Again"
+  },
+  "notFound": {
+    "pageNotFound": "Page Not Found",
+    "message": "This page doesn't exist. Let's get you back to prayer.",
+    "goHome": "Go Home"
   }
 }

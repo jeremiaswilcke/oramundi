@@ -95,5 +95,15 @@
     "luminous": "Lichtreicher Rosenkranz",
     "sorrowful": "Schmerzhafter Rosenkranz",
     "glorious": "Glorreicher Rosenkranz"
+  },
+  "error": {
+    "somethingWentWrong": "Etwas ist schiefgelaufen",
+    "defaultMessage": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "tryAgain": "Erneut versuchen"
+  },
+  "notFound": {
+    "pageNotFound": "Seite nicht gefunden",
+    "message": "Diese Seite existiert nicht. Zurück zum Gebet.",
+    "goHome": "Startseite"
   }
 }

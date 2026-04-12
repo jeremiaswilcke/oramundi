@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import {
   signInWithEmail,
@@ -12,6 +13,8 @@ export default function AuthPage() {
   const [mode, setMode] = useState<"signin" | "register">("signin");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations("auth");
+  const tc = useTranslations("common");
 
   async function handleSubmit(formData: FormData) {
     setError(null);
@@ -47,7 +50,7 @@ export default function AuthPage() {
             Ora Mundi
           </h1>
           <p className="text-on-surface-variant text-sm tracking-widest uppercase font-semibold">
-            Welcome to the Sanctuary
+            {t("welcome")}
           </p>
         </div>
 
@@ -70,7 +73,7 @@ export default function AuthPage() {
               type="email"
               name="email"
               required
-              placeholder="Email address"
+              placeholder={t("email")}
               className="w-full bg-transparent border-b border-outline-variant/30 pb-3 pl-8 text-on-surface placeholder:text-on-surface-variant/40 outline-none focus:border-primary transition-colors"
             />
           </div>
@@ -86,7 +89,7 @@ export default function AuthPage() {
               name="password"
               required
               minLength={6}
-              placeholder="Password"
+              placeholder={t("password")}
               className="w-full bg-transparent border-b border-outline-variant/30 pb-3 pl-8 text-on-surface placeholder:text-on-surface-variant/40 outline-none focus:border-primary transition-colors"
             />
           </div>
@@ -101,7 +104,7 @@ export default function AuthPage() {
               <input
                 type="text"
                 name="displayName"
-                placeholder="Display name"
+                placeholder={t("displayName")}
                 className="w-full bg-transparent border-b border-outline-variant/30 pb-3 pl-8 text-on-surface placeholder:text-on-surface-variant/40 outline-none focus:border-primary transition-colors"
               />
             </div>
@@ -115,8 +118,8 @@ export default function AuthPage() {
             {isPending
               ? "..."
               : mode === "signin"
-                ? "Sign In"
-                : "Create Account"}
+                ? tc("signIn")
+                : tc("createAccount")}
           </button>
         </form>
 
@@ -124,7 +127,7 @@ export default function AuthPage() {
         <div className="flex items-center gap-4 my-6">
           <div className="flex-1 h-px bg-outline-variant/20" />
           <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant/40">
-            or
+            {tc("or")}
           </span>
           <div className="flex-1 h-px bg-outline-variant/20" />
         </div>
@@ -142,7 +145,7 @@ export default function AuthPage() {
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
           </svg>
           <span className="text-on-surface text-sm font-semibold">
-            Continue with Google
+            {t("continueWithGoogle")}
           </span>
         </button>
 
@@ -150,11 +153,11 @@ export default function AuthPage() {
         <div className="text-center mt-8">
           {mode === "signin" ? (
             <button onClick={() => { setMode("register"); setError(null); }} className="text-primary text-sm font-semibold">
-              Join the Circle
+              {t("joinTheCircle")}
             </button>
           ) : (
             <button onClick={() => { setMode("signin"); setError(null); }} className="text-primary text-sm font-semibold">
-              Already have an account? Sign in
+              {t("alreadyHaveAccount")}
             </button>
           )}
         </div>

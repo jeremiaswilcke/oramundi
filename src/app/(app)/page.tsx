@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
 import { usePrayerPresence } from "@/lib/realtime";
@@ -30,6 +31,9 @@ export default function MapPage() {
   const { prayers: livePrayers, count } = usePrayerPresence();
   const todayType = getTodaysMysteryType();
   const todayMystery = MYSTERY_SETS.find((m) => m.type === todayType)!;
+  const t = useTranslations("map");
+  const tc = useTranslations("common");
+  const locale = useLocale() as "de" | "en";
 
   const displayPrayers = livePrayers.length > 0 ? livePrayers : MOCK_PRAYERS;
   const displayCount = count > 0 ? count : MOCK_PRAYERS.length;
@@ -78,7 +82,7 @@ export default function MapPage() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-container" />
           </span>
           <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {displayCount.toLocaleString()} praying now
+            {tc("prayingNow", { count: displayCount })}
           </span>
         </div>
       </div>
@@ -96,7 +100,7 @@ export default function MapPage() {
                   : "text-on-surface-variant"
               }`}
             >
-              Guided Prayer
+              {t("guidedPrayer")}
             </button>
             <button
               onClick={() => setMode("quick")}
@@ -106,23 +110,23 @@ export default function MapPage() {
                   : "text-on-surface-variant"
               }`}
             >
-              Quick Log
+              {t("quickLog")}
             </button>
           </div>
 
           <h2 className="font-headline italic text-3xl text-primary-fixed sacred-glow text-center mb-1">
-            The Holy Rosary
+            {t("theHolyRosary")}
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-5">
             <MaterialIcon name={todayMystery.icon} size={16} className="align-middle mr-1" />
-            Today: {todayMystery.name.en}
+            {t("today", { mystery: todayMystery.name[locale] })}
           </p>
 
           <Link
             href={mode === "guided" ? "/pray" : "/pray?mode=quick"}
             className="block w-full py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
           >
-            Start Rosary
+            {t("startRosary")}
           </Link>
 
           <div className="flex items-center justify-center gap-4 mt-4">

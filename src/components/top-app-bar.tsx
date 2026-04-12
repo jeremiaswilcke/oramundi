@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { MaterialIcon } from "./material-icon";
 
 interface TopAppBarProps {
@@ -7,6 +8,8 @@ interface TopAppBarProps {
 }
 
 export function TopAppBar({ prayingCount = 0 }: TopAppBarProps) {
+  const t = useTranslations("common");
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0b1326]/80 backdrop-blur-xl">
       <div className="flex items-center justify-between px-4 h-14">
@@ -26,7 +29,7 @@ export function TopAppBar({ prayingCount = 0 }: TopAppBarProps) {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-container" />
             </span>
             <span className="font-label text-xs font-semibold tracking-widest uppercase">
-              {prayingCount.toLocaleString("de-DE")} praying
+              {t("prayingNow", { count: prayingCount })}
             </span>
           </div>
         )}

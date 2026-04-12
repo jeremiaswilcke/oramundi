@@ -30,16 +30,16 @@ export function usePrayerPresence() {
       config: { presence: { key: "prayers" } },
     });
 
-    channel
-      .on("presence", { event: "sync" }, () => {
-        const state = channel.presenceState<PrayerPresence>();
-        const allPrayers = Object.values(state).flat();
-        setPrayers(allPrayers);
-        setCount(allPrayers.length);
-      })
-      .subscribe();
+    channel.on("presence", { event: "sync" }, () => {
+      const state = channel.presenceState<PrayerPresence>();
+      const allPrayers = Object.values(state).flat();
+      setPrayers(allPrayers);
+      setCount(allPrayers.length);
+    });
 
     channelRef.current = channel;
+
+    channel.subscribe();
 
     return () => {
       channel.unsubscribe();

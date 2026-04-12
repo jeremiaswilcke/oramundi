@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { usePrayerPresence, useGeolocation } from "@/lib/realtime";
 import { createClient } from "@/lib/supabase/client";
@@ -42,6 +43,8 @@ export default function PrayPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const { startPraying, stopPraying } = usePrayerPresence();
   const position = useGeolocation();
+  const t = useTranslations("pray");
+  const locale = useLocale() as "de" | "en";
 
   const mysteryType: MysteryType = getTodaysMysteryType();
   const mysterySet = MYSTERY_SETS.find((m) => m.type === mysteryType)!;
@@ -128,24 +131,25 @@ export default function PrayPage() {
   }, [currentStep]);
 
   function getPrayerTitle(): string {
-    switch (step.type) {
-      case "creed": return "Apostles' Creed";
-      case "our-father": return "Our Father";
-      case "hail-mary": return "Hail Mary";
-      case "glory-be": return "Glory Be";
-      case "fatima": return "Fatima Prayer";
-      case "hail-holy-queen": return "Hail Holy Queen";
-    }
+    const keys: Record<PrayerStep["type"], string> = {
+      "creed": "apostlesCreed",
+      "our-father": "ourFather",
+      "hail-mary": "hailMary",
+      "glory-be": "gloryBe",
+      "fatima": "fatimaPrayer",
+      "hail-holy-queen": "hailHolyQueen",
+    };
+    return t(keys[step.type]);
   }
 
   function getPrayerText(): string {
     switch (step.type) {
-      case "creed": return PRAYERS.apostlesCreed.en;
-      case "our-father": return PRAYERS.ourFather.en;
-      case "hail-mary": return PRAYERS.hailMary.en;
-      case "glory-be": return PRAYERS.gloryBe.en;
-      case "fatima": return PRAYERS.fatimaPrayer.en;
-      case "hail-holy-queen": return PRAYERS.hailHolyQueen.en;
+      case "creed": return PRAYERS.apostlesCreed[locale];
+      case "our-father": return PRAYERS.ourFather[locale];
+      case "hail-mary": return PRAYERS.hailMary[locale];
+      case "glory-be": return PRAYERS.gloryBe[locale];
+      case "fatima": return PRAYERS.fatimaPrayer[locale];
+      case "hail-holy-queen": return PRAYERS.hailHolyQueen[locale];
     }
   }
 
@@ -171,17 +175,17 @@ export default function PrayPage() {
       <div className="pt-4 pb-2">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            Decade {currentDecade + 1} of 5
+            {t("decadeOf", { current: currentDecade + 1, total: 5 })}
           </span>
           <span className="text-[10px] uppercase tracking-widest font-semibold text-primary">
-            {mysterySet.name.en}
+            {mysterySet.name[locale]}
           </span>
         </div>
         <h3 className="font-headline italic text-lg text-primary-fixed mb-2">
-          {mystery.title.en}
+          {mystery.title[locale]}
         </h3>
         <p className="text-xs text-on-surface-variant mb-2 italic">
-          {mystery.subtitle.en} &mdash; {mystery.scripture.en}
+          {mystery.subtitle[locale]} &mdash; {mystery.scripture[locale]}
         </p>
         <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
           <div
@@ -221,7 +225,7 @@ export default function PrayPage() {
                       : "bg-surface-container-highest opacity-60"
                 }`}
                 style={{ left: x, top: y }}
-                aria-label={`Bead ${bead.index + 1}${bead.isActive ? " (current)" : ""}`}
+                aria-label={`${t("beadOf", { current: bead.index + 1, total: 10 })}${bead.isActive ? " (current)" : ""}`}
               />
             );
           })}
@@ -245,7 +249,7 @@ export default function PrayPage() {
         </h2>
         {step.type === "hail-mary" && "bead" in step && (
           <p className="text-center text-on-surface-variant text-xs mb-2">
-            Bead {step.bead + 1} of 10
+            {t("beadOf", { current: step.bead + 1, total: 10 })}
           </p>
         )}
         <p className="prayer-text text-on-surface/80 text-center text-base leading-[1.8] max-h-32 overflow-y-auto px-2">
@@ -259,7 +263,7 @@ export default function PrayPage() {
           onClick={handlePrev}
           disabled={currentStep === 0}
           className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center disabled:opacity-30 transition-all active:scale-95"
-          aria-label="Previous prayer"
+          aria-label={t("previous")}
         >
           <MaterialIcon name="chevron_left" size={28} className="text-on-surface" />
         </button>
@@ -267,7 +271,7 @@ export default function PrayPage() {
         <button
           onClick={() => setIsPaused(!isPaused)}
           className="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center transition-all active:scale-95"
-          aria-label={isPaused ? "Resume" : "Pause"}
+          aria-label={isPaused ? t("resume") : t("pause")}
         >
           <MaterialIcon
             name={isPaused ? "play_arrow" : "pause"}
@@ -281,7 +285,7 @@ export default function PrayPage() {
           <a
             href="/"
             className="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center transition-all active:scale-95"
-            aria-label="Finish and return home"
+            aria-label={t("finish")}
           >
             <MaterialIcon name="check" size={32} className="text-on-primary-container" />
           </a>
@@ -289,7 +293,7 @@ export default function PrayPage() {
           <button
             onClick={handleNext}
             className="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center transition-all active:scale-95"
-            aria-label="Next prayer"
+            aria-label={t("next")}
           >
             <MaterialIcon name="chevron_right" size={32} className="text-on-primary-container" />
           </button>

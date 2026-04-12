@@ -1,30 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import Link from "next/link";
 
-const STEPS = [
-  {
-    id: 1,
-    headline: "Du betest nie allein.",
-    subline: "Join thousands who pray the Rosary every day — together, across the world.",
-  },
-  {
-    id: 2,
-    headline: "Gebet sichtbar machen.",
-    subline: "See real-time prayer on a live world map. Every rosary lights up a candle.",
-  },
-  {
-    id: 3,
-    headline: "Tragt einander im Gebet.",
-    subline: "Share intentions, pray for others, and let the world carry you in prayer.",
-  },
+const STEP_KEYS = [
+  { headline: "step1Title", subline: "step1Sub" },
+  { headline: "step2Title", subline: "step2Sub" },
+  { headline: "step3Title", subline: "step3Sub" },
 ] as const;
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(0);
-  const current = STEPS[step];
+  const t = useTranslations("onboarding");
+  const tc = useTranslations("common");
+  const current = STEP_KEYS[step];
 
   return (
     <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
@@ -87,15 +78,15 @@ export default function OnboardingPage() {
         </div>
 
         <h1 className="font-headline italic text-4xl text-primary-fixed sacred-glow text-center mb-4 leading-tight">
-          {current.headline}
+          {t(current.headline)}
         </h1>
         <p className="text-on-surface-variant text-center text-base leading-relaxed mb-12 max-w-xs">
-          {current.subline}
+          {t(current.subline)}
         </p>
 
         {/* Progress dots */}
         <div className="flex gap-2 mb-8">
-          {STEPS.map((_, i) => (
+          {STEP_KEYS.map((_, i) => (
             <div
               key={i}
               className={`h-2 rounded-full transition-all duration-300 ${
@@ -115,14 +106,14 @@ export default function OnboardingPage() {
             onClick={() => setStep(step + 1)}
             className="w-full max-w-xs py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
           >
-            Continue
+            {tc("continue")}
           </button>
         ) : (
           <Link
             href="/auth"
             className="block w-full max-w-xs py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
           >
-            Jetzt Starten
+            {t("getStarted")}
           </Link>
         )}
 
@@ -131,7 +122,7 @@ export default function OnboardingPage() {
             onClick={() => setStep(step - 1)}
             className="mt-3 text-on-surface-variant text-sm"
           >
-            Back
+            {tc("back")}
           </button>
         )}
       </div>

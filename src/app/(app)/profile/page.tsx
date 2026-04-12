@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/lib/supabase/actions";
@@ -30,6 +31,9 @@ export default function ProfilePage() {
   const [displayName, setDisplayName] = useState("...");
   const [stats, setStats] = useState<Stats>({ rosaries: 0, minutes: 0, intentions: 0, streak: 0 });
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const t = useTranslations("profile");
+  const tm = useTranslations("mysteries");
+  const locale = useLocale() as "de" | "en";
 
   useEffect(() => {
     async function loadProfile() {
@@ -105,14 +109,16 @@ export default function ProfilePage() {
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
 
-    if (diffDays === 0) return `Today, ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-    if (diffDays === 1) return `Yesterday, ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
-    return date.toLocaleDateString([], { month: "short", day: "numeric" }) +
-      `, ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    const timeStr = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+
+    if (diffDays === 0) return `${locale === "de" ? "Heute" : "Today"}, ${timeStr}`;
+    if (diffDays === 1) return `${locale === "de" ? "Gestern" : "Yesterday"}, ${timeStr}`;
+    return date.toLocaleDateString(locale, { month: "short", day: "numeric" }) +
+      `, ${timeStr}`;
   }
 
   function formatDuration(startedAt: string, endedAt: string | null): string {
-    if (!endedAt) return "In progress";
+    if (!endedAt) return t("inProgress");
     const diff = new Date(endedAt).getTime() - new Date(startedAt).getTime();
     return `${Math.round(diff / 60000)} min`;
   }
@@ -126,7 +132,7 @@ export default function ProfilePage() {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="font-headline italic text-4xl text-on-surface mb-1">
-            Welcome home,
+            {t("welcomeHome")}
           </h1>
           <h1 className="font-headline italic text-4xl text-primary">
             {displayName}
@@ -151,11 +157,11 @@ export default function ProfilePage() {
               <MaterialIcon name="local_fire_department" filled size={24} className="text-primary" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-on-surface">{stats.streak}-day Streak</p>
+              <p className="text-sm font-semibold text-on-surface">{t("dayStreak", { count: stats.streak })}</p>
               <p className="text-xs text-on-surface-variant">
                 {stats.streak >= 7
-                  ? "You've been praying every day this week!"
-                  : `Keep going! ${7 - stats.streak} more days to a full week.`}
+                  ? t("streakWeek")
+                  : t("streakKeepGoing", { remaining: 7 - stats.streak })}
               </p>
             </div>
           </div>
@@ -167,19 +173,19 @@ export default function ProfilePage() {
         <div className="glass-card rounded-2xl p-4 text-center">
           <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.rosaries}</p>
           <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            Rosaries
+            {t("rosaries")}
           </p>
         </div>
         <div className="glass-card rounded-2xl p-4 text-center">
           <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.minutes}</p>
           <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            Minutes
+            {t("minutes")}
           </p>
         </div>
         <div className="glass-card rounded-2xl p-4 text-center">
           <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.intentions}</p>
           <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            Intentions
+            {t("intentionsCount")}
           </p>
         </div>
       </div>
@@ -190,13 +196,13 @@ export default function ProfilePage() {
         <div className="absolute top-0 right-0 w-40 h-40 bg-primary-container/10 rounded-full blur-3xl" />
         <div className="relative p-6">
           <span className="text-[10px] uppercase tracking-widest font-semibold text-primary mb-2 block">
-            Today&apos;s Mystery
+            {t("todaysMystery")}
           </span>
           <h3 className="font-headline italic text-xl text-primary-fixed sacred-glow mb-3">
-            {todayMystery.name.en}
+            {todayMystery.name[locale]}
           </h3>
           <p className="font-headline italic text-sm text-on-surface/60 leading-relaxed mb-4">
-            &ldquo;Pray, hope and don&apos;t worry. Worry is useless. God is merciful and will hear your prayer.&rdquo;
+            {t("padrepio")}
           </p>
           <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-4">
             &mdash; St. Padre Pio
@@ -205,7 +211,7 @@ export default function ProfilePage() {
             href="/pray"
             className="inline-block px-6 py-3 bg-primary-container text-on-primary-container font-label text-xs font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
           >
-            Pray Now
+            {t("prayNow")}
           </Link>
         </div>
       </div>
@@ -213,12 +219,12 @@ export default function ProfilePage() {
       {/* Prayer History */}
       <div>
         <h3 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
-          Prayer History
+          {t("prayerHistory")}
         </h3>
         {history.length === 0 ? (
           <div className="text-center py-8">
             <MaterialIcon name="self_improvement" size={40} className="text-on-surface-variant/30 mb-2" />
-            <p className="text-on-surface-variant text-sm">No prayers yet. Start your first rosary!</p>
+            <p className="text-on-surface-variant text-sm">{t("noPrayers")}</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -235,8 +241,8 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-on-surface capitalize">
-                    {item.mystery_type} Mysteries
+                  <p className="text-sm font-semibold text-on-surface">
+                    {tm(item.mystery_type as "joyful" | "luminous" | "sorrowful" | "glorious")}
                   </p>
                   <p className="text-xs text-on-surface-variant">
                     {formatDate(item.started_at)} &middot; {formatDuration(item.started_at, item.ended_at)}
