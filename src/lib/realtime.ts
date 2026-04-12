@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useSyncExternalStore, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
@@ -18,40 +18,68 @@ function roundCoord(coord: number): number {
   return Math.round(coord * 10) / 10;
 }
 
+// Singleton channel to avoid duplicate subscriptions
+let sharedChannel: RealtimeChannel | null = null;
+let subscriberCount = 0;
+let currentPrayers: PrayerPresence[] = [];
+let listeners = new Set<() => void>();
+
+function notifyListeners() {
+  listeners.forEach((fn) => fn());
+}
+
+function getOrCreateChannel() {
+  if (sharedChannel) return sharedChannel;
+
+  const supabase = createClient();
+  const channel = supabase.channel("prayer-presence", {
+    config: { presence: { key: "prayers" } },
+  });
+
+  channel.on("presence", { event: "sync" }, () => {
+    const state = channel.presenceState<PrayerPresence>();
+    currentPrayers = Object.values(state).flat();
+    notifyListeners();
+  });
+
+  channel.subscribe();
+  sharedChannel = channel;
+  return channel;
+}
+
+function releaseChannel() {
+  if (subscriberCount <= 0 && sharedChannel) {
+    sharedChannel.unsubscribe();
+    sharedChannel = null;
+    currentPrayers = [];
+  }
+}
+
 export function usePrayerPresence() {
-  const [prayers, setPrayers] = useState<PrayerPresence[]>([]);
-  const [count, setCount] = useState(0);
-  const channelRef = useRef<RealtimeChannel | null>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-
-    const channel = supabase.channel("prayer-presence", {
-      config: { presence: { key: "prayers" } },
-    });
-
-    channel.on("presence", { event: "sync" }, () => {
-      const state = channel.presenceState<PrayerPresence>();
-      const allPrayers = Object.values(state).flat();
-      setPrayers(allPrayers);
-      setCount(allPrayers.length);
-    });
-
-    channelRef.current = channel;
-
-    channel.subscribe();
+  const subscribe = useCallback((onStoreChange: () => void) => {
+    subscriberCount++;
+    listeners.add(onStoreChange);
+    getOrCreateChannel();
 
     return () => {
-      channel.unsubscribe();
+      subscriberCount--;
+      listeners.delete(onStoreChange);
+      releaseChannel();
     };
   }, []);
+
+  const prayers = useSyncExternalStore(
+    subscribe,
+    () => currentPrayers,
+    () => [] as PrayerPresence[]
+  );
 
   async function startPraying(presence: Omit<PrayerPresence, "userId">) {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !channelRef.current) return;
+    if (!user || !sharedChannel) return;
 
-    await channelRef.current.track({
+    await sharedChannel.track({
       userId: user.id,
       latitude: roundCoord(presence.latitude),
       longitude: roundCoord(presence.longitude),
@@ -62,12 +90,12 @@ export function usePrayerPresence() {
   }
 
   async function stopPraying() {
-    if (channelRef.current) {
-      await channelRef.current.untrack();
+    if (sharedChannel) {
+      await sharedChannel.untrack();
     }
   }
 
-  return { prayers, count, startPraying, stopPraying };
+  return { prayers, count: prayers.length, startPraying, stopPraying };
 }
 
 export function useGeolocation() {
