@@ -66,18 +66,55 @@ export function ReminderSettings() {
   }
 
   async function requestPermission() {
-    if (!("Notification" in window)) {
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
       alert("Dieser Browser unterstützt keine Benachrichtigungen.");
       return;
     }
     const perm = await Notification.requestPermission();
     setNotifPermission(perm);
-    if (perm === "granted") {
+    if (perm !== "granted") return;
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const existingSub = await registration.pushManager.getSubscription();
+
+      const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      if (!vapidPublic) {
+        console.warn("VAPID public key not set — push notifications disabled");
+        return;
+      }
+
+      const subscription = existingSub ?? await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidPublic).buffer as ArrayBuffer,
+      });
+
+      // Save subscription to DB
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ push_subscription: subscription.toJSON() })
+          .eq("id", user.id);
+      }
+
       new Notification("Ora Mundi", {
-        body: "Benachrichtigungen sind aktiviert. Wir erinnern dich an deine Gebetszeit.",
+        body: "Benachrichtigungen sind aktiviert.",
         icon: "/icons/icon-192.png",
       });
+    } catch (err) {
+      console.error("Push subscription failed:", err);
     }
+  }
+
+  function urlBase64ToUint8Array(base64: string): Uint8Array {
+    const padding = "=".repeat((4 - (base64.length % 4)) % 4);
+    const b64 = (base64 + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const raw = atob(b64);
+    const out = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+    return out;
   }
 
   async function save() {
