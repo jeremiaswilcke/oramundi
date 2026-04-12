@@ -58,7 +58,6 @@ export default function PrayPage() {
   ).length;
   const progress = (completedHailMarys / TOTAL_BEADS) * 100;
 
-  // Start prayer session on mount
   useEffect(() => {
     async function initSession() {
       const supabase = createClient();
@@ -77,9 +76,7 @@ export default function PrayPage() {
         .select("id")
         .single();
 
-      if (data) {
-        setSessionId(data.id);
-      }
+      if (data) setSessionId(data.id);
 
       if (position) {
         startPraying({
@@ -91,19 +88,13 @@ export default function PrayPage() {
         });
       }
     }
-
     initSession();
-
-    return () => {
-      stopPraying();
-    };
+    return () => { stopPraying(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Complete session when finished
   useEffect(() => {
     if (currentStep !== SEQUENCE.length - 1) return;
-
     async function completeSession() {
       if (!sessionId) return;
       const supabase = createClient();
@@ -113,21 +104,16 @@ export default function PrayPage() {
         .eq("id", sessionId);
       stopPraying();
     }
-
     completeSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, sessionId]);
 
   const handleNext = useCallback(() => {
-    if (currentStep < SEQUENCE.length - 1) {
-      setCurrentStep((prev) => prev + 1);
-    }
+    if (currentStep < SEQUENCE.length - 1) setCurrentStep((prev) => prev + 1);
   }, [currentStep]);
 
   const handlePrev = useCallback(() => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
-    }
+    if (currentStep > 0) setCurrentStep((prev) => prev - 1);
   }, [currentStep]);
 
   function getPrayerTitle(): string {
@@ -155,33 +141,30 @@ export default function PrayPage() {
 
   const beads = Array.from({ length: 10 }, (_, i) => {
     const beadStep = SEQUENCE.findIndex(
-      (s) =>
-        s.type === "hail-mary" &&
-        "decade" in s &&
-        s.decade === currentDecade &&
-        "bead" in s &&
-        s.bead === i
+      (s) => s.type === "hail-mary" && "decade" in s && s.decade === currentDecade && "bead" in s && s.bead === i
     );
-    const isActive = beadStep === currentStep;
-    const isCompleted = beadStep < currentStep;
-    return { index: i, isActive, isCompleted };
+    return { index: i, isActive: beadStep === currentStep, isCompleted: beadStep < currentStep };
   });
 
   const isFinished = currentStep === SEQUENCE.length - 1 && step.type === "hail-holy-queen";
 
   return (
-    <div className="flex flex-col h-[calc(100vh-7.5rem)] px-4">
+    <div className="flex flex-col h-[calc(100vh-7.5rem)] px-4 relative">
+      {/* Decorative blobs */}
+      <div className="absolute top-24 -left-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-32 -right-12 w-80 h-80 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
+
       {/* Progress Header */}
-      <div className="pt-4 pb-2">
+      <div className="pt-4 pb-2 relative z-10">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+          <span className="font-label text-[11px] tracking-widest uppercase text-on-secondary-container bg-secondary-container/30 px-4 py-1.5 rounded-full">
             {t("decadeOf", { current: currentDecade + 1, total: 5 })}
           </span>
           <span className="text-[10px] uppercase tracking-widest font-semibold text-primary">
             {mysterySet.name[locale]}
           </span>
         </div>
-        <h3 className="font-headline italic text-lg text-primary-fixed mb-2">
+        <h3 className="font-headline italic text-lg text-on-surface mb-2 mt-3">
           {mystery.title[locale]}
         </h3>
         <p className="text-xs text-on-surface-variant mb-2 italic">
@@ -189,14 +172,14 @@ export default function PrayPage() {
         </p>
         <div className="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary-container rounded-full transition-all duration-500"
+            className="h-full bg-primary rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
       {/* Bead Circle */}
-      <div className="flex-1 flex items-center justify-center py-4">
+      <div className="flex-1 flex items-center justify-center py-4 relative z-10">
         <div className="relative w-64 h-64">
           {beads.map((bead) => {
             const angle = (bead.index / 10) * 2 * Math.PI - Math.PI / 2;
@@ -208,96 +191,78 @@ export default function PrayPage() {
                 key={bead.index}
                 onClick={() => {
                   const idx = SEQUENCE.findIndex(
-                    (s) =>
-                      s.type === "hail-mary" &&
-                      "decade" in s &&
-                      s.decade === currentDecade &&
-                      "bead" in s &&
-                      s.bead === bead.index
+                    (s) => s.type === "hail-mary" && "decade" in s && s.decade === currentDecade && "bead" in s && s.bead === bead.index
                   );
                   if (idx >= 0) setCurrentStep(idx);
                 }}
                 className={`absolute w-6 h-6 rounded-full transition-all duration-300 -translate-x-1/2 -translate-y-1/2 ${
                   bead.isActive
-                    ? "bg-primary-container glow-active ring-4 ring-primary/30 scale-125"
+                    ? "bg-primary glow-active ring-4 ring-primary/20 scale-125"
                     : bead.isCompleted
                       ? "bg-primary/40"
-                      : "bg-surface-container-highest opacity-60"
+                      : "bg-outline-variant/30"
                 }`}
                 style={{ left: x, top: y }}
                 aria-label={`${t("beadOf", { current: bead.index + 1, total: 10 })}${bead.isActive ? " (current)" : ""}`}
               />
             );
           })}
-
-          {/* Center Medallion */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center sacred-glow-box">
-            <MaterialIcon
-              name="auto_awesome"
-              filled
-              size={36}
-              className="text-primary"
-            />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-surface-container-lowest flex items-center justify-center sacred-glow-box">
+            <MaterialIcon name="auto_awesome" filled size={36} className="text-primary" />
           </div>
         </div>
       </div>
 
       {/* Prayer Text */}
-      <div className="pb-4">
-        <h2 className="font-headline text-4xl text-primary-fixed italic sacred-glow text-center mb-3">
-          {getPrayerTitle()}
-        </h2>
-        {step.type === "hail-mary" && "bead" in step && (
-          <p className="text-center text-on-surface-variant text-xs mb-2">
-            {t("beadOf", { current: step.bead + 1, total: 10 })}
+      <div className="pb-4 relative z-10">
+        <div className="w-full max-w-2xl mx-auto bg-surface-container-lowest/40 backdrop-blur-md rounded-3xl p-8 text-center">
+          <h2 className="font-headline text-3xl text-on-surface italic mb-3">
+            {getPrayerTitle()}
+          </h2>
+          {step.type === "hail-mary" && "bead" in step && (
+            <div className="flex items-center justify-center space-x-3 mb-3">
+              {Array.from({ length: 5 }, (_, i) => (
+                <div key={i} className={`rounded-full transition-all ${i === 0 ? "w-2 h-2 bg-primary" : "w-1.5 h-1.5 bg-outline-variant/40"}`} />
+              ))}
+            </div>
+          )}
+          <p className="prayer-text text-on-surface-variant text-base leading-[1.8] max-h-32 overflow-y-auto px-2 font-light">
+            {getPrayerText()}
           </p>
-        )}
-        <p className="prayer-text text-on-surface/80 text-center text-base leading-[1.8] max-h-32 overflow-y-auto px-2">
-          {getPrayerText()}
-        </p>
+        </div>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4 pb-6">
+      <div className="flex items-center justify-center gap-6 pb-6 relative z-10">
         <button
           onClick={handlePrev}
           disabled={currentStep === 0}
-          className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center disabled:opacity-30 transition-all active:scale-95"
+          className="p-3 text-primary-container hover:text-primary transition-colors disabled:opacity-30"
           aria-label={t("previous")}
         >
-          <MaterialIcon name="chevron_left" size={28} className="text-on-surface" />
+          <MaterialIcon name="replay_10" size={24} />
         </button>
 
         <button
-          onClick={() => setIsPaused(!isPaused)}
-          className="w-14 h-14 rounded-full bg-surface-container-highest flex items-center justify-center transition-all active:scale-95"
-          aria-label={isPaused ? t("resume") : t("pause")}
+          onClick={() => isFinished ? undefined : (isPaused ? setIsPaused(false) : handleNext())}
+          className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-xl hover:opacity-90 active:scale-90 transition-all"
+          aria-label={isFinished ? t("finish") : t("next")}
         >
           <MaterialIcon
-            name={isPaused ? "play_arrow" : "pause"}
+            name={isFinished ? "check" : "play_arrow"}
             filled
             size={32}
-            className="text-primary"
           />
         </button>
 
-        {isFinished ? (
-          <a
-            href="/"
-            className="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center transition-all active:scale-95"
-            aria-label={t("finish")}
-          >
-            <MaterialIcon name="check" size={32} className="text-on-primary-container" />
-          </a>
-        ) : (
-          <button
-            onClick={handleNext}
-            className="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center transition-all active:scale-95"
-            aria-label={t("next")}
-          >
-            <MaterialIcon name="chevron_right" size={32} className="text-on-primary-container" />
-          </button>
-        )}
+        <button
+          onClick={handleNext}
+          disabled={isFinished}
+          className="p-3 text-primary-container hover:text-primary transition-colors disabled:opacity-30"
+          aria-label={t("next")}
+        >
+          <MaterialIcon name="forward_10" size={24} />
+        </button>
       </div>
     </div>
   );

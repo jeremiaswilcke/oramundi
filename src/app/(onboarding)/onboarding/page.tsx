@@ -19,112 +19,71 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
-      {/* Background effects per step */}
-      {step === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* Breathing rings */}
-          {[1, 2, 3].map((ring) => (
-            <div
-              key={ring}
-              className="absolute rounded-full border border-primary/10"
-              style={{
-                width: `${ring * 140}px`,
-                height: `${ring * 140}px`,
-                animation: `bead-breathe ${3 + ring}s ease-in-out infinite`,
-                animationDelay: `${ring * 0.5}s`,
-              }}
-            />
-          ))}
-          <div className="candle-pulse w-4 h-4 rounded-full bg-primary-container" />
-        </div>
-      )}
+      {/* Decorative blobs */}
+      <div className="absolute top-[20%] -left-20 w-64 h-64 bg-primary-fixed-dim/20 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[10%] -right-20 w-80 h-80 bg-secondary-fixed/10 rounded-full blur-[100px] pointer-events-none" />
 
-      {step === 1 && (
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 map-mesh" />
-          {/* Floating pulse dots */}
-          {Array.from({ length: 8 }, (_, i) => (
-            <div
-              key={i}
-              className="absolute candle-pulse w-2 h-2 rounded-full bg-primary-container"
-              style={{
-                left: `${15 + Math.random() * 70}%`,
-                top: `${20 + Math.random() * 60}%`,
-                animationDelay: `${i * 0.4}s`,
-              }}
-            />
-          ))}
-        </div>
-      )}
-
-      {step === 2 && (
-        <div className="absolute inset-0">
-          {/* Asymmetric grid with glass cards */}
-          <div className="absolute top-20 left-6 w-32 h-44 glass-card rounded-2xl" />
-          <div className="absolute top-36 right-8 w-40 h-28 glass-card rounded-2xl" />
-          <div className="absolute bottom-48 left-12 w-36 h-32 glass-card rounded-2xl" />
-          <div className="absolute top-16 right-4 w-6 h-6 candle-pulse rounded-full bg-primary-container/40" />
-        </div>
-      )}
+      {/* Header */}
+      <header className="fixed top-0 w-full z-50 flex items-center px-6 h-16 bg-surface/80 backdrop-blur-xl editorial-shadow">
+        <span className="text-2xl font-headline italic text-on-surface">Ora Mundi</span>
+      </header>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-end relative z-10 px-8 pb-16">
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <MaterialIcon name="public" filled size={28} className="text-primary" />
-          <span className="font-headline italic text-2xl text-primary sacred-glow">
-            Ora Mundi
-          </span>
+      <div className="flex-1 flex flex-col items-center justify-center relative z-10 px-8 pt-16">
+        <div className="max-w-md w-full flex flex-col items-center text-center">
+          <h1 className="text-4xl md:text-5xl font-headline leading-tight text-on-surface tracking-tight mb-6">
+            {t(current.headline)}
+          </h1>
+          <p className="text-on-surface-variant text-center text-lg leading-relaxed mb-12 max-w-xs font-light">
+            {t(current.subline)}
+          </p>
+
+          {/* Progress dots */}
+          <div className="flex gap-2 mb-8">
+            {STEP_KEYS.map((_, i) => (
+              <div
+                key={i}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === step
+                    ? "w-8 bg-primary"
+                    : i < step
+                      ? "w-2 bg-primary/40"
+                      : "w-2 bg-outline-variant/40"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Action */}
+          {step < 2 ? (
+            <button
+              onClick={() => setStep(step + 1)}
+              className="w-full max-w-xs py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary text-center font-medium tracking-wide text-lg rounded-full shadow-xl shadow-primary/10 hover:opacity-90 active:scale-95 transition-all"
+            >
+              {tc("continue")}
+            </button>
+          ) : (
+            <Link
+              href="/auth"
+              className="block w-full max-w-xs py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary text-center font-medium tracking-wide text-lg rounded-full shadow-xl shadow-primary/10 hover:opacity-90 active:scale-95 transition-all"
+            >
+              {t("getStarted")}
+            </Link>
+          )}
+
+          {step > 0 && (
+            <button
+              onClick={() => setStep(step - 1)}
+              className="mt-4 text-on-surface-variant text-sm"
+            >
+              {tc("back")}
+            </button>
+          )}
+
+          <p className="mt-8 text-on-surface-variant text-sm font-label uppercase tracking-[0.2em] opacity-60">
+            {step === 0 && "Stille finden \u2022 Gemeinschaft erleben"}
+          </p>
         </div>
-
-        <h1 className="font-headline italic text-4xl text-primary-fixed sacred-glow text-center mb-4 leading-tight">
-          {t(current.headline)}
-        </h1>
-        <p className="text-on-surface-variant text-center text-base leading-relaxed mb-12 max-w-xs">
-          {t(current.subline)}
-        </p>
-
-        {/* Progress dots */}
-        <div className="flex gap-2 mb-8">
-          {STEP_KEYS.map((_, i) => (
-            <div
-              key={i}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === step
-                  ? "w-8 bg-primary-container"
-                  : i < step
-                    ? "w-2 bg-primary/40"
-                    : "w-2 bg-surface-container-highest"
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Action */}
-        {step < 2 ? (
-          <button
-            onClick={() => setStep(step + 1)}
-            className="w-full max-w-xs py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
-          >
-            {tc("continue")}
-          </button>
-        ) : (
-          <Link
-            href="/auth"
-            className="block w-full max-w-xs py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
-          >
-            {t("getStarted")}
-          </Link>
-        )}
-
-        {step > 0 && (
-          <button
-            onClick={() => setStep(step - 1)}
-            className="mt-3 text-on-surface-variant text-sm"
-          >
-            {tc("back")}
-          </button>
-        )}
       </div>
     </div>
   );

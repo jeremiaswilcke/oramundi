@@ -1,19 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter } from "next/font/google";
+import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import "./globals.css";
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const notoSerif = Noto_Serif({
+  variable: "--font-noto-serif",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "700"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b1326",
+  themeColor: "#faf9f5",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -43,7 +43,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${instrumentSerif.variable} ${inter.variable} h-full antialiased`}
+      className={`${notoSerif.variable} ${plusJakarta.variable} h-full antialiased`}
     >
       <head>
         <link

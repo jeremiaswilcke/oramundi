@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 import { MaterialIcon } from "./material-icon";
 
 const NAV_ITEMS = [
-  { href: "/", icon: "map", labelKey: "map" },
-  { href: "/pray", icon: "self_improvement", labelKey: "pray" },
-  { href: "/intentions", icon: "favorite", labelKey: "intentions" },
-  { href: "/profile", icon: "person", labelKey: "profile" },
+  { href: "/", icon: "auto_awesome", labelKey: "sanctuary" },
+  { href: "/pray", icon: "auto_stories", labelKey: "rituals" },
+  { href: "/intentions", icon: "edit_note", labelKey: "journal" },
+  { href: "/profile", icon: "settings", labelKey: "settings" },
 ] as const;
 
 export function BottomNav() {
@@ -17,8 +17,8 @@ export function BottomNav() {
   const t = useTranslations("nav");
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0b1326]/90 backdrop-blur-xl border-t border-outline-variant/20">
-      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl rounded-t-3xl editorial-shadow">
+      <div className="flex items-center justify-around px-4 py-3 max-w-lg mx-auto">
         {NAV_ITEMS.map((item) => {
           const isActive =
             item.href === "/"
@@ -29,19 +29,19 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-0.5 px-4 py-2 transition-colors ${
+              className={`flex flex-col items-center justify-center gap-0.5 transition-colors ${
                 isActive
-                  ? "text-primary bg-primary/10 rounded-xl"
-                  : "text-on-surface-variant"
+                  ? "bg-primary-container/20 text-primary rounded-full px-4 py-1"
+                  : "text-on-surface-variant hover:text-primary"
               }`}
             >
               <MaterialIcon
                 name={item.icon}
                 filled={isActive}
                 size={24}
-                weight={isActive ? 600 : 400}
+                weight={isActive ? 600 : 300}
               />
-              <span className="text-[0.625rem] font-semibold tracking-widest uppercase">
+              <span className="text-[11px] tracking-wide uppercase">
                 {t(item.labelKey)}
               </span>
             </Link>

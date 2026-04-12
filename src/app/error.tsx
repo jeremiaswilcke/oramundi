@@ -23,7 +23,7 @@ export default function Error({
       </p>
       <button
         onClick={reset}
-        className="px-6 py-3 bg-primary-container text-on-primary-container font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
+        className="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-medium rounded-full shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all"
       >
         {t("tryAgain")}
       </button>

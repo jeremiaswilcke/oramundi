@@ -14,13 +14,20 @@
     "loading": "Loading..."
   },
   "nav": {
-    "map": "Map",
-    "pray": "Pray",
-    "intentions": "Intentions",
-    "profile": "Profile"
+    "sanctuary": "Sanctuary",
+    "rituals": "Rituals",
+    "journal": "Journal",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "soulCollective": "Soul Collective",
+    "believersReflecting": "Believers currently in reflection",
+    "totalRosaries": "Rosaries Prayed",
+    "totalSouls": "Souls United",
+    "totalMinutes": "Minutes in Prayer"
   },
   "auth": {
-    "welcome": "Welcome to the Sanctuary",
+    "welcome": "The Digital Sanctuary",
     "email": "Email address",
     "password": "Password",
     "displayName": "Display name",

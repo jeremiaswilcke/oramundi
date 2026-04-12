@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
 import { usePrayerPresence } from "@/lib/realtime";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
 const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -33,6 +34,7 @@ export default function MapPage() {
   const todayMystery = MYSTERY_SETS.find((m) => m.type === todayType)!;
   const t = useTranslations("map");
   const tc = useTranslations("common");
+  const td = useTranslations("dashboard");
   const locale = useLocale() as "de" | "en";
 
   // Randomize fallback count once per page load (1–12)
@@ -42,6 +44,20 @@ export default function MapPage() {
   const displayPrayers = count > 0 ? livePrayers : mockSubset;
   const displayCount = count > 0 ? count : mockCount;
 
+  // Global stats
+  const [globalRosaries, setGlobalRosaries] = useState(0);
+  useEffect(() => {
+    async function fetchGlobalStats() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("global_stats")
+        .select("total_rosaries")
+        .single();
+      if (data) setGlobalRosaries(data.total_rosaries);
+    }
+    fetchGlobalStats();
+  }, []);
+
   return (
     <div className="relative h-[calc(100vh-7.5rem)] overflow-hidden">
       {/* Map */}
@@ -49,15 +65,15 @@ export default function MapPage() {
         <PrayerMap prayers={displayPrayers} mapToken={MAP_TOKEN} />
       ) : (
         /* Fallback SVG map when no token */
-        <div className="absolute inset-0 bg-surface map-mesh">
-          <div className="absolute inset-0 opacity-[0.07]">
+        <div className="absolute inset-0 bg-surface-container-low map-mesh">
+          <div className="absolute inset-0 opacity-[0.15]">
             <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-              <ellipse cx="25" cy="30" rx="12" ry="15" fill="currentColor" className="text-on-surface" />
-              <ellipse cx="30" cy="48" rx="6" ry="10" fill="currentColor" className="text-on-surface" />
-              <ellipse cx="50" cy="28" rx="8" ry="12" fill="currentColor" className="text-on-surface" />
-              <ellipse cx="52" cy="45" rx="5" ry="8" fill="currentColor" className="text-on-surface" />
-              <ellipse cx="72" cy="32" rx="14" ry="12" fill="currentColor" className="text-on-surface" />
-              <ellipse cx="82" cy="50" rx="8" ry="7" fill="currentColor" className="text-on-surface" />
+              <ellipse cx="25" cy="30" rx="12" ry="15" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="30" cy="48" rx="6" ry="10" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="50" cy="28" rx="8" ry="12" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="52" cy="45" rx="5" ry="8" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="72" cy="32" rx="14" ry="12" fill="currentColor" className="text-outline-variant" />
+              <ellipse cx="82" cy="50" rx="8" ry="7" fill="currentColor" className="text-outline-variant" />
             </svg>
           </div>
           {displayPrayers.map((p) => (
@@ -70,7 +86,7 @@ export default function MapPage() {
               }}
             >
               <div
-                className="candle-pulse w-3 h-3 rounded-full bg-primary-container"
+                className="candle-pulse w-3 h-3 rounded-full bg-secondary"
                 style={{ animationDelay: `${Math.random() * 3}s` }}
               />
             </div>
@@ -78,76 +94,62 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Top Pill Badge */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-        <div className="glass-card flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant/20">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-container" />
-          </span>
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {tc("prayingNow", { count: displayCount })}
-          </span>
-        </div>
-      </div>
-
-      {/* Bottom Card */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        <div className="glass-panel rounded-t-[32px] px-6 pt-6 pb-4 border-t border-outline-variant/20">
-          {/* Mode Toggle */}
-          <div className="flex rounded-2xl bg-surface-container-highest/50 p-1 mb-5">
-            <button
-              onClick={() => setMode("guided")}
-              className={`flex-1 py-2.5 text-xs font-semibold tracking-widest uppercase rounded-xl transition-all ${
-                mode === "guided"
-                  ? "bg-primary-container text-on-primary-container"
-                  : "text-on-surface-variant"
-              }`}
-            >
-              {t("guidedPrayer")}
-            </button>
-            <button
-              onClick={() => setMode("quick")}
-              className={`flex-1 py-2.5 text-xs font-semibold tracking-widest uppercase rounded-xl transition-all ${
-                mode === "quick"
-                  ? "bg-primary-container text-on-primary-container"
-                  : "text-on-surface-variant"
-              }`}
-            >
-              {t("quickLog")}
-            </button>
+      {/* Overlays */}
+      <div className="absolute inset-0 z-10 p-6 flex flex-col pointer-events-none">
+        <div className="flex justify-between items-start w-full">
+          {/* Soul Collective Counter */}
+          <div className="pointer-events-auto glass-card p-6 rounded-3xl flex flex-col gap-1 max-w-[200px]">
+            <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">
+              {td("soulCollective")}
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-headline text-on-surface italic">
+                {displayCount.toLocaleString(locale)}
+              </span>
+              <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
+            </div>
+            <p className="text-[11px] leading-tight text-on-surface-variant/80">
+              {td("believersReflecting")}
+            </p>
           </div>
 
-          <h2 className="font-headline italic text-3xl text-primary-fixed sacred-glow text-center mb-1">
-            {t("theHolyRosary")}
-          </h2>
-          <p className="text-center text-on-surface-variant text-sm mb-5">
-            <MaterialIcon name={todayMystery.icon} size={16} className="align-middle mr-1" />
-            {t("today", { mystery: todayMystery.name[locale] })}
-          </p>
+          {/* Global Rosaries (if available) */}
+          {globalRosaries > 0 && (
+            <div className="pointer-events-auto glass-card p-4 rounded-2xl text-right max-w-[180px]">
+              <span className="text-2xl font-headline text-on-surface italic">
+                {globalRosaries.toLocaleString(locale)}
+              </span>
+              <p className="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium mt-1">
+                {td("totalRosaries")}
+              </p>
+            </div>
+          )}
+        </div>
 
+        {/* Bottom Card */}
+        <div className="mt-auto mb-2 flex flex-col items-center">
+          <div className="pointer-events-auto w-full max-w-md glass-card p-8 rounded-[2rem] text-center mb-6">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-on-secondary-container font-semibold mb-4 block">
+              {t("today", { mystery: todayMystery.name[locale] })}
+            </span>
+            <h2 className="text-3xl font-headline text-on-surface mb-2">
+              {t("theHolyRosary")}
+            </h2>
+          </div>
+
+          {/* Start Rosary Button */}
           <Link
             href={mode === "guided" ? "/pray" : "/pray?mode=quick"}
-            className="block w-full py-4 bg-primary-container text-on-primary-container text-center font-label text-sm font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
+            className="pointer-events-auto group relative px-12 py-5 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95"
           >
-            {t("startRosary")}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-container" />
+            <div className="relative flex items-center gap-3 text-on-primary">
+              <MaterialIcon name="auto_awesome" filled size={20} />
+              <span className="font-medium tracking-wide uppercase text-sm">
+                {t("startRosary")}
+              </span>
+            </div>
           </Link>
-
-          <div className="flex items-center justify-center gap-4 mt-4">
-            {MYSTERY_SETS.map((set) => (
-              <button
-                key={set.type}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-semibold transition-all ${
-                  set.type === todayType
-                    ? "bg-primary/15 text-primary"
-                    : "text-on-surface-variant/60 hover:text-on-surface-variant"
-                }`}
-              >
-                <MaterialIcon name={set.icon} size={14} />
-                {set.type.slice(0, 3)}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

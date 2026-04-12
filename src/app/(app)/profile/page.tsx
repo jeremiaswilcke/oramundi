@@ -41,7 +41,6 @@ export default function ProfilePage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Profile
       const { data: profile } = await supabase
         .from("profiles")
         .select("display_name")
@@ -50,7 +49,6 @@ export default function ProfilePage() {
 
       if (profile) setDisplayName(profile.display_name);
 
-      // Prayer sessions
       const { data: sessions } = await supabase
         .from("prayer_sessions")
         .select("*")
@@ -65,7 +63,6 @@ export default function ProfilePage() {
           return sum + Math.round(diff / 60000);
         }, 0);
 
-        // Calculate streak
         let streak = 0;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -73,26 +70,15 @@ export default function ProfilePage() {
           const checkDate = new Date(today);
           checkDate.setDate(checkDate.getDate() - d);
           const dayStr = checkDate.toISOString().slice(0, 10);
-          const hasSession = completed.some(
-            (s) => s.started_at.slice(0, 10) === dayStr
-          );
-          if (hasSession) {
-            streak++;
-          } else if (d > 0) {
-            break;
-          }
+          const hasSession = completed.some((s) => s.started_at.slice(0, 10) === dayStr);
+          if (hasSession) streak++;
+          else if (d > 0) break;
         }
 
-        setStats({
-          rosaries: completed.length,
-          minutes: totalMinutes,
-          intentions: 0,
-          streak,
-        });
+        setStats({ rosaries: completed.length, minutes: totalMinutes, intentions: 0, streak });
         setHistory(sessions.slice(0, 10));
       }
 
-      // Intentions count
       const { count } = await supabase
         .from("intentions")
         .select("id", { count: "exact", head: true })
@@ -100,7 +86,6 @@ export default function ProfilePage() {
 
       setStats((prev) => ({ ...prev, intentions: count ?? 0 }));
     }
-
     loadProfile();
   }, []);
 
@@ -108,13 +93,10 @@ export default function ProfilePage() {
     const date = new Date(dateStr);
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
-
     const timeStr = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
-
     if (diffDays === 0) return `${locale === "de" ? "Heute" : "Today"}, ${timeStr}`;
     if (diffDays === 1) return `${locale === "de" ? "Gestern" : "Yesterday"}, ${timeStr}`;
-    return date.toLocaleDateString(locale, { month: "short", day: "numeric" }) +
-      `, ${timeStr}`;
+    return date.toLocaleDateString(locale, { month: "short", day: "numeric" }) + `, ${timeStr}`;
   }
 
   function formatDuration(startedAt: string, endedAt: string | null): string {
@@ -131,10 +113,10 @@ export default function ProfilePage() {
       {/* Welcome */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="font-headline italic text-4xl text-on-surface mb-1">
+          <h1 className="font-headline italic text-3xl text-on-surface mb-1">
             {t("welcomeHome")}
           </h1>
-          <h1 className="font-headline italic text-4xl text-primary">
+          <h1 className="font-headline italic text-3xl text-primary">
             {displayName}
           </h1>
         </div>
@@ -151,57 +133,49 @@ export default function ProfilePage() {
 
       {/* Streak Badge */}
       {stats.streak > 0 && (
-        <div className="glass-card rounded-2xl p-4 border-l-4 border-primary mb-6">
+        <div className="glass-card rounded-3xl p-4 border-l-4 border-primary mb-6">
           <div className="flex items-center gap-3">
-            <div className="candle-pulse w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <MaterialIcon name="local_fire_department" filled size={24} className="text-primary" />
             </div>
             <div>
               <p className="text-sm font-semibold text-on-surface">{t("dayStreak", { count: stats.streak })}</p>
               <p className="text-xs text-on-surface-variant">
-                {stats.streak >= 7
-                  ? t("streakWeek")
-                  : t("streakKeepGoing", { remaining: 7 - stats.streak })}
+                {stats.streak >= 7 ? t("streakWeek") : t("streakKeepGoing", { remaining: 7 - stats.streak })}
               </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Stats Bento Grid */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.rosaries}</p>
-          <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {t("rosaries")}
-          </p>
-        </div>
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.minutes}</p>
-          <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {t("minutes")}
-          </p>
-        </div>
-        <div className="glass-card rounded-2xl p-4 text-center">
-          <p className="font-headline italic text-3xl text-primary-fixed mb-1">{stats.intentions}</p>
-          <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {t("intentionsCount")}
-          </p>
-        </div>
+        {[
+          { value: stats.rosaries, label: t("rosaries") },
+          { value: stats.minutes, label: t("minutes") },
+          { value: stats.intentions, label: t("intentionsCount") },
+        ].map((stat) => (
+          <div key={stat.label} className="glass-card rounded-3xl p-4 text-center">
+            <p className="font-headline italic text-3xl text-on-surface mb-1">{stat.value}</p>
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+              {stat.label}
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Daily Mystery */}
-      <div className="relative rounded-[32px] overflow-hidden mb-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-lowest" />
-        <div className="absolute top-0 right-0 w-40 h-40 bg-primary-container/10 rounded-full blur-3xl" />
+      <div className="relative rounded-[2rem] overflow-hidden mb-6">
+        <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-surface-container-low" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl" />
         <div className="relative p-6">
           <span className="text-[10px] uppercase tracking-widest font-semibold text-primary mb-2 block">
             {t("todaysMystery")}
           </span>
-          <h3 className="font-headline italic text-xl text-primary-fixed sacred-glow mb-3">
+          <h3 className="font-headline italic text-xl text-on-surface mb-3">
             {todayMystery.name[locale]}
           </h3>
-          <p className="font-headline italic text-sm text-on-surface/60 leading-relaxed mb-4">
+          <p className="font-headline italic text-sm text-on-surface-variant leading-relaxed mb-4">
             {t("padrepio")}
           </p>
           <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-4">
@@ -209,8 +183,9 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/pray"
-            className="inline-block px-6 py-3 bg-primary-container text-on-primary-container font-label text-xs font-semibold tracking-widest uppercase rounded-2xl transition-all hover:brightness-110 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-medium text-xs tracking-widest uppercase rounded-full shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all"
           >
+            <MaterialIcon name="auto_awesome" filled size={16} />
             {t("prayNow")}
           </Link>
         </div>
@@ -229,16 +204,9 @@ export default function ProfilePage() {
         ) : (
           <div className="space-y-2">
             {history.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-3 glass-card rounded-2xl p-3"
-              >
-                <div className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
-                  <MaterialIcon
-                    name={getMysteryIcon(item.mystery_type)}
-                    size={20}
-                    className="text-primary"
-                  />
+              <div key={item.id} className="flex items-center gap-3 glass-card rounded-3xl p-3">
+                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+                  <MaterialIcon name={getMysteryIcon(item.mystery_type)} size={20} className="text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-on-surface">

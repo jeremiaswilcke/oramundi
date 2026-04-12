@@ -10,9 +10,9 @@ interface PrayerMapProps {
   mapToken: string;
 }
 
-const DARK_STYLE: maptilersdk.StyleSpecification = {
+const LIGHT_STYLE: maptilersdk.StyleSpecification = {
   version: 8,
-  name: "Ora Mundi Dark",
+  name: "Ora Mundi Light",
   sources: {
     countries: {
       type: "vector",
@@ -23,7 +23,7 @@ const DARK_STYLE: maptilersdk.StyleSpecification = {
     {
       id: "background",
       type: "background",
-      paint: { "background-color": "#0b1326" },
+      paint: { "background-color": "#f4f4f0" },
     },
     {
       id: "country-fills",
@@ -31,8 +31,8 @@ const DARK_STYLE: maptilersdk.StyleSpecification = {
       source: "countries",
       "source-layer": "administrative",
       paint: {
-        "fill-color": "#171f33",
-        "fill-opacity": 0.6,
+        "fill-color": "#e9e8e4",
+        "fill-opacity": 0.8,
       },
     },
     {
@@ -41,9 +41,9 @@ const DARK_STYLE: maptilersdk.StyleSpecification = {
       source: "countries",
       "source-layer": "administrative",
       paint: {
-        "line-color": "#222a3d",
+        "line-color": "#c4c8bf",
         "line-width": 0.5,
-        "line-opacity": 0.5,
+        "line-opacity": 0.6,
       },
     },
   ],
@@ -62,7 +62,7 @@ export function PrayerMap({ prayers, mapToken }: PrayerMapProps) {
 
     const map = new maptilersdk.Map({
       container: containerRef.current,
-      style: DARK_STYLE,
+      style: LIGHT_STYLE,
       center: [10, 30],
       zoom: 1.5,
       minZoom: 1,
@@ -110,7 +110,7 @@ export function PrayerMap({ prayers, mapToken }: PrayerMapProps) {
       el.style.width = "12px";
       el.style.height = "12px";
       el.style.borderRadius = "50%";
-      el.style.backgroundColor = "#f59e0b";
+      el.style.backgroundColor = "#785749";
       el.style.animationDelay = `${Math.random() * 3}s`;
 
       const marker = new maptilersdk.Marker({ element: el })

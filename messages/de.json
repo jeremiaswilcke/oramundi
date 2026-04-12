@@ -14,13 +14,20 @@
     "loading": "Laden..."
   },
   "nav": {
-    "map": "Karte",
-    "pray": "Beten",
-    "intentions": "Anliegen",
-    "profile": "Profil"
+    "sanctuary": "Heiligtum",
+    "rituals": "Rituale",
+    "journal": "Tagebuch",
+    "settings": "Einstellungen"
+  },
+  "dashboard": {
+    "soulCollective": "Seelengemeinschaft",
+    "believersReflecting": "Gläubige gerade im Gebet",
+    "totalRosaries": "Gebetete Rosenkränze",
+    "totalSouls": "Vereinte Seelen",
+    "totalMinutes": "Minuten im Gebet"
   },
   "auth": {
-    "welcome": "Willkommen im Heiligtum",
+    "welcome": "Das digitale Heiligtum",
     "email": "E-Mail-Adresse",
     "password": "Passwort",
     "displayName": "Anzeigename",
