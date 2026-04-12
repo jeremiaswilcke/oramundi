@@ -6,6 +6,7 @@ import { MaterialIcon } from "@/components/material-icon";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/lib/supabase/actions";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
+import { ReminderSettings } from "@/components/reminder-settings";
 import Link from "next/link";
 
 interface Stats {
@@ -190,6 +191,9 @@ export default function ProfilePage() {
           </Link>
         </div>
       </div>
+
+      {/* Reminder Settings */}
+      <ReminderSettings />
 
       {/* Legal Links */}
       <div className="flex items-center justify-center gap-4 mb-6 text-xs text-on-surface-variant/60">

@@ -82,6 +82,56 @@ export default function MapPage() {
     }
   }
 
+  // Reminder banner
+  const [reminderDue, setReminderDue] = useState(false);
+  useEffect(() => {
+    async function checkReminder() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("reminder_enabled, reminder_days, reminder_time")
+        .eq("id", user.id)
+        .single();
+      if (!profile?.reminder_enabled) return;
+
+      const now = new Date();
+      const dayKeys = ["sun","mon","tue","wed","thu","fri","sat"];
+      const today = dayKeys[now.getDay()];
+      if (!profile.reminder_days?.includes(today)) return;
+
+      // Check if user prayed today
+      const todayStart = new Date(now);
+      todayStart.setHours(0, 0, 0, 0);
+      const { count } = await supabase
+        .from("prayer_sessions")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("completed", true)
+        .gte("started_at", todayStart.toISOString());
+      if ((count ?? 0) > 0) return;
+
+      // Check if current time is past reminder time
+      const [hh, mm] = (profile.reminder_time ?? "18:00").split(":").map(Number);
+      const reminderTime = new Date(now);
+      reminderTime.setHours(hh, mm, 0, 0);
+      if (now >= reminderTime) {
+        setReminderDue(true);
+        // Fire a browser notification if permitted
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Ora Mundi — Zeit zum Gebet", {
+            body: "Es ist Zeit für deinen Rosenkranz.",
+            icon: "/icons/icon-192.png",
+            tag: "ora-mundi-reminder",
+          });
+        }
+      }
+    }
+    checkReminder();
+  }, []);
+
   // Global stats
   const [globalRosaries, setGlobalRosaries] = useState(0);
   useEffect(() => {
@@ -129,6 +179,23 @@ export default function MapPage() {
               />
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Reminder banner */}
+      {reminderDue && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+          <div className="glass-panel rounded-full px-5 py-3 flex items-center gap-3 editorial-shadow">
+            <MaterialIcon name="notifications_active" filled size={20} className="text-primary" />
+            <span className="text-sm text-on-surface font-medium">Zeit für dein Gebet</span>
+            <button
+              onClick={() => setReminderDue(false)}
+              className="text-on-surface-variant/60 hover:text-on-surface transition-colors"
+              aria-label="Schließen"
+            >
+              <MaterialIcon name="close" size={16} />
+            </button>
+          </div>
         </div>
       )}
 
