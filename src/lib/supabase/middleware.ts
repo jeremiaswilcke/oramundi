@@ -33,6 +33,7 @@ export async function updateSession(request: NextRequest) {
   const isProtectedRoute =
     !request.nextUrl.pathname.startsWith("/auth") &&
     !request.nextUrl.pathname.startsWith("/onboarding") &&
+    !request.nextUrl.pathname.startsWith("/legal") &&
     !request.nextUrl.pathname.startsWith("/api");
 
   if (!user && isProtectedRoute) {

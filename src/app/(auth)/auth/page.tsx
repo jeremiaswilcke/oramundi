@@ -156,7 +156,7 @@ export default function AuthPage() {
 
         {/* Toggle mode */}
         <footer className="text-center pb-8">
-          <p className="text-on-surface-variant/60 text-sm">
+          <p className="text-on-surface-variant/60 text-sm mb-4">
             {mode === "signin" ? (
               <button onClick={() => { setMode("register"); setError(null); }} className="text-primary font-semibold ml-1">
                 {t("joinTheCircle")}
@@ -167,6 +167,11 @@ export default function AuthPage() {
               </button>
             )}
           </p>
+          <div className="flex items-center justify-center gap-3 text-xs text-on-surface-variant/40">
+            <a href="/legal/impressum" className="hover:text-primary transition-colors">Impressum</a>
+            <span>&middot;</span>
+            <a href="/legal/privacy" className="hover:text-primary transition-colors">Datenschutz</a>
+          </div>
         </footer>
       </div>
     </div>

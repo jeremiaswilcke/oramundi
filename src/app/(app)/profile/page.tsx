@@ -191,6 +191,17 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Legal Links */}
+      <div className="flex items-center justify-center gap-4 mb-6 text-xs text-on-surface-variant/60">
+        <Link href="/legal/impressum" className="hover:text-primary transition-colors">
+          Impressum
+        </Link>
+        <span>&middot;</span>
+        <Link href="/legal/privacy" className="hover:text-primary transition-colors">
+          Datenschutz
+        </Link>
+      </div>
+
       {/* Prayer History */}
       <div>
         <h3 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">

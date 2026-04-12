@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { CookieBanner } from "@/components/cookie-banner";
 import "./globals.css";
 
 const notoSerif = Noto_Serif({
@@ -54,6 +55,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-on-surface font-body">
         <NextIntlClientProvider messages={messages}>
           {children}
+          <CookieBanner />
         </NextIntlClientProvider>
       </body>
     </html>
