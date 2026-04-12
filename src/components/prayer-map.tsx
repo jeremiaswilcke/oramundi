@@ -1,133 +1,71 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import * as maptilersdk from "@maptiler/sdk";
-import "@maptiler/sdk/dist/maptiler-sdk.css";
+import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import type { PrayerPresence } from "@/lib/realtime";
+
+// World-110m TopoJSON from public CDN (no API key, always available)
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface PrayerMapProps {
   prayers: PrayerPresence[];
-  mapToken: string;
+  mapToken?: string;
 }
 
-const LIGHT_STYLE: maptilersdk.StyleSpecification = {
-  version: 8,
-  name: "Ora Mundi Light",
-  sources: {
-    countries: {
-      type: "vector",
-      url: "https://api.maptiler.com/tiles/countries/tiles.json",
-    },
-  },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: { "background-color": "#f4f4f0" },
-    },
-    {
-      id: "country-fills",
-      type: "fill",
-      source: "countries",
-      "source-layer": "administrative",
-      paint: {
-        "fill-color": "#e9e8e4",
-        "fill-opacity": 0.8,
-      },
-    },
-    {
-      id: "country-borders",
-      type: "line",
-      source: "countries",
-      "source-layer": "administrative",
-      paint: {
-        "line-color": "#c4c8bf",
-        "line-width": 0.5,
-        "line-opacity": 0.6,
-      },
-    },
-  ],
-};
-
-export function PrayerMap({ prayers, mapToken }: PrayerMapProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<maptilersdk.Map | null>(null);
-  const markersRef = useRef<Map<string, maptilersdk.Marker>>(new Map());
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
-
-    maptilersdk.config.apiKey = mapToken;
-
-    const map = new maptilersdk.Map({
-      container: containerRef.current,
-      style: LIGHT_STYLE,
-      center: [10, 30],
-      zoom: 1.5,
-      minZoom: 1,
-      maxZoom: 8,
-      attributionControl: { compact: true },
-      geolocateControl: false,
-      maptilerLogo: false,
-    });
-
-    map.dragRotate.disable();
-    map.touchZoomRotate.disableRotation();
-
-    map.on("load", () => {
-      setIsLoaded(true);
-    });
-
-    mapRef.current = map;
-
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [mapToken]);
-
-  // Update markers when prayers change
-  useEffect(() => {
-    if (!mapRef.current || !isLoaded) return;
-
-    const currentIds = new Set(prayers.map((p) => p.userId));
-
-    // Remove markers for users no longer praying
-    markersRef.current.forEach((marker, id) => {
-      if (!currentIds.has(id)) {
-        marker.remove();
-        markersRef.current.delete(id);
-      }
-    });
-
-    // Add/update markers
-    prayers.forEach((prayer) => {
-      if (markersRef.current.has(prayer.userId)) return;
-
-      const el = document.createElement("div");
-      el.className = "candle-pulse";
-      el.style.width = "12px";
-      el.style.height = "12px";
-      el.style.borderRadius = "50%";
-      el.style.backgroundColor = "#785749";
-      el.style.animationDelay = `${Math.random() * 3}s`;
-
-      const marker = new maptilersdk.Marker({ element: el })
-        .setLngLat([prayer.longitude, prayer.latitude])
-        .addTo(mapRef.current!);
-
-      markersRef.current.set(prayer.userId, marker);
-    });
-  }, [prayers, isLoaded]);
-
+export function PrayerMap({ prayers }: PrayerMapProps) {
   return (
-    <div ref={containerRef} className="absolute inset-0">
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-surface flex items-center justify-center">
-          <div className="candle-pulse w-4 h-4 rounded-full bg-primary-container" />
-        </div>
-      )}
+    <div className="absolute inset-0 bg-surface-container-low overflow-hidden">
+      <ComposableMap
+        projection="geoNaturalEarth1"
+        projectionConfig={{ scale: 180 }}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <Geographies geography={GEO_URL}>
+          {({ geographies }: { geographies: Array<{ rsmKey: string }> }) =>
+            geographies.map((geo) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#e9e8e4"
+                stroke="#c4c8bf"
+                strokeWidth={0.4}
+                style={{
+                  default: { outline: "none" },
+                  hover: { outline: "none", fill: "#e9e8e4" },
+                  pressed: { outline: "none" },
+                }}
+              />
+            ))
+          }
+        </Geographies>
+
+        {prayers.map((p, i) => {
+          const delay = (i * 0.25) % 2.5;
+          return (
+            <Marker key={p.userId} coordinates={[p.longitude, p.latitude]}>
+              <g>
+                <circle r={6} fill="#785749" opacity={0.25}>
+                  <animate
+                    attributeName="r"
+                    values="4;10;4"
+                    dur="2.5s"
+                    repeatCount="indefinite"
+                    begin={`${delay}s`}
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0.5;0;0.5"
+                    dur="2.5s"
+                    repeatCount="indefinite"
+                    begin={`${delay}s`}
+                  />
+                </circle>
+                <circle r={3} fill="#785749" />
+                <circle r={1.5} fill="#fdd0bf" />
+              </g>
+            </Marker>
+          );
+        })}
+      </ComposableMap>
     </div>
   );
 }
