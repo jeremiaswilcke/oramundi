@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* === Primary (Sage Green) === */
-  --color-primary: #516350;
+  /* === Primary (Sage Green — Rose/Struktur) === */
+  --color-primary: #5b6d5b;
   --color-primary-container: #8da08a;
   --color-primary-fixed: #d4e8d0;
   --color-primary-fixed-dim: #b8ccb4;
@@ -12,43 +12,43 @@
   --color-on-primary-fixed-variant: #3a4b39;
   --color-inverse-primary: #b8ccb4;
 
-  /* === Secondary (Terra Cotta) === */
-  --color-secondary: #785749;
-  --color-secondary-container: #fdd0bf;
-  --color-secondary-fixed: #ffdbcd;
-  --color-secondary-fixed-dim: #e8bdac;
-  --color-on-secondary: #ffffff;
-  --color-on-secondary-container: #795749;
-  --color-on-secondary-fixed: #2d150b;
-  --color-on-secondary-fixed-variant: #5e4033;
+  /* === Secondary (Ember Orange — Licht/Akzent) === */
+  --color-secondary: #e6a266;
+  --color-secondary-container: #f7d6b0;
+  --color-secondary-fixed: #fbe5cc;
+  --color-secondary-fixed-dim: #f1c08a;
+  --color-on-secondary: #3d2400;
+  --color-on-secondary-container: #5a3a0c;
+  --color-on-secondary-fixed: #2a1700;
+  --color-on-secondary-fixed-variant: #6d4912;
 
-  /* === Tertiary (Forest Green) === */
-  --color-tertiary: #536253;
-  --color-tertiary-container: #8f9f8d;
-  --color-tertiary-fixed: #d7e7d3;
-  --color-tertiary-fixed-dim: #bbcbb8;
+  /* === Tertiary (Clay Red — Herzschlag/Zentrum) === */
+  --color-tertiary: #a67c7c;
+  --color-tertiary-container: #d9b8b8;
+  --color-tertiary-fixed: #ecd2d2;
+  --color-tertiary-fixed-dim: #c5a0a0;
   --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #283628;
-  --color-on-tertiary-fixed: #111f12;
-  --color-on-tertiary-fixed-variant: #3c4a3c;
+  --color-on-tertiary-container: #4a2929;
+  --color-on-tertiary-fixed: #2c1414;
+  --color-on-tertiary-fixed-variant: #5e3434;
 
-  /* === Surface / Background (Light Cream) === */
-  --color-background: #faf9f5;
-  --color-surface: #faf9f5;
-  --color-surface-dim: #dbdad6;
+  /* === Surface / Background (Warm Sand) === */
+  --color-background: #f2f0e9;
+  --color-surface: #f2f0e9;
+  --color-surface-dim: #d4d2cc;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f4f4f0;
-  --color-surface-container: #efeeea;
-  --color-surface-container-high: #e9e8e4;
-  --color-surface-container-highest: #e3e2df;
-  --color-surface-variant: #e3e2df;
-  --color-surface-bright: #faf9f5;
-  --color-surface-tint: #516350;
-  --color-on-surface: #1b1c1a;
-  --color-on-surface-variant: #434842;
-  --color-on-background: #1b1c1a;
+  --color-surface-container-low: #ebe9e2;
+  --color-surface-container: #e6e4dd;
+  --color-surface-container-high: #e0ddd5;
+  --color-surface-container-highest: #d9d6cf;
+  --color-surface-variant: #d9d6cf;
+  --color-surface-bright: #f2f0e9;
+  --color-surface-tint: #5b6d5b;
+  --color-on-surface: #333333;
+  --color-on-surface-variant: #555555;
+  --color-on-background: #333333;
   --color-inverse-surface: #2f312e;
-  --color-inverse-on-surface: #f2f1ed;
+  --color-inverse-on-surface: #f2f0e9;
 
   /* === Outline === */
   --color-outline: #747871;
@@ -80,9 +80,9 @@ body {
 
 /* Logo color tokens (aliases for the brand palette) */
 :root {
-  --ora-green: var(--color-primary);
-  --ora-orange: var(--color-secondary-fixed-dim);
-  --ora-clay: var(--color-secondary);
+  --ora-green: #5b6d5b;
+  --ora-orange: #e6a266;
+  --ora-clay: #a67c7c;
 }
 
 /* === Custom Utility Classes === */

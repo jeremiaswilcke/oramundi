@@ -156,16 +156,67 @@ export default function PrayPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initializing, resumePrompt, sessionId]);
 
-  // Persist progress whenever step changes
+  // Persist progress whenever step changes (debounced)
   useEffect(() => {
     if (!sessionId) return;
     const supabase = createClient();
-    supabase
-      .from("prayer_sessions")
-      .update({ current_step: currentStep, last_active_at: new Date().toISOString() })
-      .eq("id", sessionId)
-      .then(() => { /* ignore */ });
+    const timeout = setTimeout(async () => {
+      const { error } = await supabase
+        .from("prayer_sessions")
+        .update({ current_step: currentStep, last_active_at: new Date().toISOString() })
+        .eq("id", sessionId);
+      if (error) console.error("Failed to save progress:", error);
+    }, 300);
+    return () => clearTimeout(timeout);
   }, [currentStep, sessionId]);
+
+  // Save on tab close / app background using sendBeacon
+  useEffect(() => {
+    if (!sessionId) return;
+    const handler = () => {
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+        if (!supabaseUrl || !anonKey) return;
+        const url = `${supabaseUrl}/rest/v1/prayer_sessions?id=eq.${sessionId}`;
+        const data = JSON.stringify({
+          current_step: currentStep,
+          last_active_at: new Date().toISOString(),
+        });
+        const blob = new Blob([data], { type: "application/json" });
+        // Get auth token from localStorage if available
+        const tokenKey = Object.keys(localStorage).find((k) => k.startsWith("sb-") && k.endsWith("-auth-token"));
+        const tokenStr = tokenKey ? localStorage.getItem(tokenKey) : null;
+        let accessToken = anonKey;
+        if (tokenStr) {
+          try {
+            const parsed = JSON.parse(tokenStr);
+            accessToken = parsed.access_token ?? anonKey;
+          } catch { /* ignore */ }
+        }
+        // sendBeacon doesn't support custom headers, so we use fetch with keepalive
+        fetch(url, {
+          method: "PATCH",
+          keepalive: true,
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": anonKey,
+            "Authorization": `Bearer ${accessToken}`,
+            "Prefer": "return=minimal",
+          },
+          body: data,
+        }).catch(() => { /* ignore */ });
+        // Also try sendBeacon as fallback
+        navigator.sendBeacon?.(url, blob);
+      } catch { /* ignore */ }
+    };
+    window.addEventListener("beforeunload", handler);
+    window.addEventListener("pagehide", handler);
+    return () => {
+      window.removeEventListener("beforeunload", handler);
+      window.removeEventListener("pagehide", handler);
+    };
+  }, [sessionId, currentStep]);
 
   useEffect(() => {
     if (currentStep !== SEQUENCE.length - 1) return;

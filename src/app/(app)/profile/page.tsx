@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/lib/supabase/actions";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { ReminderSettings } from "@/components/reminder-settings";
+import { Friends } from "@/components/friends";
 import Link from "next/link";
 
 interface Stats {
@@ -191,6 +192,9 @@ export default function ProfilePage() {
           </Link>
         </div>
       </div>
+
+      {/* Friends */}
+      <Friends />
 
       {/* Reminder Settings */}
       <ReminderSettings />

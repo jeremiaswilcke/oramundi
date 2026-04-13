@@ -25,8 +25,8 @@ export function PrayerMap({ prayers }: PrayerMapProps) {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill="#e9e8e4"
-                stroke="#c4c8bf"
+                fill="#e0ddd5"
+                stroke="#c2bfb6"
                 strokeWidth={0.4}
                 style={{
                   default: { outline: "none" },
@@ -43,7 +43,7 @@ export function PrayerMap({ prayers }: PrayerMapProps) {
           return (
             <Marker key={p.userId} coordinates={[p.longitude, p.latitude]}>
               <g>
-                <circle r={6} fill="#785749" opacity={0.25}>
+                <circle r={6} fill="#a67c7c" opacity={0.25}>
                   <animate
                     attributeName="r"
                     values="4;10;4"
@@ -59,8 +59,8 @@ export function PrayerMap({ prayers }: PrayerMapProps) {
                     begin={`${delay}s`}
                   />
                 </circle>
-                <circle r={3} fill="#785749" />
-                <circle r={1.5} fill="#fdd0bf" />
+                <circle r={3} fill="#a67c7c" />
+                <circle r={1.5} fill="#f7d6b0" />
               </g>
             </Marker>
           );
