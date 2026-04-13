@@ -195,14 +195,31 @@ export default function ProfilePage() {
       {/* Reminder Settings */}
       <ReminderSettings />
 
-      {/* Legal Links */}
-      <div className="flex items-center justify-center gap-4 mb-6 text-xs text-on-surface-variant/60">
-        <Link href="/legal/impressum" className="hover:text-primary transition-colors">
-          Impressum
+      {/* Legal Links as Cards */}
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <Link
+          href="/legal/impressum"
+          className="glass-card rounded-2xl p-4 flex items-center gap-3 hover:bg-surface-container-high transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="description" size={20} className="text-tertiary" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-on-surface">Impressum</div>
+            <div className="text-[11px] text-on-surface-variant truncate">Rechtliche Angaben</div>
+          </div>
         </Link>
-        <span>&middot;</span>
-        <Link href="/legal/privacy" className="hover:text-primary transition-colors">
-          Datenschutz
+        <Link
+          href="/legal/privacy"
+          className="glass-card rounded-2xl p-4 flex items-center gap-3 hover:bg-surface-container-high transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full bg-tertiary-container/30 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="shield" size={20} className="text-tertiary" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-on-surface">Datenschutz</div>
+            <div className="text-[11px] text-on-surface-variant truncate">DSGVO-Erklärung</div>
+          </div>
         </Link>
       </div>
 

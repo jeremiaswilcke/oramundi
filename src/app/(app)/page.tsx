@@ -275,9 +275,10 @@ export default function MapPage() {
           </div>
           <Link
             href="/library"
-            className="pointer-events-auto text-on-surface-variant text-xs tracking-widest uppercase font-medium hover:text-primary transition-colors"
+            className="pointer-events-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-on-surface-variant hover:text-primary text-xs tracking-widest uppercase font-medium transition-all editorial-shadow active:scale-95"
           >
-            {tl("openLibrary")} &rarr;
+            <MaterialIcon name="auto_stories" size={16} />
+            {tl("openLibrary")}
           </Link>
         </div>
       </div>

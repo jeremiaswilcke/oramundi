@@ -167,10 +167,13 @@ export default function AuthPage() {
               </button>
             )}
           </p>
-          <div className="flex items-center justify-center gap-3 text-xs text-on-surface-variant/40">
-            <a href="/legal/impressum" className="hover:text-primary transition-colors">Impressum</a>
-            <span>&middot;</span>
-            <a href="/legal/privacy" className="hover:text-primary transition-colors">Datenschutz</a>
+          <div className="flex items-center justify-center gap-2">
+            <a href="/legal/impressum" className="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-xs hover:bg-surface-container transition-colors">
+              Impressum
+            </a>
+            <a href="/legal/privacy" className="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-xs hover:bg-surface-container transition-colors">
+              Datenschutz
+            </a>
           </div>
         </footer>
       </div>

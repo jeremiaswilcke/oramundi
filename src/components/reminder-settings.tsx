@@ -301,50 +301,43 @@ export function ReminderSettings() {
       )}
 
       {enabled && userId && (
-        <div className="mb-4 p-4 rounded-2xl bg-surface-container-low border border-outline-variant/10">
-          <div className="flex items-center gap-2 mb-2">
-            <MaterialIcon name="calendar_month" size={18} className="text-primary" />
-            <span className="text-xs font-semibold text-on-surface uppercase tracking-wider">
-              Im Kalender abonnieren
-            </span>
-          </div>
-          <p className="text-[11px] text-on-surface-variant leading-relaxed mb-3">
-            Füge diese URL als Kalender-Abo in Apple Kalender, Google Calendar oder Outlook hinzu.
-            Erinnerungen erscheinen dann auch ohne Browser/App.
-          </p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              readOnly
-              value={typeof window !== "undefined" ? `${window.location.origin}/api/calendar/${userId}` : ""}
-              onClick={(e) => (e.target as HTMLInputElement).select()}
-              className="flex-1 bg-surface-container px-3 py-2 rounded-lg text-xs text-on-surface-variant font-mono border border-outline-variant/10"
-            />
-            <button
-              onClick={async () => {
-                const url = `${window.location.origin}/api/calendar/${userId}`;
-                try {
-                  await navigator.clipboard.writeText(url);
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 2000);
-                } catch {
-                  // fallback
-                }
-              }}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
-                copied ? "bg-primary text-on-primary" : "bg-primary-container text-on-primary-container"
-              }`}
-            >
-              {copied ? "✓" : "Kopieren"}
-            </button>
-          </div>
+        <div className="mb-4 grid grid-cols-2 gap-3">
+          <button
+            onClick={async () => {
+              const url = `${window.location.origin}/api/calendar/${userId}`;
+              try {
+                await navigator.clipboard.writeText(url);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              } catch { /* fallback */ }
+            }}
+            className={`relative overflow-hidden rounded-2xl p-5 text-left transition-all active:scale-[0.98] ${
+              copied
+                ? "bg-primary text-on-primary"
+                : "bg-gradient-to-br from-tertiary-fixed to-tertiary-fixed-dim text-on-tertiary-container hover:brightness-105"
+            }`}
+          >
+            <MaterialIcon name="calendar_month" size={28} className="mb-2" />
+            <div className="text-sm font-semibold leading-tight">
+              {copied ? "Kopiert" : "Kalender abonnieren"}
+            </div>
+            <div className="text-[11px] opacity-70 mt-0.5">
+              {copied ? "URL in Zwischenablage" : "Apple, Google, Outlook"}
+            </div>
+          </button>
+
           <a
             href={`/api/calendar/${userId}`}
             download="ora-mundi.ics"
-            className="inline-flex items-center gap-1 mt-3 text-[11px] text-primary hover:underline"
+            className="relative overflow-hidden rounded-2xl p-5 text-left bg-gradient-to-br from-secondary-container to-secondary-fixed-dim text-on-secondary-container hover:brightness-105 transition-all active:scale-[0.98] block"
           >
-            <MaterialIcon name="download" size={14} />
-            Als .ics-Datei herunterladen
+            <MaterialIcon name="download" size={28} className="mb-2" />
+            <div className="text-sm font-semibold leading-tight">
+              .ics herunterladen
+            </div>
+            <div className="text-[11px] opacity-70 mt-0.5">
+              Einmalig importieren
+            </div>
           </a>
         </div>
       )}
