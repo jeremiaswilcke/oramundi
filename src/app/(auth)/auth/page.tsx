@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
+import { OraMundiLogo } from "@/components/ora-mundi-logo";
 import {
   signInWithEmail,
   signUpWithEmail,
@@ -47,8 +48,8 @@ export default function AuthPage() {
       <div className="w-full max-w-md mx-auto space-y-12 relative z-10">
         {/* Logo */}
         <header className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-container-lowest rounded-full editorial-shadow mb-4">
-            <MaterialIcon name="auto_awesome" filled size={32} className="text-primary" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-surface-container-lowest rounded-full editorial-shadow mb-4">
+            <OraMundiLogo size={48} />
           </div>
           <h1 className="font-headline italic text-4xl text-on-surface tracking-tight">
             Ora Mundi

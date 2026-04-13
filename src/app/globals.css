@@ -78,6 +78,13 @@ body {
   font-family: var(--font-body);
 }
 
+/* Logo color tokens (aliases for the brand palette) */
+:root {
+  --ora-green: var(--color-primary);
+  --ora-orange: var(--color-secondary-fixed-dim);
+  --ora-clay: var(--color-secondary);
+}
+
 /* === Custom Utility Classes === */
 
 .sacred-glow {

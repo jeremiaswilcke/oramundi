@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { MaterialIcon } from "./material-icon";
+import { OraMundiLogo } from "./ora-mundi-logo";
 
 interface TopAppBarProps {
   prayingCount?: number;
@@ -14,9 +14,12 @@ export function TopAppBar({ prayingCount = 0 }: TopAppBarProps) {
     <header className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl editorial-shadow">
       <div className="flex items-center justify-between px-6 h-16">
         {/* Logo */}
-        <h1 className="font-headline italic text-2xl text-on-surface">
-          Ora Mundi
-        </h1>
+        <div className="flex items-center gap-2">
+          <OraMundiLogo size={28} />
+          <h1 className="font-headline italic text-2xl text-on-surface">
+            Ora Mundi
+          </h1>
+        </div>
 
         {/* Live Counter */}
         {prayingCount > 0 && (

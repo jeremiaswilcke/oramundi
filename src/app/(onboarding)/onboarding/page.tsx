@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MaterialIcon } from "@/components/material-icon";
+import { OraMundiLogo } from "@/components/ora-mundi-logo";
 import Link from "next/link";
 
 const STEP_KEYS = [
@@ -24,7 +24,8 @@ export default function OnboardingPage() {
       <div className="absolute bottom-[10%] -right-20 w-80 h-80 bg-secondary-fixed/10 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 flex items-center px-6 h-16 bg-surface/80 backdrop-blur-xl editorial-shadow">
+      <header className="fixed top-0 w-full z-50 flex items-center gap-2 px-6 h-16 bg-surface/80 backdrop-blur-xl editorial-shadow">
+        <OraMundiLogo size={28} />
         <span className="text-2xl font-headline italic text-on-surface">Ora Mundi</span>
       </header>
 
