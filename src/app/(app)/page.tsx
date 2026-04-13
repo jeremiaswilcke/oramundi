@@ -30,21 +30,21 @@ export default function MapPage() {
     let cancelled = false;
     async function loadRecent() {
       const supabase = createClient();
-      const since = new Date(Date.now() - 30 * 60_000).toISOString();
-      const { data } = await supabase
-        .from("prayer_sessions")
-        .select("id, user_id, mystery_type, mode, latitude, longitude, started_at")
-        .gte("started_at", since)
-        .not("latitude", "is", null)
-        .not("longitude", "is", null);
+      const { data } = await supabase.rpc("get_public_active_prayers");
       if (cancelled || !data) return;
-      const mapped: PrayerPresence[] = data.map((s) => ({
-        userId: s.id as string,
-        latitude: s.latitude as number,
-        longitude: s.longitude as number,
-        mysteryType: (s.mystery_type as string) ?? "glorious",
-        mode: (s.mode as string) ?? "quick",
-        startedAt: s.started_at as string,
+      const mapped: PrayerPresence[] = (data as Array<{
+        latitude: number;
+        longitude: number;
+        mystery_type: string | null;
+        mode: string | null;
+        started_at: string;
+      }>).map((s, idx) => ({
+        userId: `public-${idx}-${s.started_at}`,
+        latitude: s.latitude,
+        longitude: s.longitude,
+        mysteryType: s.mystery_type ?? "glorious",
+        mode: s.mode ?? "quick",
+        startedAt: s.started_at,
       }));
       setRecentPrayers(mapped);
     }
@@ -106,10 +106,10 @@ export default function MapPage() {
       if (!user) return;
 
       const { data: profile } = await supabase
-        .from("profiles")
+        .from("user_private_settings")
         .select("reminder_enabled, reminder_days, reminder_time")
-        .eq("id", user.id)
-        .single();
+        .eq("user_id", user.id)
+        .maybeSingle();
       if (!profile?.reminder_enabled) return;
 
       const now = new Date();

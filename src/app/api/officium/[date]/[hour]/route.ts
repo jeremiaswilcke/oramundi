@@ -1,4 +1,20 @@
 import { NextResponse } from "next/server";
+import DOMPurify from "isomorphic-dompurify";
+
+const OFFICIUM_ALLOWED_TAGS = [
+  "p", "div", "span", "br", "hr",
+  "h1", "h2", "h3", "h4", "h5",
+  "table", "tbody", "thead", "tr", "td", "th",
+  "b", "i", "u", "em", "strong", "sub", "sup",
+  "ul", "ol", "li",
+  "font", "center", "small", "big",
+  "a",
+];
+
+const OFFICIUM_ALLOWED_ATTR = [
+  "class", "id", "align", "color", "size", "colspan", "rowspan", "valign",
+  "href", "title",
+];
 
 // Maps our hour slugs to divinumofficium.com command names
 const HOUR_MAP: Record<string, string> = {
@@ -67,22 +83,20 @@ export async function GET(
   const bodyMatch = html.match(/<H2[^>]*ID=['"]?\w+top['"]?[^>]*>([\s\S]*?)<\/FORM>/i);
   let body = bodyMatch ? bodyMatch[1] : html;
 
-  // Strip the navigation footer if present
+  // Trim nav fragments before handing to the sanitizer
   body = body.split(/<FORM[\s\S]*?>/i)[0];
   body = body.split(/<INPUT TYPE=/i)[0];
   body = body.split(/<P ALIGN=CENTER><A HREF=/i)[0];
-
-  // Strip the "Top/Next" anchor links inside cells
   body = body.replace(/<DIV ALIGN=['"]?right['"]?>[\s\S]*?<\/DIV>/gi, "");
 
-  // Strip onclick handlers for safety
-  body = body.replace(/on\w+="[^"]*"/gi, "");
-
-  // Strip script/style/form tags
-  body = body
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<form[\s\S]*?<\/form>/gi, "");
+  // Allowlist-based sanitization: drops scripts, event handlers, javascript: URLs,
+  // iframes, embeds, SVG/MathML payloads, and any tag/attr not explicitly permitted.
+  body = DOMPurify.sanitize(body, {
+    ALLOWED_TAGS: OFFICIUM_ALLOWED_TAGS,
+    ALLOWED_ATTR: OFFICIUM_ALLOWED_ATTR,
+    ALLOWED_URI_REGEXP: /^(?:https?:|#)/i,
+    FORBID_TAGS: ["script", "style", "form", "iframe", "object", "embed", "svg", "math"],
+  });
 
   // Extract the title (e.g. "Ad Vesperas")
   const titleMatch = html.match(/<H2[^>]*>([^<]+)<\/H2>/i);

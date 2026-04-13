@@ -2,14 +2,16 @@
 
 Damit echte Gebetserinnerungen auch bei geschlossener App funktionieren, muss die Supabase Edge Function deployed werden und ein Cron-Job eingerichtet werden.
 
-## 1. VAPID Keys (bereits generiert)
+## 1. VAPID Keys
+
+> **WICHTIG:** Der ursprünglich in dieser Datei committete Private Key (`z5v4voD9…`) gilt als **kompromittiert** und muss rotiert werden. Neuen Keypair mit `npx web-push generate-vapid-keys` erzeugen und überall ersetzen (Vercel Env, Supabase Secrets, Service Worker Build).
 
 ```
-VAPID_PUBLIC_KEY=BDByHmHaWh7a1fzE8Bfd5JZ5REG2kmHhe6KLHGuFrrXBoc1u3xHkilG1DN8GOVphSGq1W-Pt1s9FsKfGz2f0cVA
-VAPID_PRIVATE_KEY=z5v4voD9ErBg_JrjKrAidYZ0vVaVh2tSn2WB-GQGqUk
+VAPID_PUBLIC_KEY=YOUR_VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY=YOUR_VAPID_PRIVATE_KEY
 ```
 
-Der Public Key ist bereits in `next.config.ts` als Fallback hinterlegt. Der Private Key muss geheim bleiben.
+Der Private Key darf **niemals** ins Repo oder in Doku. Nur Secret Manager (Vercel, Supabase) / lokales `.env.local`.
 
 ## 2. Supabase CLI installieren (falls noch nicht)
 
@@ -22,8 +24,8 @@ supabase link --project-ref gbczpovjxftfixzzelfy
 ## 3. Edge Function Secrets setzen
 
 ```bash
-supabase secrets set VAPID_PUBLIC_KEY=BDByHmHaWh7a1fzE8Bfd5JZ5REG2kmHhe6KLHGuFrrXBoc1u3xHkilG1DN8GOVphSGq1W-Pt1s9FsKfGz2f0cVA
-supabase secrets set VAPID_PRIVATE_KEY=z5v4voD9ErBg_JrjKrAidYZ0vVaVh2tSn2WB-GQGqUk
+supabase secrets set VAPID_PUBLIC_KEY=YOUR_VAPID_PUBLIC_KEY
+supabase secrets set VAPID_PRIVATE_KEY=YOUR_VAPID_PRIVATE_KEY
 supabase secrets set VAPID_SUBJECT=mailto:info@oramundi.online
 ```
 

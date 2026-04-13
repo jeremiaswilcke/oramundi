@@ -104,8 +104,8 @@ Deno.serve(async () => {
     const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
     const { data: profiles, error } = await supabase
-      .from("profiles")
-      .select("id, reminder_time, reminder_days, push_subscription")
+      .from("user_private_settings")
+      .select("user_id, reminder_time, reminder_days, push_subscription")
       .eq("reminder_enabled", true)
       .not("push_subscription", "is", null);
 
@@ -133,7 +133,7 @@ Deno.serve(async () => {
       const { count } = await supabase
         .from("prayer_sessions")
         .select("id", { count: "exact", head: true })
-        .eq("user_id", profile.id)
+        .eq("user_id", profile.user_id)
         .eq("completed", true)
         .gte("started_at", todayStart.toISOString());
       if ((count ?? 0) > 0) { skipped++; continue; }
@@ -149,7 +149,7 @@ Deno.serve(async () => {
           sent++;
         } else if (status === 410 || status === 404) {
           // Subscription expired/invalid
-          await supabase.from("profiles").update({ push_subscription: null }).eq("id", profile.id);
+          await supabase.from("user_private_settings").update({ push_subscription: null }).eq("user_id", profile.user_id);
           failed++;
         } else {
           failed++;

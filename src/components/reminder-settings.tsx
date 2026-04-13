@@ -31,7 +31,7 @@ export function ReminderSettings() {
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState(false);
   const [notifPermission, setNotifPermission] = useState<NotificationPermission>("default");
-  const [userId, setUserId] = useState<string | null>(null);
+  const [calendarToken, setCalendarToken] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -42,17 +42,17 @@ export function ReminderSettings() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      setUserId(user.id);
       const { data } = await supabase
-        .from("profiles")
-        .select("reminder_enabled, reminder_frequency, reminder_days, reminder_time")
-        .eq("id", user.id)
-        .single();
+        .from("user_private_settings")
+        .select("reminder_enabled, reminder_frequency, reminder_days, reminder_time, calendar_token")
+        .eq("user_id", user.id)
+        .maybeSingle();
       if (data) {
         setEnabled(data.reminder_enabled ?? false);
         setFrequency((data.reminder_frequency ?? "daily") as Frequency);
         setDays(data.reminder_days ?? ["mon","tue","wed","thu","fri","sat","sun"]);
         setTime(data.reminder_time ?? "18:00");
+        setCalendarToken(data.calendar_token ?? null);
       }
     }
     load();
@@ -92,14 +92,12 @@ export function ReminderSettings() {
         applicationServerKey: urlBase64ToUint8Array(vapidPublic).buffer as ArrayBuffer,
       });
 
-      // Save subscription to DB
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         await supabase
-          .from("profiles")
-          .update({ push_subscription: subscription.toJSON() })
-          .eq("id", user.id);
+          .from("user_private_settings")
+          .upsert({ user_id: user.id, push_subscription: subscription.toJSON() }, { onConflict: "user_id" });
       }
 
       new Notification("Ora Mundi", {
@@ -142,6 +140,19 @@ export function ReminderSettings() {
     }
   }
 
+  async function ensureCalendarToken(): Promise<string | null> {
+    if (calendarToken) return calendarToken;
+    const supabase = createClient();
+    const { data, error } = await supabase.rpc("rotate_calendar_token");
+    if (error) {
+      console.error("rotate_calendar_token failed:", error);
+      return null;
+    }
+    const token = data as string | null;
+    if (token) setCalendarToken(token);
+    return token;
+  }
+
   async function save() {
     setSaving(true);
     setSavedMsg(false);
@@ -150,26 +161,27 @@ export function ReminderSettings() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Ensure push subscription exists if reminders are enabled
       const subscription = enabled ? await ensurePushSubscription() : null;
 
-      const updateData: Record<string, unknown> = {
+      const payload: Record<string, unknown> = {
+        user_id: user.id,
         reminder_enabled: enabled,
         reminder_frequency: frequency,
         reminder_days: days,
         reminder_time: time,
+        updated_at: new Date().toISOString(),
       };
-      if (subscription) {
-        updateData.push_subscription = subscription;
-      }
+      if (subscription) payload.push_subscription = subscription;
 
       const { error } = await supabase
-        .from("profiles")
-        .update(updateData)
-        .eq("id", user.id);
+        .from("user_private_settings")
+        .upsert(payload, { onConflict: "user_id" });
       if (error) {
         alert(`Fehler: ${error.message}`);
         return;
+      }
+      if (enabled) {
+        await ensureCalendarToken();
       }
       if (enabled && !subscription) {
         alert("Erinnerung gespeichert, aber Browser-Push konnte nicht aktiviert werden. Erlaube Benachrichtigungen in den Browser-Einstellungen.");
@@ -219,7 +231,6 @@ export function ReminderSettings() {
 
       {enabled && (
         <>
-          {/* Frequency */}
           <div className="mb-4">
             <label className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2 block">
               Häufigkeit
@@ -246,7 +257,6 @@ export function ReminderSettings() {
             </div>
           </div>
 
-          {/* Days */}
           <div className="mb-4">
             <label className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2 block">
               Tage
@@ -268,7 +278,6 @@ export function ReminderSettings() {
             </div>
           </div>
 
-          {/* Time */}
           <div className="mb-4">
             <label className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2 block">
               Uhrzeit
@@ -281,7 +290,6 @@ export function ReminderSettings() {
             />
           </div>
 
-          {/* Notification permission */}
           {notifPermission !== "granted" && (
             <button
               onClick={requestPermission}
@@ -300,11 +308,11 @@ export function ReminderSettings() {
         </>
       )}
 
-      {enabled && userId && (
+      {enabled && calendarToken && (
         <div className="mb-4 grid grid-cols-2 gap-3">
           <button
             onClick={async () => {
-              const url = `${window.location.origin}/api/calendar/${userId}`;
+              const url = `${window.location.origin}/api/calendar/${calendarToken}`;
               try {
                 await navigator.clipboard.writeText(url);
                 setCopied(true);
@@ -327,7 +335,7 @@ export function ReminderSettings() {
           </button>
 
           <a
-            href={`/api/calendar/${userId}`}
+            href={`/api/calendar/${calendarToken}`}
             download="ora-mundi.ics"
             className="relative overflow-hidden rounded-2xl p-5 text-left bg-gradient-to-br from-secondary-container to-secondary-fixed-dim text-on-secondary-container hover:brightness-105 transition-all active:scale-[0.98] block"
           >

@@ -23,34 +23,41 @@ function formatUtcStamp(date: Date): string {
   return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
 }
 
+type ReminderRow = {
+  display_name: string | null;
+  reminder_enabled: boolean;
+  reminder_days: string[] | null;
+  reminder_time: string | null;
+};
+
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ token: string }> }
 ) {
-  const { userId } = await params;
+  const { token } = await params;
+  if (!token || token.length < 20) {
+    return new NextResponse("Not found", { status: 404 });
+  }
 
-  // URL itself is the secret (userId is a UUID)
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { auth: { persistSession: false } }
   );
 
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("display_name, reminder_enabled, reminder_days, reminder_time")
-    .eq("id", userId)
-    .single();
+  const { data, error } = await supabase.rpc("get_reminder_by_calendar_token", {
+    p_token: token,
+  });
 
-  if (error || !profile) {
+  const row = Array.isArray(data) ? (data[0] as ReminderRow | undefined) : undefined;
+  if (error || !row) {
     return new NextResponse("Not found", { status: 404 });
   }
 
-  const time = (profile.reminder_time as string) ?? "18:00";
+  const time = row.reminder_time ?? "18:00";
   const [hh, mm] = time.split(":").map(Number);
-  const days = ((profile.reminder_days as string[]) ?? []).map((d) => DAY_TO_ICAL[d]).filter(Boolean);
+  const days = (row.reminder_days ?? []).map((d) => DAY_TO_ICAL[d]).filter(Boolean);
 
-  // First occurrence: today (or next matching day) at the given time
   const now = new Date();
   const start = new Date(now);
   start.setHours(hh, mm, 0, 0);
@@ -89,10 +96,10 @@ export async function GET(
     "END:VTIMEZONE",
   ];
 
-  if (profile.reminder_enabled && days.length > 0) {
+  if (row.reminder_enabled && days.length > 0) {
     lines.push(
       "BEGIN:VEVENT",
-      `UID:ora-mundi-reminder-${userId}@oramundi.online`,
+      `UID:ora-mundi-reminder-${token.slice(0, 16)}@oramundi.online`,
       `DTSTAMP:${stamp}`,
       `DTSTART;TZID=${tzid}:${dtStart}`,
       `DTEND;TZID=${tzid}:${dtEnd}`,
