@@ -25,15 +25,21 @@ serwist.addEventListeners();
 // Web Push: Handle incoming push notifications
 self.addEventListener("push", (event: PushEvent) => {
   let payload: { title?: string; body?: string; url?: string } = {};
-  try {
-    payload = event.data?.json() ?? {};
-  } catch {
-    payload = { body: event.data?.text() };
+  if (event.data) {
+    try {
+      payload = event.data.json();
+    } catch {
+      try {
+        payload = { body: event.data.text() };
+      } catch {
+        // empty push
+      }
+    }
   }
 
-  const title = payload.title ?? "Ora Mundi";
+  const title = payload.title ?? "Ora Mundi — Zeit für dein Gebet";
   const options: NotificationOptions = {
-    body: payload.body ?? "Zeit für dein Gebet.",
+    body: payload.body ?? "Dein Rosenkranz wartet auf dich.",
     icon: "/icons/icon-192.png",
     badge: "/icons/icon-192.png",
     tag: "ora-mundi-reminder",
