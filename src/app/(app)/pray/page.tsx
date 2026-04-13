@@ -11,6 +11,14 @@ import {
   getTodaysMysteryType,
   type MysteryType,
 } from "@/data/rosary";
+import {
+  PRAYERS_LATIN,
+  INSERTIONS_LATIN,
+  MYSTERY_NAMES_LATIN,
+  PRAYER_TITLES_LATIN,
+} from "@/data/prayers-latin";
+
+type PrayerLang = "de" | "en" | "la";
 
 type PrayerStep =
   | { type: "creed" }
@@ -42,13 +50,17 @@ export default function PrayPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showMysteryPicker, setShowMysteryPicker] = useState(false);
+  const [prayerLang, setPrayerLang] = useState<PrayerLang>("de");
   const [resumePrompt, setResumePrompt] = useState<{ sessionId: string; mysteryType: MysteryType; step: number } | null>(null);
   const [initializing, setInitializing] = useState(true);
   const { startPraying, stopPraying } = usePrayerPresence();
   const position = useGeolocation();
   const t = useTranslations("pray");
   const tm = useTranslations("mysteries");
-  const locale = useLocale() as "de" | "en";
+  const uiLocale = useLocale() as "de" | "en";
+  // Default prayer language to UI language; user can override via picker
+  useEffect(() => { setPrayerLang(uiLocale); }, [uiLocale]);
+  const locale: "de" | "en" = uiLocale; // for non-prayer UI labels
 
   const todayType = getTodaysMysteryType();
   const mysteryType: MysteryType = selectedMystery ?? todayType;
@@ -242,6 +254,21 @@ export default function PrayPage() {
   }, [currentStep]);
 
   function getPrayerTitle(): string {
+    if (prayerLang === "la") {
+      if (mysteryType === "mercy") {
+        if (step.type === "our-father") return PRAYER_TITLES_LATIN.eternalFather;
+        if (step.type === "hail-mary") return PRAYER_TITLES_LATIN.divineMercy;
+      }
+      const keys: Record<PrayerStep["type"], string> = {
+        "creed": "apostlesCreed",
+        "our-father": "ourFather",
+        "hail-mary": "hailMary",
+        "glory-be": "gloryBe",
+        "fatima": "fatimaPrayer",
+        "hail-holy-queen": "hailHolyQueen",
+      };
+      return PRAYER_TITLES_LATIN[keys[step.type]];
+    }
     if (mysteryType === "mercy") {
       if (step.type === "our-father") return locale === "de" ? "Ewiger Vater" : "Eternal Father";
       if (step.type === "hail-mary") return locale === "de" ? "Barmherzigkeit" : "Divine Mercy";
@@ -258,6 +285,14 @@ export default function PrayPage() {
   }
 
   function getHailMaryWithInsertion(): string {
+    if (prayerLang === "la") {
+      const ins = INSERTIONS_LATIN[mysteryType]?.[currentDecade] ?? "";
+      // Latin: insert after "fructus ventris tui, Iesus."
+      return PRAYERS_LATIN.hailMary.replace(
+        "fructus ventris tui, Iesus.",
+        `fructus ventris tui, ${ins}.`
+      );
+    }
     const ins = mystery.insertion[locale];
     if (locale === "de") {
       return PRAYERS.hailMary.de.replace(
@@ -272,6 +307,20 @@ export default function PrayPage() {
   }
 
   function getPrayerText(): string {
+    if (prayerLang === "la") {
+      if (mysteryType === "mercy") {
+        if (step.type === "our-father") return PRAYERS_LATIN.eternalFather;
+        if (step.type === "hail-mary") return PRAYERS_LATIN.divineMercy;
+      }
+      switch (step.type) {
+        case "creed": return PRAYERS_LATIN.apostlesCreed;
+        case "our-father": return PRAYERS_LATIN.ourFather;
+        case "hail-mary": return getHailMaryWithInsertion();
+        case "glory-be": return PRAYERS_LATIN.gloryBe;
+        case "fatima": return PRAYERS_LATIN.fatimaPrayer;
+        case "hail-holy-queen": return PRAYERS_LATIN.hailHolyQueen;
+      }
+    }
     if (mysteryType === "mercy") {
       if (step.type === "our-father") return PRAYERS.eternalFather[locale];
       if (step.type === "hail-mary") return PRAYERS.divineMercy[locale];
@@ -340,17 +389,31 @@ export default function PrayPage() {
 
       {/* Mystery Selector Header */}
       <div className="pt-4 pb-2 relative z-10">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between gap-2 mb-2">
           <button
             onClick={() => setShowMysteryPicker(!showMysteryPicker)}
-            className="flex items-center gap-2 font-label text-[11px] tracking-widest uppercase text-on-secondary-container bg-secondary-container/30 px-4 py-1.5 rounded-full hover:bg-secondary-container/50 transition-colors"
+            className="flex items-center gap-2 font-label text-[11px] tracking-widest uppercase text-on-secondary-container bg-secondary-container/40 px-4 py-1.5 rounded-full hover:bg-secondary-container/60 transition-colors min-w-0"
           >
-            {tm(mysteryType)}
+            <span className="truncate">{prayerLang === "la" ? MYSTERY_NAMES_LATIN[mysteryType] : tm(mysteryType)}</span>
             <MaterialIcon name="expand_more" size={16} />
           </button>
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
-            {t("decadeOf", { current: currentDecade + 1, total: 5 })}
-          </span>
+          {/* Language picker DE / EN / LA */}
+          <div className="flex items-center bg-surface-container-low rounded-full p-0.5 flex-shrink-0">
+            {(["de", "en", "la"] as const).map((lng) => (
+              <button
+                key={lng}
+                onClick={() => setPrayerLang(lng)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-all ${
+                  prayerLang === lng
+                    ? "bg-primary text-on-primary"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+                aria-label={lng === "la" ? "Latein" : lng === "de" ? "Deutsch" : "English"}
+              >
+                {lng}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Mystery Picker Dropdown */}
