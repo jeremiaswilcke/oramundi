@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { OraMundiLogo } from "./ora-mundi-logo";
 
@@ -13,13 +14,17 @@ export function TopAppBar({ prayingCount = 0 }: TopAppBarProps) {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl editorial-shadow">
       <div className="flex items-center justify-between px-6 h-16">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
+        {/* Logo (links to home) */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity active:scale-95"
+          aria-label="Zur Startseite"
+        >
           <OraMundiLogo size={28} />
           <h1 className="font-headline italic text-2xl text-on-surface">
             Ora Mundi
           </h1>
-        </div>
+        </Link>
 
         {/* Live Counter */}
         {prayingCount > 0 && (
