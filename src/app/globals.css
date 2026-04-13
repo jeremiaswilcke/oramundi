@@ -146,6 +146,78 @@ body {
   box-shadow: 0 40px 60px rgba(27, 28, 26, 0.04);
 }
 
+/* === Officium Divinum embedded content (from divinumofficium.com) === */
+.officium-content {
+  font-family: "Noto Serif", serif;
+  line-height: 1.8;
+  color: var(--color-on-surface);
+}
+.officium-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none;
+  margin: 1rem 0;
+}
+.officium-content td {
+  vertical-align: top;
+  padding: 1rem;
+  border: none;
+}
+.officium-content td + td {
+  border-left: 1px solid var(--color-outline-variant);
+}
+.officium-content h2 {
+  font-style: italic;
+  font-size: 1.25rem;
+  text-align: center;
+  margin: 2rem 0 1rem;
+  color: var(--color-primary);
+}
+.officium-content h3 {
+  font-style: italic;
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+  color: var(--color-on-surface-variant);
+}
+.officium-content p {
+  margin: 0.5em 0;
+}
+.officium-content font[color="red"],
+.officium-content font[color="RED"] {
+  color: var(--color-tertiary) !important;
+  font-style: italic;
+}
+.officium-content font[color="MAROON"],
+.officium-content font[color="maroon"] {
+  color: var(--color-secondary) !important;
+}
+.officium-content font[color="green"],
+.officium-content font[color="GREEN"] {
+  display: none;
+}
+.officium-content i {
+  color: var(--color-on-surface-variant);
+}
+.officium-content a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.officium-content a:hover {
+  text-decoration: underline;
+}
+.officium-content br + br {
+  display: block;
+  content: "";
+  margin: 0.5em 0;
+}
+@media (max-width: 768px) {
+  .officium-content table { display: block; }
+  .officium-content tr { display: block; }
+  .officium-content td { display: block; padding: 0.5rem 0; }
+  .officium-content td + td { border-left: none; border-top: 1px solid var(--color-outline-variant); padding-top: 0.75rem; margin-top: 0.5rem; }
+}
+
 /* === Skeleton Shimmer === */
 .skeleton-shimmer {
   background: linear-gradient(

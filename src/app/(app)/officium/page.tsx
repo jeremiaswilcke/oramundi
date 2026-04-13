@@ -17,6 +17,28 @@ export default function OfficiumIndex() {
         Latein und Deutsch parallel · Latein gemeinfrei · Deutsche Übersetzung nach Allioli
       </p>
 
+      {/* Today's office (live from divinumofficium.com) */}
+      <Link
+        href="/officium/today"
+        className="block mb-6 rounded-3xl p-5 bg-gradient-to-br from-primary to-primary-container text-on-primary hover:brightness-105 transition-all active:scale-[0.99] editorial-shadow"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-on-primary/15 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="today" size={28} filled />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-headline italic text-xl mb-0.5">Heutiges Offizium</h3>
+            <p className="text-xs opacity-80">
+              Alle Horen für jeden Tag · Tagesheilige · Festkalender
+            </p>
+          </div>
+          <MaterialIcon name="chevron_right" size={20} className="opacity-70" />
+        </div>
+      </Link>
+
+      <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
+        Statische Vorlagen
+      </h2>
       <div className="space-y-3">
         {OFFICIUM_OFFICES.map((office) => (
           <Link
