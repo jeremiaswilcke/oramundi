@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { TopAppBar } from "./top-app-bar";
 import { BottomNav } from "./bottom-nav";
+import { MaterialIcon } from "./material-icon";
 import { usePrayerPresence } from "@/lib/realtime";
 
 function RosaryBackground() {
@@ -51,12 +54,23 @@ function RosaryBackground() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { count } = usePrayerPresence();
+  const pathname = usePathname();
+  const hideSos = pathname.startsWith("/healing/sos");
 
   return (
     <>
       <RosaryBackground />
       <TopAppBar prayingCount={count > 0 ? count : undefined} />
       <main className="flex-1 pt-14 pb-16">{children}</main>
+      {!hideSos && (
+        <Link
+          href="/healing/sos"
+          aria-label="SOS"
+          className="fixed right-4 bottom-24 z-40 w-14 h-14 rounded-full bg-error text-on-error shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+        >
+          <MaterialIcon name="favorite" size={26} filled />
+        </Link>
+      )}
       <BottomNav />
     </>
   );
