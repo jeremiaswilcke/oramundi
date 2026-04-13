@@ -42,6 +42,8 @@ export default function PrayPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showMysteryPicker, setShowMysteryPicker] = useState(false);
+  const [resumePrompt, setResumePrompt] = useState<{ sessionId: string; mysteryType: MysteryType; step: number } | null>(null);
+  const [initializing, setInitializing] = useState(true);
   const { startPraying, stopPraying } = usePrayerPresence();
   const position = useGeolocation();
   const t = useTranslations("pray");
@@ -62,39 +64,108 @@ export default function PrayPage() {
   const progress = (completedHailMarys / TOTAL_BEADS) * 100;
 
   useEffect(() => {
-    async function initSession() {
+    async function checkResumable() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) { setInitializing(false); return; }
 
+      // Find incomplete session from the last 24 hours
+      const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data } = await supabase
         .from("prayer_sessions")
-        .insert({
-          user_id: user.id,
-          mystery_type: mysteryType,
-          mode: "guided",
-          latitude: position?.lat ?? null,
-          longitude: position?.lng ?? null,
-        })
-        .select("id")
-        .single();
+        .select("id, mystery_type, current_step")
+        .eq("user_id", user.id)
+        .eq("completed", false)
+        .gte("started_at", dayAgo)
+        .order("started_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
-      if (data) setSessionId(data.id);
-
-      if (position) {
-        startPraying({
-          latitude: position.lat,
-          longitude: position.lng,
-          mysteryType,
-          mode: "guided",
-          startedAt: new Date().toISOString(),
+      if (data && (data.current_step ?? 0) > 0 && (data.current_step ?? 0) < SEQUENCE.length - 1) {
+        setResumePrompt({
+          sessionId: data.id,
+          mysteryType: data.mystery_type as MysteryType,
+          step: data.current_step ?? 0,
         });
       }
+      setInitializing(false);
     }
-    initSession();
+    checkResumable();
     return () => { stopPraying(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function startFreshSession() {
+    setResumePrompt(null);
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Mark any previous unfinished sessions as abandoned (leave them incomplete)
+    const { data } = await supabase
+      .from("prayer_sessions")
+      .insert({
+        user_id: user.id,
+        mystery_type: mysteryType,
+        mode: "guided",
+        latitude: position?.lat ?? null,
+        longitude: position?.lng ?? null,
+        current_step: 0,
+      })
+      .select("id")
+      .single();
+
+    if (data) setSessionId(data.id);
+    setCurrentStep(0);
+
+    if (position) {
+      startPraying({
+        latitude: position.lat,
+        longitude: position.lng,
+        mysteryType,
+        mode: "guided",
+        startedAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  async function resumeSession() {
+    if (!resumePrompt) return;
+    setSelectedMystery(resumePrompt.mysteryType);
+    setSessionId(resumePrompt.sessionId);
+    setCurrentStep(resumePrompt.step);
+    setResumePrompt(null);
+
+    if (position) {
+      startPraying({
+        latitude: position.lat,
+        longitude: position.lng,
+        mysteryType: resumePrompt.mysteryType,
+        mode: "guided",
+        startedAt: new Date().toISOString(),
+      });
+    }
+  }
+
+  // Auto-create session on mount if no resume
+  useEffect(() => {
+    if (initializing) return;
+    if (resumePrompt) return;
+    if (sessionId) return;
+    startFreshSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initializing, resumePrompt, sessionId]);
+
+  // Persist progress whenever step changes
+  useEffect(() => {
+    if (!sessionId) return;
+    const supabase = createClient();
+    supabase
+      .from("prayer_sessions")
+      .update({ current_step: currentStep, last_active_at: new Date().toISOString() })
+      .eq("id", sessionId)
+      .then(() => { /* ignore */ });
+  }, [currentStep, sessionId]);
 
   useEffect(() => {
     if (currentStep !== SEQUENCE.length - 1) return;
@@ -172,6 +243,43 @@ export default function PrayPage() {
   });
 
   const isFinished = currentStep === SEQUENCE.length - 1 && step.type === "hail-holy-queen";
+
+  if (resumePrompt) {
+    const resumedMystery = MYSTERY_SETS.find((m) => m.type === resumePrompt.mysteryType)!;
+    const resumeProgress = Math.round(
+      (SEQUENCE.slice(0, resumePrompt.step).filter((s) => s.type === "hail-mary").length / TOTAL_BEADS) * 100
+    );
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7.5rem)] px-6 pb-20">
+        <div className="w-full max-w-md glass-card rounded-3xl p-8 text-center editorial-shadow">
+          <MaterialIcon name="restart_alt" size={48} className="text-primary mb-4 mx-auto" />
+          <h2 className="font-headline italic text-2xl text-on-surface mb-2">
+            {locale === "de" ? "Gebet fortsetzen?" : "Resume prayer?"}
+          </h2>
+          <p className="text-on-surface-variant text-sm mb-1">
+            {resumedMystery.name[locale]}
+          </p>
+          <p className="text-on-surface-variant text-xs mb-6">
+            {resumeProgress}% {locale === "de" ? "abgeschlossen" : "completed"}
+          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={resumeSession}
+              className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-on-primary font-medium rounded-full shadow-lg hover:opacity-90 active:scale-[0.98] transition-all"
+            >
+              {locale === "de" ? "Fortsetzen" : "Resume"}
+            </button>
+            <button
+              onClick={startFreshSession}
+              className="w-full py-3 bg-surface-container-high text-on-surface-variant font-medium rounded-full hover:bg-surface-container-highest transition-all"
+            >
+              {locale === "de" ? "Neu beginnen" : "Start fresh"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-7.5rem)] px-4 pb-20 relative">
