@@ -117,6 +117,28 @@ export function ReminderSettings() {
     return out;
   }
 
+  async function ensurePushSubscription(): Promise<PushSubscriptionJSON | null> {
+    if (typeof window === "undefined") return null;
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return null;
+    if (Notification.permission !== "granted") return null;
+    const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+    if (!vapidPublic) return null;
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      let sub = await registration.pushManager.getSubscription();
+      if (!sub) {
+        sub = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(vapidPublic).buffer as ArrayBuffer,
+        });
+      }
+      return sub.toJSON() as PushSubscriptionJSON;
+    } catch (err) {
+      console.error("ensurePushSubscription failed:", err);
+      return null;
+    }
+  }
+
   async function save() {
     setSaving(true);
     setSavedMsg(false);
@@ -124,18 +146,30 @@ export function ReminderSettings() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
+      // Ensure push subscription exists if reminders are enabled
+      const subscription = enabled ? await ensurePushSubscription() : null;
+
+      const updateData: Record<string, unknown> = {
+        reminder_enabled: enabled,
+        reminder_frequency: frequency,
+        reminder_days: days,
+        reminder_time: time,
+      };
+      if (subscription) {
+        updateData.push_subscription = subscription;
+      }
+
       const { error } = await supabase
         .from("profiles")
-        .update({
-          reminder_enabled: enabled,
-          reminder_frequency: frequency,
-          reminder_days: days,
-          reminder_time: time,
-        })
+        .update(updateData)
         .eq("id", user.id);
       if (error) {
         alert(`Fehler: ${error.message}`);
         return;
+      }
+      if (enabled && !subscription) {
+        alert("Erinnerung gespeichert, aber Browser-Push konnte nicht aktiviert werden. Erlaube Benachrichtigungen in den Browser-Einstellungen.");
       }
       setSavedMsg(true);
       setTimeout(() => setSavedMsg(false), 2500);
@@ -143,6 +177,11 @@ export function ReminderSettings() {
       setSaving(false);
     }
   }
+
+  type PushSubscriptionJSON = {
+    endpoint?: string;
+    keys?: { p256dh?: string; auth?: string };
+  };
 
   return (
     <div className="glass-card rounded-3xl p-6 mb-6">
