@@ -193,6 +193,25 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Groups link */}
+      <Link
+        href="/groups"
+        className="block mb-6 rounded-3xl p-5 bg-gradient-to-br from-primary-fixed to-primary-fixed-dim text-on-primary-container hover:brightness-105 transition-all active:scale-[0.99]"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="diversity_3" size={28} className="text-primary" filled />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-headline italic text-xl text-on-surface mb-0.5">Gebetsgruppen</h3>
+            <p className="text-xs text-on-surface-variant">
+              Bete gemeinsam in Familien, Pfarren oder Glaubensgemeinschaften
+            </p>
+          </div>
+          <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/60" />
+        </div>
+      </Link>
+
       {/* Friends */}
       <Friends />
 
