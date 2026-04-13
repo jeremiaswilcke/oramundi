@@ -1,35 +1,20 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
-import { usePrayerPresence } from "@/lib/realtime";
+import { usePrayerPresence, useGeolocation, type PrayerPresence } from "@/lib/realtime";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
 const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "ybWg0XgugDk1LNoPvkfL";
 
-// Fallback mock dots when no real prayers exist
-const MOCK_PRAYERS = [
-  { userId: "m1", latitude: 48.1, longitude: 11.6, mysteryType: "glorious", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m2", latitude: 40.4, longitude: -3.7, mysteryType: "joyful", mode: "quick", startedAt: new Date().toISOString() },
-  { userId: "m3", latitude: 41.9, longitude: 12.5, mysteryType: "sorrowful", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m4", latitude: 51.5, longitude: -0.1, mysteryType: "luminous", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m5", latitude: 48.9, longitude: 2.3, mysteryType: "glorious", mode: "quick", startedAt: new Date().toISOString() },
-  { userId: "m6", latitude: 52.5, longitude: 13.4, mysteryType: "joyful", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m7", latitude: 47.4, longitude: 8.5, mysteryType: "sorrowful", mode: "quick", startedAt: new Date().toISOString() },
-  { userId: "m8", latitude: -22.9, longitude: -43.2, mysteryType: "glorious", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m9", latitude: 14.6, longitude: 121.0, mysteryType: "joyful", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m10", latitude: 40.7, longitude: -74.0, mysteryType: "luminous", mode: "quick", startedAt: new Date().toISOString() },
-  { userId: "m11", latitude: -33.9, longitude: 18.4, mysteryType: "glorious", mode: "guided", startedAt: new Date().toISOString() },
-  { userId: "m12", latitude: 35.7, longitude: 139.7, mysteryType: "sorrowful", mode: "quick", startedAt: new Date().toISOString() },
-];
-
 export default function MapPage() {
   const [mode, setMode] = useState<"guided" | "quick">("guided");
   const { prayers: livePrayers, count } = usePrayerPresence();
+  const position = useGeolocation();
   const todayType = getTodaysMysteryType();
   const todayMystery = MYSTERY_SETS.find((m) => m.type === todayType)!;
   const t = useTranslations("map");
@@ -38,12 +23,40 @@ export default function MapPage() {
   const tl = useTranslations("library");
   const locale = useLocale() as "de" | "en";
 
-  // Randomize fallback count once per page load (1–12)
-  const mockCount = useMemo(() => Math.floor(Math.random() * 12) + 1, []);
-  const mockSubset = useMemo(() => MOCK_PRAYERS.slice(0, mockCount), [mockCount]);
+  // Recent prayers from DB (last 30 minutes) so the map isn't empty
+  // and you remain visible after finishing
+  const [recentPrayers, setRecentPrayers] = useState<PrayerPresence[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    async function loadRecent() {
+      const supabase = createClient();
+      const since = new Date(Date.now() - 30 * 60_000).toISOString();
+      const { data } = await supabase
+        .from("prayer_sessions")
+        .select("id, user_id, mystery_type, mode, latitude, longitude, started_at")
+        .gte("started_at", since)
+        .not("latitude", "is", null)
+        .not("longitude", "is", null);
+      if (cancelled || !data) return;
+      const mapped: PrayerPresence[] = data.map((s) => ({
+        userId: s.id as string,
+        latitude: s.latitude as number,
+        longitude: s.longitude as number,
+        mysteryType: (s.mystery_type as string) ?? "glorious",
+        mode: (s.mode as string) ?? "quick",
+        startedAt: s.started_at as string,
+      }));
+      setRecentPrayers(mapped);
+    }
+    loadRecent();
+    const interval = setInterval(loadRecent, 60_000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, []);
 
-  const displayPrayers = count > 0 ? livePrayers : mockSubset;
-  const displayCount = count > 0 ? count : mockCount;
+  // Show recent prayers from DB; live presence is already included
+  // (active users have started_at within the last 30 min)
+  const displayPrayers = recentPrayers.length > 0 ? recentPrayers : livePrayers;
+  const displayCount = Math.max(count, recentPrayers.length);
 
   // Quick log
   const [quickLogging, setQuickLogging] = useState(false);
@@ -67,6 +80,8 @@ export default function MapPage() {
         started_at: startedAt,
         ended_at: now.toISOString(),
         completed: true,
+        latitude: position?.lat ?? null,
+        longitude: position?.lng ?? null,
       });
       if (error) {
         alert(`Fehler beim Speichern: ${error.message}`);
