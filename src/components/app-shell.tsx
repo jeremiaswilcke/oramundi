@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { TopAppBar } from "./top-app-bar";
 import { BottomNav } from "./bottom-nav";
 import { MaterialIcon } from "./material-icon";
+import { InstallPrompt } from "./install-prompt";
 import { usePrayerPresence } from "@/lib/realtime";
 
 function RosaryBackground() {
@@ -72,6 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Link>
       )}
       <BottomNav />
+      <InstallPrompt />
     </>
   );
 }
