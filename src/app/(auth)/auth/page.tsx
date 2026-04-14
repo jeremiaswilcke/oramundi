@@ -40,7 +40,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 relative overflow-hidden selection:bg-primary-container/30">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6 py-12 pb-56 md:pb-12 relative selection:bg-primary-container/30">
       {/* Decorative blobs */}
       <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[10%] right-[5%] w-80 h-80 bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
