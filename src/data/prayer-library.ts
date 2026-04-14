@@ -1,6 +1,6 @@
 export interface PrayerEntry {
   slug: string;
-  category: "litany" | "hour" | "novena";
+  category: "litany" | "hour" | "novena" | "devotion";
   title: { de: string; en: string };
   description: { de: string; en: string };
   icon: string;
@@ -193,6 +193,226 @@ export const PRAYER_LIBRARY: PrayerEntry[] = [
         text: {
           de: "Salve Regina\n\nSei gegrüßt, o Königin, Mutter der Barmherzigkeit, unser Leben, unsre Wonne und unsre Hoffnung, sei gegrüßt! Zu dir rufen wir verbannte Kinder Evas; zu dir seufzen wir trauernd und weinend in diesem Tal der Tränen. Wohlan denn, unsre Fürsprecherin, wende deine barmherzigen Augen uns zu, und nach diesem Elend zeige uns Jesus, die gebenedeite Frucht deines Leibes. O gütige, o milde, o süße Jungfrau Maria!",
           en: "Salve Regina\n\nHail, Holy Queen, Mother of Mercy, our life, our sweetness and our hope. To you do we cry, poor banished children of Eve; to you do we send up our sighs, mourning and weeping in this valley of tears. Turn then, most gracious advocate, your eyes of mercy toward us, and after this our exile, show unto us the blessed fruit of your womb, Jesus. O clement, O loving, O sweet Virgin Mary.",
+        },
+      },
+    ],
+  },
+
+  // ===================== Devotions / Daily Prayers =====================
+
+  {
+    slug: "totus-tuus",
+    category: "devotion",
+    icon: "favorite",
+    title: { de: "Totus Tuus — Weihe an Maria", en: "Totus Tuus — Consecration to Mary" },
+    description: {
+      de: "Persönliches Weihegebet des hl. Johannes Paul II. an die Gottesmutter",
+      en: "Personal Marian consecration prayer of St. John Paul II",
+    },
+    steps: [
+      {
+        text: {
+          de: "Ganz dein, Maria.\nTotus tuus ego sum, Maria, et omnia mea tua sunt.\n\nIch bin ganz dein, Maria, und alles, was mein ist, gehört dir. Du bist mir in allem Beispiel. O Maria, meine Mutter, nimm mich zu deinem Kind an. Leite mich, bewahre mich, bete für mich als deine Tochter, deinen Sohn, in der Stunde meines Todes. Amen.",
+          en: "I am all yours, Mary.\nTotus tuus ego sum, Maria, et omnia mea tua sunt.\n\nI am all yours, Mary, and all that I have is yours. You are my model in all things. O Mary, my Mother, take me as your child. Guide me, keep me, pray for me as your daughter, your son, at the hour of my death. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "thomas-aquinas-before-study",
+    category: "devotion",
+    icon: "menu_book",
+    title: {
+      de: "Gebet vor dem Studium — hl. Thomas von Aquin",
+      en: "Prayer Before Study — St. Thomas Aquinas",
+    },
+    description: {
+      de: "Um Erleuchtung des Verstandes und Klarheit des Denkens",
+      en: "For illumination of the intellect and clarity of thought",
+    },
+    steps: [
+      {
+        text: {
+          de: "Unaussprechlicher Schöpfer, du hast aus den Schätzen deiner Weisheit drei Ordnungen von Engeln eingerichtet und sie in wunderbarer Ordnung über den erhabenen Himmel gesetzt, die Teile des Weltalls vortrefflich geordnet: Du, den man den wahren Quell des Lichtes und der Weisheit, den erhabenen Ursprung nennt, gieße gnädig in die Finsternis meines Verstandes einen Strahl deiner Klarheit, nimm die zweifache Finsternis von mir, unter der ich geboren bin: die Finsternis der Sünde und die der Unwissenheit.\n\nDu, der du die Zungen der Kinder beredt machst, bilde meine Zunge, und gieße auf meine Lippen die Gnade deines Segens. Verleihe mir Schärfe des Verstandes beim Begreifen, Fähigkeit des Behaltens, Leichtigkeit im Lernen, Tiefe des Erkennens, Überfluss an Ausdruck. Lehre mich anfangen, leite mich voran, vollende, was ich beginne, durch Christus, unsern Herrn. Amen.",
+          en: "Ineffable Creator, You who are the true fount of light and wisdom, pour forth a ray of Your brightness into the darkened places of my mind; disperse from my soul the twofold darkness into which I was born: sin and ignorance.\n\nYou make eloquent the tongues of infants. Refine my speech and pour forth upon my lips the goodness of Your blessing. Grant me keenness of mind, capacity to remember, skill in learning, subtlety to interpret, and eloquence in speech. May You guide the beginning of my work, direct its progress, and bring it to completion, through Christ our Lord. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "morning-offering",
+    category: "devotion",
+    icon: "wb_sunny",
+    title: { de: "Morgenaufopferung", en: "Morning Offering" },
+    description: {
+      de: "Den Tag in Gottes Hände legen",
+      en: "Offering the day into God's hands",
+    },
+    steps: [
+      {
+        text: {
+          de: "Herr, mein Gott, ich bete dich an und danke dir für diesen neuen Tag. Ich schenke dir meine Gedanken, Worte und Taten, meine Freuden und Leiden, meine Arbeit und mein Gebet. Vereinige sie mit dem heiligen Opfer deines Sohnes, unseres Herrn Jesus Christus, das auf unzähligen Altären der Erde dargebracht wird. Ich bringe sie dir dar für deine heilige Kirche, für den Heiligen Vater, für alle meine Lieben und für die Anliegen, die mir heute besonders am Herzen liegen.\n\nMaria, meine Mutter, heiliger Joseph, mein Schutzengel — begleitet mich durch diesen Tag. Amen.",
+          en: "Lord my God, I adore You and thank You for this new day. I offer You my thoughts, words, and actions, my joys and sufferings, my work and my prayer. Unite them with the Holy Sacrifice of Your Son, our Lord Jesus Christ, offered on altars throughout the world. I offer them for Your Holy Church, for the Holy Father, for those I love, and for the intentions I carry today.\n\nMary, my Mother, St. Joseph, my Guardian Angel — walk with me this day. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "evening-prayer",
+    category: "devotion",
+    icon: "bedtime",
+    title: { de: "Traditionelles Abendgebet", en: "Traditional Evening Prayer" },
+    description: {
+      de: "Gewissenserforschung und Hingabe vor dem Schlaf",
+      en: "Examination of conscience and entrustment before sleep",
+    },
+    steps: [
+      {
+        title: { de: "Dank", en: "Thanksgiving" },
+        text: {
+          de: "Herr, mein Gott, ich danke dir für alle Gnaden dieses Tages: für das Leben, für die Menschen, die du mir geschenkt hast, für jedes gute Wort und jede kleine Freude.",
+          en: "Lord my God, I thank You for every grace of this day: for life, for the people You have given me, for every good word and every small joy.",
+        },
+      },
+      {
+        title: { de: "Gewissenserforschung", en: "Examination of Conscience" },
+        text: {
+          de: "Ich betrachte diesen Tag in deiner Gegenwart. Wo habe ich gegen die Liebe zu dir und zum Nächsten gefehlt? In Gedanken, Worten und Werken? Was habe ich Gutes unterlassen?\n\n(Stille)",
+          en: "I look back on this day in Your presence. Where did I fail in love — toward You or my neighbor? In thought, word, or deed? What good did I neglect?\n\n(Silence)",
+        },
+      },
+      {
+        title: { de: "Reuegebet", en: "Act of Contrition" },
+        text: {
+          de: "Mein Gott und Vater, ich habe Unrecht getan und dich beleidigt. Es tut mir leid. Verzeih mir, ich will mich bessern. Hilf mir mit deiner Gnade. Amen.",
+          en: "My God and Father, I have done wrong and offended You. I am sorry. Forgive me, I want to amend my life. Help me with Your grace. Amen.",
+        },
+      },
+      {
+        title: { de: "Hingabe", en: "Entrustment" },
+        text: {
+          de: "In deine Hände, o Herr, lege ich meinen Geist. Du hast mich erlöst, Herr, du treuer Gott. Maria, Mutter Gottes, heiliger Joseph, heiliger Schutzengel — bittet für mich.\n\nIm Namen des Vaters und des Sohnes und des Heiligen Geistes. Amen.",
+          en: "Into Your hands, O Lord, I commend my spirit. You have redeemed me, O Lord, faithful God. Mary, Mother of God, St. Joseph, Guardian Angel — pray for me.\n\nIn the name of the Father, and of the Son, and of the Holy Spirit. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "memorare",
+    category: "devotion",
+    icon: "favorite",
+    title: { de: "Memorare — Gedenke", en: "Memorare" },
+    description: {
+      de: "Zuflucht zur Fürsprache der Gottesmutter (hl. Bernhard v. Clairvaux)",
+      en: "A prayer of refuge in Our Lady's intercession (St. Bernard of Clairvaux)",
+    },
+    steps: [
+      {
+        text: {
+          de: "Gedenke, o gütigste Jungfrau Maria, es ist noch nie gehört worden, dass jemand, der zu dir seine Zuflucht genommen, deine Hilfe angerufen und um deine Fürsprache gebeten hat, von dir verlassen worden sei.\n\nVon solchem Vertrauen beseelt, eile ich zu dir, Jungfrau der Jungfrauen. Zu dir komme ich; vor dir stehe ich als sündiger Mensch und seufze. Du Mutter des Ewigen Wortes, verschmähe nicht meine Worte, sondern höre sie gnädig und erhöre sie. Amen.",
+          en: "Remember, O most gracious Virgin Mary, that never was it known that anyone who fled to your protection, implored your help, or sought your intercession was left unaided.\n\nInspired with this confidence, I fly unto you, O Virgin of virgins, my Mother. To you do I come, before you I stand, sinful and sorrowful. O Mother of the Word Incarnate, despise not my petitions, but in your mercy hear and answer me. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "anima-christi",
+    category: "devotion",
+    icon: "local_fire_department",
+    title: { de: "Anima Christi — Seele Christi", en: "Anima Christi — Soul of Christ" },
+    description: {
+      de: "Klassisches eucharistisches Dankgebet",
+      en: "Classical eucharistic prayer of thanksgiving",
+    },
+    steps: [
+      {
+        text: {
+          de: "Seele Christi, heilige mich.\nLeib Christi, rette mich.\nBlut Christi, tränke mich.\nWasser der Seite Christi, reinige mich.\nLeiden Christi, stärke mich.\nO guter Jesus, erhöre mich.\nBirg in deinen Wunden mich.\nVon dir lass nimmer scheiden mich.\nVor dem bösen Feind beschütze mich.\nIn meiner Todesstunde rufe mich,\nund lass zu dir kommen mich,\ndass ich mit deinen Heiligen lobe dich\nin alle Ewigkeit. Amen.",
+          en: "Soul of Christ, sanctify me.\nBody of Christ, save me.\nBlood of Christ, inebriate me.\nWater from the side of Christ, wash me.\nPassion of Christ, strengthen me.\nO good Jesus, hear me.\nWithin Thy wounds, hide me.\nSeparated from Thee let me never be.\nFrom the malignant enemy, defend me.\nIn the hour of my death, call me,\nand bid me come unto Thee,\nThat with Thy Saints I may praise Thee\nforever and ever. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "st-michael",
+    category: "devotion",
+    icon: "shield",
+    title: {
+      de: "Gebet zum hl. Erzengel Michael",
+      en: "Prayer to St. Michael the Archangel",
+    },
+    description: {
+      de: "Um Schutz gegen das Böse (Leo XIII.)",
+      en: "For protection against evil (Leo XIII)",
+    },
+    steps: [
+      {
+        text: {
+          de: "Heiliger Erzengel Michael, verteidige uns im Kampfe; gegen die Bosheit und die Nachstellungen des Teufels sei unser Schutz.\n\nGott gebiete ihm, so bitten wir flehentlich; du aber, Fürst der himmlischen Heerscharen, stoße den Satan und die anderen bösen Geister, die in der Welt umhergehen, um die Seelen zu verderben, durch die Kraft Gottes in die Hölle hinab. Amen.",
+          en: "Saint Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil.\n\nMay God rebuke him, we humbly pray; and do thou, O Prince of the Heavenly Host, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "guardian-angel",
+    category: "devotion",
+    icon: "auto_awesome",
+    title: { de: "Schutzengelgebet", en: "Guardian Angel Prayer" },
+    description: {
+      de: "Tägliches Gebet an den eigenen Schutzengel",
+      en: "Daily prayer to one's guardian angel",
+    },
+    steps: [
+      {
+        text: {
+          de: "Heiliger Schutzengel mein,\nlass mich dir empfohlen sein.\nIn allem Tun und allem Lauf\nhalte deine Hand auf mich.\nBehüte mich bei Tag und Nacht,\nbis Gott mich in sein Reich gebracht. Amen.",
+          en: "Angel of God, my guardian dear,\nto whom God's love commits me here:\never this day be at my side,\nto light and guard, to rule and guide. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "veni-creator",
+    category: "devotion",
+    icon: "local_fire_department",
+    title: { de: "Veni Creator Spiritus", en: "Veni Creator Spiritus" },
+    description: {
+      de: "Anrufung des Heiligen Geistes (Hrabanus Maurus)",
+      en: "Invocation of the Holy Spirit (Rabanus Maurus)",
+    },
+    steps: [
+      {
+        text: {
+          de: "Komm, Schöpfer Geist, kehr bei uns ein,\nbesuch das Herz der Kinder dein:\ndie deine Macht erschaffen hat,\nerfülle nun mit deiner Gnad.\n\nDer du der Tröster wirst genannt,\nvom höchsten Gott ein Gnadenpfand,\ndu Lebensbrunn, Licht, Lieb und Glut,\nder Seele Salbung, höchstes Gut.\n\nO Schatz, der siebenfältig ziert,\no Finger Gottes, der uns führt,\nGeschenk, vom Vater zugesagt,\ndu, der die Zungen reden macht.\n\nZünd an in uns des Lichtes Schein,\ngieß Liebe in die Herzen ein,\nstärk unsres Leibes Schwachheit an\nmit deiner Kraft zu jeder Zeit.\n\nDen Feind vertreibe weit hinaus,\nden Frieden bring in unser Haus;\nund da du gehst uns selbst voran,\nmeid unser Fuß des Bösen Bahn.\n\nAmen.",
+          en: "Come, Creator Spirit, come,\nfrom Thy bright heavenly throne;\ncome, take possession of our souls,\nand make them all Thine own.\n\nThou who art called the Paraclete,\nbest gift of God above,\nthe living spring, the living fire,\nsweet unction, and true love.\n\nKindle our senses from above,\nand make our hearts o'erflow\nwith love in every word and deed,\nthat we Thy peace may know.\n\nAmen.",
+        },
+      },
+    ],
+  },
+
+  {
+    slug: "st-joseph",
+    category: "devotion",
+    icon: "carpenter",
+    title: { de: "Gebet zum hl. Josef", en: "Prayer to St. Joseph" },
+    description: {
+      de: "Um Fürsprache des Kirchenpatrons (Leo XIII.)",
+      en: "For the intercession of the Patron of the Church (Leo XIII)",
+    },
+    steps: [
+      {
+        text: {
+          de: "Zu dir, heiliger Josef, nehmen wir unsere Zuflucht in unserer Not. Wir rufen deine mächtige Fürsprache an, nach der deiner heiligsten Braut, und bitten voll Vertrauen um deinen Schutz.\n\nBei der Liebe, die dich mit der unbefleckten Jungfrau und Gottesmutter verband, und bei der väterlichen Zuneigung, mit der du das Jesuskind umfingst, flehen wir dich an: Blicke gnädig auf das Erbe, das Jesus Christus sich durch sein Blut erworben hat, und hilf uns in unseren Nöten durch deine Macht und deinen Beistand.\n\nBeschütze, o gütigster Hüter der Heiligen Familie, die auserwählte Nachkommenschaft Jesu Christi. Halte, o liebreichster Vater, alle Irrtümer und Verderben von uns fern. Steh uns vom Himmel aus gnädig bei in diesem Kampf gegen die Macht der Finsternis, du unser starker Schutz; und wie du einst das Jesuskind aus höchster Lebensgefahr gerettet hast, so verteidige jetzt die heilige Kirche Gottes vor den Nachstellungen aller Feinde und allem Unheil; uns aber alle nimm in deinen beständigen Schutz, auf dass wir nach deinem Beispiel und durch deinen Beistand heilig leben, selig sterben und die ewige Glückseligkeit im Himmel erlangen. Amen.",
+          en: "To you, O blessed Joseph, we come in our afflictions, and having asked the help of your most holy spouse, we confidently ask your patronage also. Through that love which bound you to the Immaculate Virgin Mother of God and through the paternal love with which you embraced the Child Jesus, we beseech you to look graciously upon the inheritance which Jesus Christ purchased by His blood, and to help us in our needs by your power and strength.\n\nMost watchful guardian of the Holy Family, defend the chosen people of Jesus Christ. Keep from us, most loving father, all blight of error and corruption. Aid us from on high, most valiant defender, in this conflict with the powers of darkness. As once you rescued the Child Jesus from deadly peril, so now defend God's Holy Church from the snares of the enemy and from all adversity. Shield each one of us by your constant protection, so that, supported by your example and your aid, we may be able to live a holy life, die a happy death, and attain everlasting happiness in Heaven. Amen.",
         },
       },
     ],

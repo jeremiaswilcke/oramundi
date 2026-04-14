@@ -9,6 +9,7 @@ export default function LibraryPage() {
   const locale = useLocale() as "de" | "en";
   const t = useTranslations("library");
 
+  const devotions = PRAYER_LIBRARY.filter((p) => p.category === "devotion");
   const litanies = PRAYER_LIBRARY.filter((p) => p.category === "litany");
   const hours = PRAYER_LIBRARY.filter((p) => p.category === "hour");
 
@@ -39,6 +40,37 @@ export default function LibraryPage() {
           <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/60" />
         </div>
       </Link>
+
+      {/* Devotions / Daily prayers */}
+      {devotions.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
+            {t("devotions")}
+          </h2>
+          <div className="space-y-3">
+            {devotions.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/library/${p.slug}`}
+                className="flex items-start gap-3 glass-card rounded-3xl p-4 hover:bg-surface-container-high transition-colors"
+              >
+                <div className="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center flex-shrink-0">
+                  <MaterialIcon name={p.icon} size={24} className="text-tertiary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-headline italic text-lg text-on-surface mb-0.5">
+                    {p.title[locale]}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant leading-relaxed">
+                    {p.description[locale]}
+                  </p>
+                </div>
+                <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/40" />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Litanies */}
       <section className="mb-8">
