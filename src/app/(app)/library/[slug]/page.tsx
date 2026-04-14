@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PRAYER_LIBRARY } from "@/data/prayer-library";
+import { AddToCollectionButton } from "@/components/add-to-collection-button";
 
 export default function PrayerDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -37,13 +38,16 @@ export default function PrayerDetailPage({ params }: { params: Promise<{ slug: s
 
       {/* Header */}
       <div className="pt-4 pb-4 relative z-10">
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-2 text-on-surface-variant text-sm mb-3 hover:text-primary transition-colors"
-        >
-          <MaterialIcon name="chevron_left" size={20} />
-          <span>{prayer.title[locale]}</span>
-        </button>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-on-surface-variant text-sm hover:text-primary transition-colors min-w-0"
+          >
+            <MaterialIcon name="chevron_left" size={20} />
+            <span className="truncate">{prayer.title[locale]}</span>
+          </button>
+          <AddToCollectionButton slug={prayer.slug} />
+        </div>
 
         {step.title && (
           <h2 className="font-headline italic text-xl text-on-surface mb-2">

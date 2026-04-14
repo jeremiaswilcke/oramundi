@@ -22,6 +22,29 @@ export default function LibraryPage() {
         {t("subtitle")}
       </p>
 
+      {/* My collections shortcut */}
+      <Link
+        href="/collections"
+        className="block mb-4 rounded-2xl p-4 bg-surface-container-high hover:bg-surface-container-highest transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="bookmark" size={20} className="text-primary" filled />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-on-surface">
+              {locale === "de" ? "Meine Sammlungen" : "My Collections"}
+            </p>
+            <p className="text-[11px] text-on-surface-variant">
+              {locale === "de"
+                ? "Eigene Gebetsreihen — Morgengebet, Abendgebet u. a."
+                : "Personal prayer sets — morning, evening, etc."}
+            </p>
+          </div>
+          <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/40" />
+        </div>
+      </Link>
+
       {/* Officium Divinum highlight card */}
       <Link
         href="/officium"
