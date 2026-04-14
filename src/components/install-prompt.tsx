@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { MaterialIcon } from "./material-icon";
 
 type BeforeInstallPromptEvent = Event & {
@@ -41,10 +42,17 @@ export function InstallPrompt() {
   const [show, setShow] = useState(false);
   const [variant, setVariant] = useState<"android" | "ios" | null>(null);
   const [iosInstructions, setIosInstructions] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isStandalone()) return;
     if (wasRecentlyDismissed()) return;
+    // Never show install prompts on auth / legal / onboarding pages.
+    // A "install this app" banner over a password form looks like phishing
+    // to Safe Browsing classifiers and to new visitors.
+    if (pathname.startsWith("/auth") || pathname.startsWith("/legal") || pathname.startsWith("/onboarding")) {
+      return;
+    }
 
     const handler = (e: Event) => {
       e.preventDefault();
@@ -65,7 +73,7 @@ export function InstallPrompt() {
       };
     }
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
+  }, [pathname]);
 
   async function install() {
     if (!deferred) return;

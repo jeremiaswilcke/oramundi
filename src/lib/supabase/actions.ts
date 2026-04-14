@@ -41,10 +41,20 @@ export async function signUpWithEmail(formData: FormData) {
 export async function signInWithGoogle() {
   const supabase = await createServerSupabaseClient();
 
+  // Require NEXT_PUBLIC_SITE_URL in production. A localhost fallback on a
+  // live deploy would send the OAuth redirect to the wrong host, which
+  // Safe Browsing classifiers treat as a phishing signal.
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NODE_ENV === "production" ? null : "http://localhost:3000");
+  if (!siteUrl) {
+    return { error: "Site URL not configured" };
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/api/auth/callback`,
+      redirectTo: `${siteUrl}/api/auth/callback`,
     },
   });
 
