@@ -90,15 +90,14 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
 
     try {
       const supabase = createClient();
-      const { error: mutationError } = collection.containsSlug
-        ? await supabase
-            .from("user_prayer_collection_items")
-            .delete()
-            .eq("collection_id", collection.id)
-            .eq("prayer_slug", slug)
-        : await supabase
-            .from("user_prayer_collection_items")
-            .insert({ collection_id: collection.id, prayer_slug: slug });
+      const { error: mutationError } = await supabase.rpc(
+        "set_prayer_collection_item",
+        {
+          p_collection_id: collection.id,
+          p_prayer_slug: slug,
+          p_should_exist: !collection.containsSlug,
+        }
+      );
 
       if (mutationError && mutationError.code !== "23505") {
         throw mutationError;
@@ -145,9 +144,11 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
         return;
       }
 
-      const { error: itemError } = await supabase
-        .from("user_prayer_collection_items")
-        .insert({ collection_id: collection.id, prayer_slug: slug });
+      const { error: itemError } = await supabase.rpc("set_prayer_collection_item", {
+        p_collection_id: collection.id,
+        p_prayer_slug: slug,
+        p_should_exist: true,
+      });
 
       if (itemError) {
         setError(itemError.message);
