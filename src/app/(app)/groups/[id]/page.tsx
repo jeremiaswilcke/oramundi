@@ -139,9 +139,15 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   async function leaveGroup() {
     if (!confirm(`Möchtest du "${group?.name}" wirklich verlassen?`)) return;
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    await supabase.from("group_members").delete().eq("group_id", id).eq("user_id", user.id);
+    const { data, error } = await supabase.rpc("leave_group", { p_group_id: id });
+    if (error) {
+      alert(`Fehler: ${error.message}`);
+      return;
+    }
+    if (data === "not_member") {
+      alert("Du bist kein Mitglied dieser Gruppe.");
+      return;
+    }
     router.push("/groups");
   }
 
@@ -155,7 +161,15 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   async function removeMember(memberRow: MemberRow) {
     if (!confirm(`${memberRow.display_name} aus der Gruppe entfernen?`)) return;
     const supabase = createClient();
-    await supabase.from("group_members").delete().eq("id", memberRow.id);
+    const { data, error } = await supabase.rpc("remove_group_member", { p_member_id: memberRow.id });
+    if (error) {
+      alert(`Fehler: ${error.message}`);
+      return;
+    }
+    if (data === "not_admin") {
+      alert("Nur Admins können Mitglieder entfernen.");
+      return;
+    }
     load();
   }
 
