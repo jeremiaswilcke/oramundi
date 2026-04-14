@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { MaterialIcon } from "@/components/material-icon";
 
@@ -12,6 +13,16 @@ interface GroupDetail {
   invite_code: string;
   is_public: boolean;
   created_by: string;
+}
+
+interface CampaignSummary {
+  id: string;
+  title: string;
+  intention: string | null;
+  duration_days: number;
+  starts_on: string;
+  status: string;
+  prayer_kind: string;
 }
 
 interface MemberRow {
@@ -35,6 +46,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
   const [members, setMembers] = useState<MemberRow[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [groupRosaries, setGroupRosaries] = useState({ today: 0, week: 0, total: 0 });
+  const [campaigns, setCampaigns] = useState<CampaignSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -122,6 +134,14 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
     }
 
     setGroupRosaries({ today: groupToday, week: groupWeek, total: groupTotal });
+
+    const { data: camps } = await supabase
+      .from("group_campaigns")
+      .select("id, title, intention, duration_days, starts_on, status, prayer_kind")
+      .eq("group_id", id)
+      .order("created_at", { ascending: false });
+    setCampaigns((camps ?? []) as CampaignSummary[]);
+
     setLoading(false);
   }, [id]);
 
@@ -250,6 +270,71 @@ export default function GroupDetailPage({ params }: { params: Promise<{ id: stri
           {copied ? "Kopiert" : "Tippen zum Kopieren · Teile diesen Code mit anderen"}
         </p>
       </button>
+
+      {/* Campaigns */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+            Gebetsaktionen
+          </h2>
+          {isAdmin && (
+            <button
+              onClick={() => router.push(`/groups/${id}/campaigns/new`)}
+              className="text-xs text-primary font-semibold flex items-center gap-1 hover:opacity-80"
+            >
+              <MaterialIcon name="add" size={16} />
+              Neue Aktion
+            </button>
+          )}
+        </div>
+        {campaigns.length === 0 ? (
+          <p className="text-sm text-on-surface-variant/60 text-center py-4">
+            {isAdmin
+              ? "Starte eine Novene oder mehrtägige Gebetsaktion für eure Anliegen."
+              : "Noch keine Gebetsaktion."}
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {campaigns.map((c) => {
+              const startsOn = new Date(c.starts_on + "T00:00:00");
+              const now = new Date(); now.setHours(0, 0, 0, 0);
+              const day = Math.floor((now.getTime() - startsOn.getTime()) / 86400000) + 1;
+              const displayDay = c.status === "cancelled"
+                ? "beendet"
+                : day < 1
+                  ? "startet bald"
+                  : day > c.duration_days
+                    ? "abgeschlossen"
+                    : `Tag ${day}/${c.duration_days}`;
+              return (
+                <Link
+                  key={c.id}
+                  href={`/groups/${id}/campaigns/${c.id}`}
+                  className="block glass-card rounded-2xl p-4 hover:bg-surface-container-high transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-tertiary/15 flex items-center justify-center flex-shrink-0">
+                      <MaterialIcon name="auto_stories" size={20} className="text-tertiary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-headline italic text-base text-on-surface mb-0.5 truncate">
+                        {c.title}
+                      </p>
+                      {c.intention && (
+                        <p className="text-xs text-on-surface-variant leading-relaxed line-clamp-2 mb-1">
+                          {c.intention}
+                        </p>
+                      )}
+                      <p className="text-[11px] text-on-surface-variant/80">{displayDay}</p>
+                    </div>
+                    <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/40" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Members */}
       <div className="mb-6">
