@@ -75,6 +75,8 @@ export default function PrayPage() {
   // Default prayer language to UI language; user can override via picker
   useEffect(() => { setPrayerLang(uiLocale); }, [uiLocale]);
   const locale: "de" | "en" = uiLocale; // for non-prayer UI labels
+  // Prayer text language: Latin stays Latin; otherwise whatever the picker selected
+  const textLocale: "de" | "en" = prayerLang === "la" ? uiLocale : prayerLang;
 
   const todayType = getTodaysMysteryType();
   const mysteryType: MysteryType = selectedMystery ?? todayType;
@@ -294,8 +296,8 @@ export default function PrayPage() {
       return PRAYER_TITLES_LATIN[keys[step.type]];
     }
     if (mysteryType === "mercy") {
-      if (step.type === "our-father") return locale === "de" ? "Ewiger Vater" : "Eternal Father";
-      if (step.type === "hail-mary") return locale === "de" ? "Barmherzigkeit" : "Divine Mercy";
+      if (step.type === "our-father") return textLocale === "de" ? "Ewiger Vater" : "Eternal Father";
+      if (step.type === "hail-mary") return textLocale === "de" ? "Barmherzigkeit" : "Divine Mercy";
     }
     const keys: Record<PrayerStep["type"], string> = {
       "sign-of-cross": "signOfCross",
@@ -309,13 +311,26 @@ export default function PrayPage() {
       "fatima": "fatimaPrayer",
       "hail-holy-queen": "hailHolyQueen",
     };
+    // If user switched prayer text to the other UI language, translate titles too
+    if (textLocale !== uiLocale) {
+      const titles: Record<string, Record<"de" | "en", string>> = {
+        signOfCross: { de: "Kreuzzeichen", en: "Sign of the Cross" },
+        apostlesCreed: { de: "Apostolisches Glaubensbekenntnis", en: "Apostles' Creed" },
+        ourFather: { de: "Vater unser", en: "Our Father" },
+        hailMary: { de: "Gegrüßet seist du, Maria", en: "Hail Mary" },
+        gloryBe: { de: "Ehre sei dem Vater", en: "Glory Be" },
+        fatimaPrayer: { de: "Fatima-Gebet", en: "Fatima Prayer" },
+        hailHolyQueen: { de: "Salve Regina", en: "Hail Holy Queen" },
+      };
+      return titles[keys[step.type]][textLocale];
+    }
     return t(keys[step.type]);
   }
 
   function getOpeningSubtitle(): string | null {
     if (step.type !== "opening-hail-mary") return null;
     if (prayerLang === "la") return OPENING_INTENTIONS_LATIN[step.bead];
-    return OPENING_INTENTIONS[step.bead][locale];
+    return OPENING_INTENTIONS[step.bead][textLocale];
   }
 
   function getHailMaryWithInsertion(): string {
@@ -327,8 +342,8 @@ export default function PrayPage() {
         `fructus ventris tui, ${ins}.`
       );
     }
-    const ins = mystery.insertion[locale];
-    if (locale === "de") {
+    const ins = mystery.insertion[textLocale];
+    if (textLocale === "de") {
       return PRAYERS.hailMary.de.replace(
         "deines Leibes, Jesus.",
         `deines Leibes, ${ins}.`
@@ -360,20 +375,20 @@ export default function PrayPage() {
       }
     }
     if (mysteryType === "mercy") {
-      if (step.type === "our-father") return PRAYERS.eternalFather[locale];
-      if (step.type === "hail-mary") return PRAYERS.divineMercy[locale];
+      if (step.type === "our-father") return PRAYERS.eternalFather[textLocale];
+      if (step.type === "hail-mary") return PRAYERS.divineMercy[textLocale];
     }
     switch (step.type) {
-      case "sign-of-cross": return PRAYERS.signOfCross[locale];
-      case "creed": return PRAYERS.apostlesCreed[locale];
-      case "opening-our-father": return PRAYERS.ourFather[locale];
-      case "opening-hail-mary": return PRAYERS.hailMary[locale];
-      case "opening-glory-be": return PRAYERS.gloryBe[locale];
-      case "our-father": return PRAYERS.ourFather[locale];
+      case "sign-of-cross": return PRAYERS.signOfCross[textLocale];
+      case "creed": return PRAYERS.apostlesCreed[textLocale];
+      case "opening-our-father": return PRAYERS.ourFather[textLocale];
+      case "opening-hail-mary": return PRAYERS.hailMary[textLocale];
+      case "opening-glory-be": return PRAYERS.gloryBe[textLocale];
+      case "our-father": return PRAYERS.ourFather[textLocale];
       case "hail-mary": return getHailMaryWithInsertion();
-      case "glory-be": return PRAYERS.gloryBe[locale];
-      case "fatima": return PRAYERS.fatimaPrayer[locale];
-      case "hail-holy-queen": return PRAYERS.hailHolyQueen[locale];
+      case "glory-be": return PRAYERS.gloryBe[textLocale];
+      case "fatima": return PRAYERS.fatimaPrayer[textLocale];
+      case "hail-holy-queen": return PRAYERS.hailHolyQueen[textLocale];
     }
   }
 
