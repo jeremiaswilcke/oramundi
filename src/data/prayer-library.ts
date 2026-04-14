@@ -201,6 +201,28 @@ export const PRAYER_LIBRARY: PrayerEntry[] = [
   // ===================== Devotions / Daily Prayers =====================
 
   {
+    slug: "jpii-daily-prayer",
+    category: "devotion",
+    icon: "local_fire_department",
+    title: {
+      de: "Tägliches Gebet des hl. Johannes Paul II.",
+      en: "Daily Prayer of St. John Paul II",
+    },
+    description: {
+      de: "Zum Heiligen Geist — um Einsicht, Wort und Schweigen",
+      en: "To the Holy Spirit — for insight, word, and silence",
+    },
+    steps: [
+      {
+        text: {
+          de: "O Heiliger Geist,\nDu Liebe des Vaters und des Sohnes,\ngib mir immer ein, was ich denken soll.\n\nGib mir immer ein,\nwas ich sagen soll und wie ich es sagen soll.\n\nGib mir ein, worüber ich schweigen soll;\nund wie ich mich dabei verhalten soll.\n\nGib mir ein, was ich zur Ehre Gottes, zum Wohl der Seelen\nund zu meiner eigenen Heiligung tun soll.\n\nHeiliger Geist,\ngib mir Verstand, um zu verstehen und zu erkennen;\ngib mir das Fassungsvermögen, um alles zu behalten.\n\nLehre mich die Methoden\nund gib mir die Fähigkeit, um immer wieder zu lernen.\n\nGib mir Scharfsinn,\num richtig zu deuten und zu unterscheiden;\ngib mir die Gnade, um wirkungsvoll zu sprechen.\n\nHeiliger Geist,\ngib mir Zuversicht und Treffsicherheit am Beginn;\nleite und führe mich bei der Ausführung,\nund schenke mir Vollkommenheit beim Beenden. Amen.",
+          en: "O Holy Spirit,\nLove of the Father and of the Son,\ninspire me always in what I should think,\nin what I should say and how I should say it,\nin what I should keep silent about\nand how I should conduct myself.\n\nInspire me in what I should do for the glory of God,\nfor the good of souls, and for my own sanctification.\n\nHoly Spirit,\ngive me understanding, to comprehend and to discern;\ngive me the capacity to retain all.\n\nTeach me the methods\nand grant me the ability to learn again and again.\n\nGive me keenness of insight,\nto interpret rightly and to distinguish;\ngive me the grace to speak with power.\n\nHoly Spirit,\ngrant me confidence and sure aim at the beginning;\nguide and lead me in the carrying out;\nand grant me completion at the end. Amen.",
+        },
+      },
+    ],
+  },
+
+  {
     slug: "totus-tuus",
     category: "devotion",
     icon: "favorite",
