@@ -417,4 +417,316 @@ export const PRAYER_LIBRARY: PrayerEntry[] = [
       },
     ],
   },
+
+  // ===== Marian =====
+
+  {
+    slug: "angelus",
+    category: "devotion",
+    icon: "notifications_active",
+    title: { de: "Der Engel des Herrn (Angelus)", en: "The Angelus" },
+    description: { de: "Morgens, mittags und abends — das Geheimnis der Menschwerdung", en: "Morning, noon, and evening — the mystery of the Incarnation" },
+    steps: [
+      { title: { de: "V./R.", en: "V./R." }, text: { de: "V: Der Engel des Herrn brachte Maria die Botschaft,\nR: und sie empfing vom Heiligen Geist.\n\nGegrüßet seist du, Maria, voll der Gnade, der Herr ist mit dir. Du bist gebenedeit unter den Frauen, und gebenedeit ist die Frucht deines Leibes, Jesus. Heilige Maria, Mutter Gottes, bitte für uns Sünder, jetzt und in der Stunde unseres Todes. Amen.", en: "V: The Angel of the Lord declared unto Mary,\nR: and she conceived of the Holy Spirit.\n\nHail Mary, full of grace..." } },
+      { text: { de: "V: Maria sprach: Siehe, ich bin die Magd des Herrn;\nR: mir geschehe nach deinem Wort.\n\nGegrüßet seist du, Maria...", en: "V: Behold the handmaid of the Lord.\nR: Be it done unto me according to thy word.\n\nHail Mary..." } },
+      { text: { de: "V: Und das Wort ist Fleisch geworden\nR: und hat unter uns gewohnt.\n\nGegrüßet seist du, Maria...", en: "V: And the Word was made flesh\nR: and dwelt among us.\n\nHail Mary..." } },
+      { title: { de: "Schlussgebet", en: "Closing" }, text: { de: "V: Bitte für uns, o heilige Gottesgebärerin,\nR: auf dass wir würdig werden der Verheißungen Christi.\n\nLasset uns beten.\nAllmächtiger Gott, gieße deine Gnade in unsere Herzen ein. Durch die Botschaft des Engels haben wir die Menschwerdung Christi, deines Sohnes, erkannt. Lass uns durch sein Leiden und Kreuz zur Herrlichkeit der Auferstehung gelangen. Darum bitten wir durch Christus, unseren Herrn. Amen.", en: "V: Pray for us, O holy Mother of God.\nR: That we may be made worthy of the promises of Christ.\n\nLet us pray. Pour forth, we beseech Thee, O Lord, Thy grace into our hearts, that we, to whom the Incarnation of Christ Thy Son was made known by the message of an angel, may by His Passion and Cross be brought to the glory of His Resurrection. Through the same Christ our Lord. Amen." } },
+    ],
+  },
+
+  {
+    slug: "regina-caeli",
+    category: "devotion",
+    icon: "celebration",
+    title: { de: "Regina Caeli — Freu dich, du Himmelskönigin", en: "Regina Caeli" },
+    description: { de: "Osterantiphon — ersetzt den Angelus in der Osterzeit", en: "Easter antiphon, replaces the Angelus during Eastertide" },
+    steps: [
+      { text: { de: "Freu dich, du Himmelskönigin, Halleluja!\nDen du zu tragen würdig warst, Halleluja,\ner ist auferstanden, wie er gesagt, Halleluja.\nBitt Gott für uns, Maria, Halleluja.\n\nV: Freu dich und frohlocke, Jungfrau Maria, Halleluja.\nR: Denn der Herr ist wahrhaft auferstanden, Halleluja.\n\nLasset uns beten.\nAllmächtiger Gott, durch die Auferstehung deines Sohnes, unseres Herrn Jesus Christus, hast du die Welt mit Jubel erfüllt. Lass uns durch seine jungfräuliche Mutter Maria zur unvergänglichen Osterfreude gelangen. Darum bitten wir durch Christus, unseren Herrn. Amen.", en: "Queen of Heaven, rejoice, alleluia.\nFor He whom you did merit to bear, alleluia,\nhas risen as He said, alleluia.\nPray for us to God, alleluia.\n\nV: Rejoice and be glad, O Virgin Mary, alleluia.\nR: For the Lord has truly risen, alleluia.\n\nLet us pray. O God, who by the Resurrection of Your Son, our Lord Jesus Christ, granted joy to the whole world, grant that through His Virgin Mother we may obtain the joys of everlasting life. Through Christ our Lord. Amen." } },
+    ],
+  },
+
+  {
+    slug: "sub-tuum",
+    category: "devotion",
+    icon: "shield_moon",
+    title: { de: "Sub tuum praesidium — Unter deinen Schutz", en: "Sub tuum praesidium" },
+    description: { de: "Ältestes bekanntes Gebet zur Gottesmutter (3. Jh.)", en: "The oldest known prayer to the Mother of God (3rd c.)" },
+    steps: [
+      { text: { de: "Unter deinen Schutz und Schirm fliehen wir, heilige Gottesgebärerin. Verschmähe nicht unser Gebet in unseren Nöten, sondern erlöse uns jederzeit von allen Gefahren, o du glorreiche und gebenedeite Jungfrau. Amen.", en: "We fly to your patronage, O holy Mother of God; despise not our petitions in our necessities, but deliver us always from all dangers, O glorious and blessed Virgin. Amen." } },
+    ],
+  },
+
+  {
+    slug: "magnificat",
+    category: "devotion",
+    icon: "volunteer_activism",
+    title: { de: "Magnificat — Lobgesang Marias", en: "Magnificat — Canticle of Mary" },
+    description: { de: "Marias Lobpreis (Lk 1,46-55), Herzstück der Vesper", en: "Mary's song of praise (Luke 1:46-55), heart of Vespers" },
+    steps: [
+      { text: { de: "Meine Seele preist die Größe des Herrn,\nund mein Geist jubelt über Gott, meinen Retter.\nDenn auf die Niedrigkeit seiner Magd hat er geschaut.\nSiehe, von nun an preisen mich selig alle Geschlechter.\nDenn der Mächtige hat Großes an mir getan,\nund sein Name ist heilig.\nEr erbarmt sich von Geschlecht zu Geschlecht\nüber alle, die ihn fürchten.\nEr vollbringt mit seinem Arm machtvolle Taten:\nEr zerstreut, die im Herzen voll Hochmut sind.\nEr stürzt die Mächtigen vom Thron\nund erhöht die Niedrigen.\nDie Hungernden beschenkt er mit seinen Gaben\nund lässt die Reichen leer ausgehen.\nEr nimmt sich seines Knechtes Israel an\nund denkt an sein Erbarmen,\ndas er unseren Vätern verheißen hat,\nAbraham und seinen Nachkommen auf ewig.\n\nEhre sei dem Vater und dem Sohn und dem Heiligen Geist,\nwie im Anfang, so auch jetzt und alle Zeit und in Ewigkeit. Amen.", en: "My soul magnifies the Lord,\nand my spirit rejoices in God my Savior,\nfor He has looked upon the lowliness of His handmaid.\nBehold, from now on all generations shall call me blessed,\nfor the Mighty One has done great things for me,\nand holy is His name.\nHis mercy is from age to age on those who fear Him.\nHe has shown might with His arm,\ndispersed the arrogant of mind and heart.\nHe has thrown down the rulers from their thrones\nbut lifted up the lowly.\nThe hungry He has filled with good things;\nthe rich He has sent away empty.\nHe has helped Israel His servant,\nremembering His mercy,\naccording to His promise to our fathers,\nto Abraham and his descendants forever.\n\nGlory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen." } },
+    ],
+  },
+
+  // ===== Eucharistic =====
+
+  {
+    slug: "tantum-ergo",
+    category: "devotion",
+    icon: "star",
+    title: { de: "Tantum Ergo", en: "Tantum Ergo" },
+    description: { de: "Eucharistischer Hymnus (Thomas v. Aquin)", en: "Eucharistic hymn (Thomas Aquinas)" },
+    steps: [
+      { text: { de: "Gottheit tief verborgen, betend nah ich dir.\nUnter diesen Zeichen bist du wirklich hier.\nSieh, mit ganzem Herzen schenk ich mich dir hin,\nweil vor solchem Wunder ich nur Armut bin.\n\nTantum ergo Sacramentum veneremur cernui:\net antiquum documentum novo cedat ritui:\npraestet fides supplementum sensuum defectui.\n\nGenitori, Genitoque laus et iubilatio,\nsalus, honor, virtus quoque sit et benedictio:\nprocedenti ab utroque compar sit laudatio. Amen.\n\nV: Brot des Himmels hast du ihnen gegeben, Halleluja.\nR: Das alle Labsal in sich birgt, Halleluja.", en: "Down in adoration falling, lo! the sacred Host we hail,\nlo! o'er ancient forms departing, newer rites of grace prevail:\nfaith for all defects supplying, where the feeble senses fail.\n\nTo the everlasting Father, and the Son who reigns on high,\nwith the Holy Spirit proceeding forth from each eternally,\nbe salvation, honor, blessing, might and endless majesty. Amen." } },
+    ],
+  },
+
+  {
+    slug: "adoro-te-devote",
+    category: "devotion",
+    icon: "star",
+    title: { de: "Adoro Te Devote", en: "Adoro Te Devote" },
+    description: { de: "Anbetungshymnus (Thomas v. Aquin)", en: "Adoration hymn (Thomas Aquinas)" },
+    steps: [
+      { text: { de: "Dich Gottheit, tief verborgen, demütig bet ich an,\ndie unter den Gestalten sich wahrhaft bergen kann.\nDir gebe sich mein Herze zu eigen ganz und gar,\nweil vor dir, angebet'ter, es nur wie nichts noch war.\n\nVor dir getäuscht wird Auge, Getast und Zunge ganz,\nnur das Gehör bringt Kunde von deines Wesens Glanz.\nIch glaub, was Gottes Sohn uns zu lehren sich entschloss;\nes gibt nicht Wort des Wahren, das gleich dem Worte groß.\n\nAm Kreuz war nur verborgen die Gottheit, doch nicht mehr;\nhier ist zumal verborgen die Menschheit auch so sehr.\nDoch beide fest bekennend, glaub ich, gewiss und fest,\nwie einst der reuige Schächer um Gnade bitten lässt.\n\nDie Wunden seh ich freilich nicht, wie sie Thomas sah,\ndoch rufe ich mein Gott du, bist du mir wirklich nah.\nAch gib mir, dass ich immer mehr glauben möge dir,\nauf dich mein Hoffen gründe, in Liebe steh zu dir. Amen.", en: "I devoutly adore Thee, O hidden Deity, truly hidden beneath these appearances. My whole heart submits to Thee, and in contemplating Thee, it surrenders itself completely.\n\nSight, touch, taste are all deceived in their judgment of Thee, but hearing suffices firmly to believe. I believe all that the Son of God has spoken; there is nothing truer than this word of Truth.\n\nO Jesus, whom now I see hidden, I ask of Thee to fulfill what I so desire: That on seeing Thee face to face, I may be happy in seeing Thy glory. Amen." } },
+    ],
+  },
+
+  {
+    slug: "spiritual-communion",
+    category: "devotion",
+    icon: "favorite_border",
+    title: { de: "Geistliche Kommunion", en: "Spiritual Communion" },
+    description: { de: "Für Zeiten ohne Mess-Teilnahme (Alfons v. Liguori)", en: "For times when sacramental communion is not possible (Alphonsus Liguori)" },
+    steps: [
+      { text: { de: "Mein Jesus, ich glaube, dass du im heiligsten Sakrament wahrhaft gegenwärtig bist.\nIch liebe dich über alles und ersehne dich in meine Seele.\nDa ich dich jetzt nicht sakramental empfangen kann,\nkomm wenigstens geistlich in mein Herz.\nIch umfange dich, als seiest du schon dort, und vereinige mich ganz mit dir.\nLass nicht zu, dass ich mich je von dir trenne. Amen.", en: "My Jesus, I believe that You are truly present in the Most Holy Sacrament. I love You above all things, and I desire to receive You into my soul. Since I cannot now receive You sacramentally, come at least spiritually into my heart. I embrace You as if You were already there, and unite myself wholly to You. Never permit me to be separated from You. Amen." } },
+    ],
+  },
+
+  {
+    slug: "before-communion",
+    category: "devotion",
+    icon: "favorite_border",
+    title: { de: "Gebet vor der Kommunion", en: "Prayer Before Communion" },
+    description: { de: "Vorbereitung des Herzens auf den Empfang", en: "Preparing the heart to receive the Eucharist" },
+    steps: [
+      { text: { de: "Herr Jesus Christus, Sohn des lebendigen Gottes,\ndu hast nach dem Willen des Vaters\nin Einheit mit dem Heiligen Geist durch deinen Tod\nder Welt das Leben geschenkt.\nErlöse mich durch deinen heiligen Leib und dein Blut,\ndas ich nun empfangen darf, von allen meinen Sünden und von jedem Übel.\nHilf mir, dass ich an deinen Geboten festhalte,\nund lass nicht zu, dass ich mich auf ewig von dir trenne. Amen.", en: "Lord Jesus Christ, Son of the living God, who by the will of the Father and the work of the Holy Spirit have through Your death given life to the world: by Your most holy Body and Blood which I now am to receive, free me from all my sins and from every evil. Help me to keep Your commandments, and never let me be separated from You. Amen." } },
+    ],
+  },
+
+  {
+    slug: "after-communion",
+    category: "devotion",
+    icon: "favorite_border",
+    title: { de: "Gebet nach der Kommunion", en: "Prayer After Communion" },
+    description: { de: "Danksagung nach Empfang der Eucharistie", en: "Thanksgiving after receiving the Eucharist" },
+    steps: [
+      { text: { de: "Herr, ich danke dir für die heilige Gemeinschaft mit dir.\nDu bist in mir, und ich bin in dir.\nBleibe bei mir, wenn dieser Tag sich neigt.\nLass dein Licht durch mich leuchten,\ndeinen Frieden durch mich weitergehen,\ndeine Liebe durch mich Frucht bringen.\n\nNimm, Herr, und empfange meine ganze Freiheit,\nmein Gedächtnis, meinen Verstand und meinen ganzen Willen,\nalles, was ich habe und besitze. Du hast es mir gegeben; dir, Herr, gebe ich es zurück. Alles ist dein, verfüge darüber nach deinem Willen. Gib mir nur deine Liebe und deine Gnade, dann bin ich reich genug und ich verlange nichts weiter. Amen. (Hl. Ignatius)", en: "Lord, I thank You for this holy communion. You are in me and I am in You. Stay with me as this day unfolds. Let Your light shine through me, Your peace spread through me, Your love bear fruit in me.\n\nTake, Lord, and receive all my liberty, my memory, my understanding, and my entire will — all that I have and possess. You have given all to me; to You, Lord, I return it. All is Yours, dispose of it wholly according to Your will. Give me only Your love and Your grace; that is enough for me. Amen. (St. Ignatius)" } },
+    ],
+  },
+
+  // ===== Acts and Penance =====
+
+  {
+    slug: "act-contrition",
+    category: "devotion",
+    icon: "water_drop",
+    title: { de: "Akt der Reue", en: "Act of Contrition" },
+    description: { de: "Reue und Vorsatz vor der Beichte oder am Lebensende", en: "Contrition and purpose before confession or at life's close" },
+    steps: [
+      { text: { de: "Mein Gott und Vater,\nich habe gesündigt in Gedanken, Worten und Werken,\ndurch meine Schuld, durch meine Schuld, durch meine große Schuld.\nEs tut mir aufrichtig leid, denn ich habe dich beleidigt,\nder du aller Liebe würdig bist und die Sünde hasst.\nIch will mit deiner Gnade nicht mehr sündigen und die Gelegenheit zur Sünde meiden.\nVerzeih mir durch die Verdienste deines Sohnes Jesus Christus\nund schenke mir ein neues Herz. Amen.", en: "O my God, I am heartily sorry for having offended You, and I detest all my sins because of Your just punishments, but most of all because they offend You, my God, who are all good and deserving of all my love. I firmly resolve, with the help of Your grace, to sin no more and to avoid the near occasions of sin. Amen." } },
+    ],
+  },
+
+  {
+    slug: "act-faith",
+    category: "devotion",
+    icon: "lightbulb",
+    title: { de: "Akt des Glaubens", en: "Act of Faith" },
+    description: { de: "Erneuerung des Glaubens", en: "Renewal of faith" },
+    steps: [
+      { text: { de: "Mein Gott, ich glaube an dich:\nan den Vater, den Sohn und den Heiligen Geist —\nan einen Gott in drei Personen.\nIch glaube, dass dein Sohn Jesus Christus Mensch geworden ist,\nfür uns gestorben, von den Toten auferstanden,\nund am Ende der Zeiten kommen wird, die Lebenden und die Toten zu richten.\nIch glaube alles, was deine heilige Kirche glaubt und lehrt,\nweil du es geoffenbart hast, der du die Wahrheit selbst bist.\nIn diesem Glauben will ich leben und sterben. Amen.", en: "O my God, I firmly believe that You are one God in three divine Persons, Father, Son, and Holy Spirit. I believe that Your Divine Son became man, died for our sins, and that He will come to judge the living and the dead. I believe these and all the truths which the Holy Catholic Church teaches, because You have revealed them, who can neither deceive nor be deceived. Amen." } },
+    ],
+  },
+
+  {
+    slug: "act-hope",
+    category: "devotion",
+    icon: "wb_twilight",
+    title: { de: "Akt der Hoffnung", en: "Act of Hope" },
+    description: { de: "Vertrauen auf Gottes Verheißung", en: "Trust in God's promise" },
+    steps: [
+      { text: { de: "Mein Gott, ich hoffe auf dich mit fester Zuversicht,\ndass du mir durch die Verdienste Jesu Christi\ndas ewige Leben und die dazu nötigen Gnaden schenkst,\nweil du es versprochen hast, der du allmächtig, gütig und treu bist. Amen.", en: "O my God, relying on Your almighty power and infinite mercy and promises, I hope to obtain pardon for my sins, the help of Your grace, and life everlasting, through the merits of Jesus Christ, my Lord and Redeemer. Amen." } },
+    ],
+  },
+
+  {
+    slug: "act-love",
+    category: "devotion",
+    icon: "favorite",
+    title: { de: "Akt der Liebe", en: "Act of Love" },
+    description: { de: "Liebe zu Gott und zum Nächsten", en: "Love of God and neighbor" },
+    steps: [
+      { text: { de: "Mein Gott, ich liebe dich über alles aus ganzem Herzen,\nweil du unendlich gut und aller Liebe würdig bist.\nAus Liebe zu dir liebe ich auch meinen Nächsten wie mich selbst\nund verzeihe allen, die mir Unrecht getan haben. Amen.", en: "O my God, I love You above all things, with my whole heart and soul, because You are all good and worthy of all love. I love my neighbor as myself for the love of You. I forgive all who have injured me and ask pardon of all whom I have injured. Amen." } },
+    ],
+  },
+
+  {
+    slug: "examination-of-conscience",
+    category: "devotion",
+    icon: "search",
+    title: { de: "Gewissenserforschung", en: "Examination of Conscience" },
+    description: { de: "Vorbereitung auf die Beichte entlang der Zehn Gebote", en: "Preparation for confession along the Ten Commandments" },
+    steps: [
+      { title: { de: "Vorbereitung", en: "Preparation" }, text: { de: "Komm, Heiliger Geist, erleuchte meinen Verstand, damit ich meine Sünden erkenne. Rühre mein Herz, damit ich sie aufrichtig bereue. Gib mir den festen Vorsatz, mich zu bessern. Amen.", en: "Come, Holy Spirit, enlighten my mind that I may know my sins, move my heart to true contrition, and give me a firm purpose of amendment. Amen." } },
+      { title: { de: "1. Gebot — Du sollst an einen Gott glauben", en: "1st Commandment" }, text: { de: "Habe ich täglich gebetet? Habe ich Gott vertraut auch in Schwierigkeiten? Habe ich die Würde meines Glaubens durch Aberglaube, Esoterik, Horoskope oder okkulte Praktiken verletzt? Habe ich den Glauben aus Menschenfurcht verleugnet?", en: "Did I pray daily? Did I trust God in difficulty? Did I harm the dignity of my faith through superstition, occult practices, horoscopes? Did I deny the faith out of human respect?" } },
+      { title: { de: "2. Gebot — Du sollst den Namen Gottes nicht missbrauchen", en: "2nd Commandment" }, text: { de: "Habe ich den Namen Gottes missbraucht, geflucht, falsch geschworen? Habe ich Heiliges verspottet?", en: "Did I misuse God's name, curse, or swear falsely? Did I mock the sacred?" } },
+      { title: { de: "3. Gebot — Du sollst den Tag des Herrn heiligen", en: "3rd Commandment" }, text: { de: "Habe ich die Sonntagsmesse bewusst versäumt? Habe ich den Sonntag durch unnötige Arbeit, Konsum oder Zerstreuung entheiligt? Habe ich die Hochfeste geachtet?", en: "Did I deliberately miss Sunday Mass? Did I profane the Lord's Day through unnecessary work, consumption, or distraction? Did I honor the holy days?" } },
+      { title: { de: "4. Gebot — Ehre deinen Vater und deine Mutter", en: "4th Commandment" }, text: { de: "Habe ich meine Eltern geachtet, auch im Alter? Habe ich als Elternteil meine Kinder im Glauben erzogen? Habe ich rechtmäßige Autoritäten respektiert? Habe ich meiner Verantwortung gegenüber Ehepartner, Familie, Nachbarn, Arbeitskollegen gerecht gelebt?", en: "Did I honor my parents, also in old age? Did I raise my children in the faith? Did I respect lawful authority? Did I live responsibly toward spouse, family, neighbors, colleagues?" } },
+      { title: { de: "5. Gebot — Du sollst nicht töten", en: "5th Commandment" }, text: { de: "Habe ich durch Hass, Groll, Rache, Verachtung gesündigt? Habe ich mir oder anderen im Leib oder in der Seele geschadet? Habe ich an Abtreibung oder Sterbehilfe mitgewirkt? Habe ich Vergebung verweigert?", en: "Did I sin through hatred, resentment, revenge, contempt? Did I harm myself or others in body or soul? Did I cooperate with abortion or euthanasia? Did I refuse to forgive?" } },
+      { title: { de: "6. & 9. Gebot — Reinheit", en: "6th & 9th Commandments — Purity" }, text: { de: "Habe ich meine Sexualität geachtet? Habe ich die Würde des Leibes und der Ehe verletzt durch Pornografie, Selbstbefriedigung, unreine Gedanken oder Beziehungen, Ehebruch, Unzucht? Habe ich andere zur Sünde verführt?", en: "Did I honor my sexuality? Did I wound the dignity of the body and of marriage through pornography, masturbation, impure thoughts or relationships, adultery, fornication? Did I lead others to sin?" } },
+      { title: { de: "7. & 10. Gebot — Gerechtigkeit", en: "7th & 10th Commandments — Justice" }, text: { de: "Habe ich gestohlen oder Unehrliches getan? Habe ich Schulden und Verpflichtungen erfüllt? Habe ich im Beruf sorgfältig und ehrlich gearbeitet? Habe ich Bedürftige übersehen? Habe ich neidisch oder habgierig gelebt?", en: "Did I steal or act dishonestly? Did I fulfill debts and obligations? Did I work honestly? Did I ignore those in need? Did I live in envy or greed?" } },
+      { title: { de: "8. Gebot — Du sollst nicht falsch Zeugnis geben", en: "8th Commandment" }, text: { de: "Habe ich gelogen, andere schlechtgemacht, Geheimnisse verletzt, üble Nachrede geführt? Habe ich den guten Ruf anderer bewahrt? Habe ich mich an der Wahrheit orientiert?", en: "Did I lie, slander, betray trust, gossip? Did I protect the good name of others? Did I live in truth?" } },
+      { title: { de: "Abschluss", en: "Conclusion" }, text: { de: "Herr, ich habe erkannt. Verzeih mir, was ich bereue, gib mir Kraft zur Umkehr, führe mich zur Beichte. Amen.", en: "Lord, I have seen. Forgive what I repent of, give me strength to convert, and lead me to confession. Amen." } },
+    ],
+  },
+
+  // ===== For the Deceased =====
+
+  {
+    slug: "requiem-aeternam",
+    category: "devotion",
+    icon: "candle",
+    title: { de: "Ewige Ruhe (Requiem aeternam)", en: "Eternal Rest" },
+    description: { de: "Bitte um Frieden für die Verstorbenen", en: "Prayer for peace for the departed" },
+    steps: [
+      { text: { de: "Herr, gib ihnen die ewige Ruhe,\nund das ewige Licht leuchte ihnen.\nLass sie ruhen in Frieden. Amen.\n\nRequiem aeternam dona eis, Domine,\net lux perpetua luceat eis.\nRequiescant in pace. Amen.", en: "Eternal rest grant unto them, O Lord,\nand let perpetual light shine upon them.\nMay they rest in peace. Amen." } },
+    ],
+  },
+
+  {
+    slug: "de-profundis",
+    category: "devotion",
+    icon: "waves",
+    title: { de: "De Profundis (Psalm 130)", en: "De Profundis (Psalm 130)" },
+    description: { de: "Aus der Tiefe rufe ich — Bußpsalm, besonders für Verstorbene", en: "Out of the depths — penitential psalm, especially for the deceased" },
+    steps: [
+      { text: { de: "Aus der Tiefe rufe ich, Herr, zu dir:\nHerr, höre meine Stimme!\nWende dein Ohr mir zu,\nachte auf mein lautes Flehen!\n\nWürdest du, Herr, unsere Sünden beachten,\nHerr, wer könnte bestehen?\nDoch bei dir ist die Vergebung,\ndamit man in Ehrfurcht dir dient.\n\nIch hoffe auf den Herrn, meine Seele hofft,\nich warte auf sein Wort.\nMeine Seele wartet auf den Herrn,\nmehr als die Wächter auf den Morgen.\n\nMehr als die Wächter auf den Morgen\nsoll Israel harren auf den Herrn.\nDenn beim Herrn ist die Huld,\nbei ihm ist Erlösung in Fülle.\n\nJa, er wird Israel erlösen\naus all seinen Sünden.\n\nEhre sei dem Vater und dem Sohn und dem Heiligen Geist,\nwie im Anfang, so auch jetzt und alle Zeit und in Ewigkeit. Amen.", en: "Out of the depths I cry to You, O Lord;\nLord, hear my voice!\nLet Your ears be attentive\nto the voice of my supplications.\n\nIf You, O Lord, should mark iniquities,\nLord, who could stand?\nBut with You is forgiveness,\nthat You may be revered.\n\nI trust in the Lord; my soul trusts in His word.\nMy soul waits for the Lord more than sentinels wait for the dawn.\nMore than sentinels wait for the dawn,\nlet Israel wait for the Lord.\n\nFor with the Lord is kindness and with Him plenteous redemption.\nAnd He will redeem Israel from all their iniquities.\n\nGlory be to the Father... Amen." } },
+    ],
+  },
+
+  // ===== Modern Popes & Saints =====
+
+  {
+    slug: "francis-to-joseph",
+    category: "devotion",
+    icon: "carpenter",
+    title: { de: "Papst Franziskus — Gebet zum hl. Josef", en: "Pope Francis — Prayer to St. Joseph" },
+    description: { de: "Aus dem Apostolischen Schreiben Patris corde (2020)", en: "From the Apostolic Letter Patris corde (2020)" },
+    steps: [
+      { text: { de: "Sei gegrüßt, Hüter des Erlösers,\nBräutigam der Jungfrau Maria.\nDir hat Gott seinen einzigen Sohn anvertraut;\nauf dich hat Maria ihr Vertrauen gesetzt;\nmit dir ist Christus zum Mann herangewachsen.\nO seliger Josef, erweise dich auch uns als Vater\nund geleite uns auf dem Weg des Lebens.\nErwirke uns Gnade, Barmherzigkeit und Mut\nund beschütze uns vor allem Bösen. Amen.", en: "Hail, Guardian of the Redeemer,\nSpouse of the Blessed Virgin Mary.\nTo you God entrusted His only Son;\nin you Mary placed her trust;\nwith you Christ became man.\nBlessed Joseph, to us too show yourself a father\nand guide us in the path of life.\nObtain for us grace, mercy, and courage,\nand defend us from every evil. Amen." } },
+    ],
+  },
+
+  {
+    slug: "benedict-xvi-vocations",
+    category: "devotion",
+    icon: "church",
+    title: { de: "Papst Benedikt XVI. — Gebet um Berufungen", en: "Pope Benedict XVI — Prayer for Vocations" },
+    description: { de: "Um geistliche Berufe in der Kirche", en: "For priestly and religious vocations" },
+    steps: [
+      { text: { de: "Vater, lass aus den Menschen unserer Zeit\nheilige Berufungen für das priesterliche und geweihte Leben hervorgehen,\ndamit der Glaube unter den Völkern lebendig bleibt\nund die Hoffnung nicht schwindet.\nStärke alle, die du berufst,\ndamit sie in Treue und Freude dein Evangelium verkünden\nund die Sakramente als lebensspendende Quelle ausspenden.\nMaria, Königin der Apostel, bitte für uns. Amen.", en: "Father, raise up from among the people of our time holy vocations to the priesthood and consecrated life, that faith may remain alive among the peoples and hope may not fade. Strengthen those You call to proclaim Your Gospel and to dispense the sacraments as life-giving streams. Mary, Queen of the Apostles, pray for us. Amen." } },
+    ],
+  },
+
+  {
+    slug: "mother-teresa-instrument",
+    category: "devotion",
+    icon: "volunteer_activism",
+    title: { de: "Mutter Teresa — Herr, mache mich zum Werkzeug", en: "Mother Teresa — Radiating Christ" },
+    description: { de: "Tägliches Gebet der Missionarinnen der Nächstenliebe", en: "Daily prayer of the Missionaries of Charity" },
+    steps: [
+      { text: { de: "Lieber Jesus, hilf uns, dein Leben überall auszustrahlen,\nwohin wir gehen. Überflute unsere Seele mit deinem Geist und Leben.\nDurchdringe und besitze unser ganzes Sein so vollständig,\ndass unser Leben nur noch ein Abglanz deines Lebens wird.\nLeuchte durch uns und sei so in uns,\ndass jede Seele, mit der wir in Berührung kommen,\ndeine Gegenwart in unserer Seele spürt.\nLass sie aufblicken und nicht mehr uns sehen, sondern nur noch dich, Jesus.\nBleibe bei uns, und wir werden anfangen zu leuchten, wie du leuchtest,\nso zu leuchten, dass wir ein Licht für andere werden. Amen.", en: "Dear Jesus, help us to spread Your fragrance everywhere we go.\nFlood our souls with Your spirit and life.\nPenetrate and possess our whole being so utterly that our lives may only be a radiance of Yours.\nShine through us and be so in us that every soul we come in contact with may feel Your presence in our soul.\nLet them look up and see no longer us but only Jesus.\nStay with us, and then we shall begin to shine as You shine, so to shine as to be a light to others. Amen." } },
+    ],
+  },
+
+  {
+    slug: "padre-pio-stay",
+    category: "devotion",
+    icon: "nightlight",
+    title: { de: "Padre Pio — Bleib bei mir, Herr", en: "Padre Pio — Stay with Me, Lord" },
+    description: { de: "Gebet nach der heiligen Kommunion", en: "Prayer after Holy Communion" },
+    steps: [
+      { text: { de: "Bleib bei mir, Herr, denn ich brauche deine Gegenwart, um dich nicht zu vergessen.\nDu weißt, wie leicht ich dich verlasse.\n\nBleib bei mir, Herr, denn ich bin schwach; ich bedarf deiner Kraft, um nicht zu fallen.\nBleib bei mir, Herr, denn du bist mein Leben: Ohne dich fehlt mir der Eifer.\nBleib bei mir, Herr, denn du bist mein Licht: Ohne dich versinke ich in Finsternis.\nBleib bei mir, Herr, um mir deinen Willen zu zeigen.\nBleib bei mir, Herr, damit ich deine Stimme höre und dir folge.\nBleib bei mir, Herr, denn ich will dich sehr lieben und immer in deiner Gesellschaft sein.\n\nBleib bei mir, Herr, wenn es Abend wird und der Tag sich neigt; das Leben vergeht, die Ewigkeit naht.\nIch muss die Kräfte verdoppeln, damit ich unterwegs nicht nachlasse; dazu brauche ich dich.\nEs wird Abend, und der Tod naht; ich fürchte die Finsternis, die Versuchungen, die Gefahren.\nO wie nötig habe ich dich, mein Jesus, in dieser Nacht der Verbannung.\n\nBleib bei mir, Jesus, denn in dieser Nacht des Lebens und der Gefahren habe ich dich so nötig.\nBleib bei mir, Jesus, Nahrung der starken Seelen. Amen.", en: "Stay with me, Lord, for it is necessary to have You present so that I do not forget You. You know how easily I abandon You.\n\nStay with me, Lord, because I am weak and I need Your strength, that I may not fall so often.\nStay with me, Lord, for You are my life, and without You, I am without fervor.\nStay with me, Lord, for You are my light, and without You, I am in darkness.\nStay with me, Lord, to show me Your will.\nStay with me, Lord, so that I hear Your voice and follow You.\nStay with me, Lord, for I desire to love You very much and always be in Your company.\n\nStay with me, Lord, if You wish me to be faithful to You. Stay with me, Lord, for as poor as my soul is, I want it to be a place of consolation for You, a nest of love.\n\nStay with me, Jesus, for it is getting late and the day is coming to a close, and life passes, death, judgment, eternity approach. It is necessary to renew my strength, so that I will not stop along the way; and for that, I need You.\n\nIt is getting late and death approaches, I fear the darkness, the temptations, the dryness, the cross, the sorrows. O how I need You, my Jesus, in this night of exile. Amen." } },
+    ],
+  },
+
+  {
+    slug: "prayer-for-pope",
+    category: "devotion",
+    icon: "church",
+    title: { de: "Gebet für den Papst", en: "Prayer for the Pope" },
+    description: { de: "Tägliche Fürbitte für den Heiligen Vater", en: "Daily intercession for the Holy Father" },
+    steps: [
+      { text: { de: "Allmächtiger ewiger Gott, erbarme dich deines Knechtes unseres Papstes,\nund leite ihn nach deiner Güte auf dem Weg des ewigen Heils,\ndamit er, durch deine Gnade geführt,\ndas suche, was dir wohlgefällig ist,\nund es mit ganzer Kraft vollbringe.\nDurch Christus, unseren Herrn. Amen.\n\nV: Lasst uns beten für unseren Papst.\nR: Der Herr erhalte ihn und belebe ihn, mache ihn glücklich auf Erden und gebe ihn nicht preis dem Willen seiner Feinde.", en: "Almighty and everlasting God, have mercy upon Your servant, our Pope, and direct him according to Your clemency into the way of everlasting salvation, that, by Your grace, he may desire the things that are pleasing to You, and perform them with all his strength. Through Christ our Lord. Amen.\n\nV: Let us pray for our Pope.\nR: May the Lord preserve him and give him life, make him blessed upon the earth, and deliver him not up to the will of his enemies." } },
+    ],
+  },
+
+  // ===== Hymns =====
+
+  {
+    slug: "te-deum",
+    category: "devotion",
+    icon: "celebration",
+    title: { de: "Te Deum — Großer Gott, wir loben dich", en: "Te Deum" },
+    description: { de: "Feierlicher Lobgesang der Kirche", en: "Solemn hymn of praise" },
+    steps: [
+      { text: { de: "Dich, Gott, loben wir, dich, Herr, preisen wir.\nDir, dem ewigen Vater, huldigt das Erdenreich.\nDir rufen die Engel alle, dir Himmel und Mächte insgesamt,\ndie Cherubim dir und die Serafim mit niemals endender Stimme zu:\n\nHeilig, heilig, heilig der Herr, der Gott der Scharen!\nVoll sind Himmel und Erde von deiner hohen Herrlichkeit.\n\nDich preist der glorreiche Chor der Apostel;\ndich der Propheten lobwürdige Zahl;\ndich der Märtyrer leuchtendes Heer;\ndich preist über das Erdenrund die heilige Kirche;\ndich, den Vater unermessbarer Majestät;\ndeinen wahren und einzigen Sohn;\nund den Heiligen Fürsprecher Geist.\n\nDu König der Herrlichkeit, Christus.\nDu bist des Vaters allewiger Sohn.\nDu hast der Jungfrau Schoß nicht verschmäht,\nbist Mensch geworden, den Menschen zu befreien.\nDu hast bezwungen des Todes Stachel\nund denen, die glauben, die Reiche der Himmel aufgetan.\nDu sitzest zur Rechten Gottes in deines Vaters Herrlichkeit.\nAls Richter, so glauben wir, kehrst du einst wieder.\n\nDich bitten wir denn, komm deinen Dienern zu Hilfe,\ndie du erlöst mit kostbarem Blut.\nIn der ewigen Herrlichkeit zähle uns deinen Heiligen zu. Amen.", en: "You are God: we praise You; You are the Lord: we acclaim You. You are the eternal Father: all creation worships You. To You all angels, all the powers of heaven, the cherubim and seraphim, sing in endless praise:\n\nHoly, holy, holy Lord, God of power and might, heaven and earth are full of Your glory.\n\nThe glorious company of apostles praise You. The noble fellowship of prophets praise You. The white-robed army of martyrs praise You. Throughout the world the holy Church acclaims You: Father, of majesty unbounded; Your true and only Son, worthy of all worship; and the Holy Spirit, advocate and guide.\n\nYou, Christ, are the king of glory, the eternal Son of the Father. When You became man to set us free You did not spurn the Virgin's womb. You overcame the sting of death and opened the kingdom of heaven to all believers. You are seated at God's right hand in glory. We believe that You will come to be our judge.\n\nCome then, Lord, and help Your people, bought with the price of Your own blood, and bring us with Your saints to glory everlasting. Amen." } },
+    ],
+  },
+
+  {
+    slug: "veni-sancte-spiritus",
+    category: "devotion",
+    icon: "local_fire_department",
+    title: { de: "Veni Sancte Spiritus — Komm, Heiliger Geist", en: "Veni Sancte Spiritus" },
+    description: { de: "Pfingstsequenz", en: "Pentecost sequence" },
+    steps: [
+      { text: { de: "Komm herab, o Heilger Geist, der die finstre Nacht zerreißt,\nstrahle Licht in diese Welt.\nKomm, der alle Armen liebt, komm, der gute Gaben gibt,\nkomm, der jedes Herz erhellt.\n\nHöchster Tröster in der Zeit, Gast, der Herz und Sinn erfreut,\nköstlich Labsal in der Not.\nIn der Unrast schenkst du Ruh, hauchst in Hitze Kühlung zu,\nspendest Trost in Leid und Tod.\n\nKomm, o du glückselig Licht, fülle Herz und Angesicht,\ndring bis auf der Seele Grund.\nOhne dein lebendig Wehn kann im Menschen nichts bestehn,\nkann nichts heil sein noch gesund.\n\nWas befleckt ist, wasche rein, Dürrem gieße Leben ein,\nheile du, wo Krankheit quält.\nWärme du, was kalt und hart, löse, was in sich erstarrt,\nlenke, was den Weg verfehlt.\n\nGib dem Volk, das dir vertraut, das auf deine Hilfe baut,\ndeine Gaben zum Geleit.\nLass es in der Zeit bestehn, deines Heils Vollendung sehn\nund der Freuden Ewigkeit. Amen.", en: "Come, Holy Spirit, come! And from Your celestial home shed a ray of light divine! Come, Father of the poor! Come, source of all our store! Come, within our bosoms shine.\n\nYou, of comforters the best; You, the soul's most welcome guest; sweet refreshment here below; in our labor, rest most sweet; grateful coolness in the heat; solace in the midst of woe.\n\nO most blessed Light divine, shine within these hearts of Yours, and our inmost being fill! Where You are not, we have naught, nothing good in deed or thought, nothing free from taint of ill.\n\nHeal our wounds, our strength renew; on our dryness pour Your dew; wash the stains of guilt away: bend the stubborn heart and will; melt the frozen, warm the chill; guide the steps that go astray.\n\nOn the faithful, who adore and confess You, evermore in Your sevenfold gift descend; give them virtue's sure reward; give them Your salvation, Lord; give them joys that never end. Amen." } },
+    ],
+  },
+
+  {
+    slug: "stabat-mater",
+    category: "devotion",
+    icon: "water_drop",
+    title: { de: "Stabat Mater", en: "Stabat Mater" },
+    description: { de: "Gebet der Mutter unter dem Kreuz — Karwoche", en: "The Mother at the foot of the Cross — Holy Week" },
+    steps: [
+      { text: { de: "Christi Mutter stand mit Schmerzen\nbei dem Kreuz und weint von Herzen,\nals ihr lieber Sohn da hing.\nDurch die Seele voller Trauer,\nschneidend unter Todesschauer,\njetzt das Schwert des Leidens ging.\n\nWelch ein Schmerz der Auserkor'nen,\nda sie sah den Eingebor'nen,\nwie er mit dem Tode rang.\nAngst und Jammer, Qual und Bangen,\nalles Leid hielt sie umfangen,\ndas nur je ein Herz durchdrang.\n\nGib, o Mutter, Born der Liebe,\ndass ich mich mit dir betrübe,\ndass ich fühl die Schmerzen dein.\nDass mein Herz von Lieb entbrenne,\ndass ich nur noch Jesus kenne,\ndass ich liebe Gott allein.\n\nWenn mein Leib nun stirbt und endet,\ndann, o Mutter, lass gesendet\nmeiner Seel die Himmelskron. Amen.", en: "At the cross her station keeping, stood the mournful Mother weeping, close to Jesus to the last.\nThrough her heart, His sorrow sharing, all His bitter anguish bearing, now at length the sword had passed.\n\nO how sad and sore distressed, was that Mother highly blessed, of the sole-begotten One!\nChrist above in torment hangs; she beneath beholds the pangs of her dying glorious Son.\n\nO sweet Mother! fount of love, touch my spirit from above, make my heart with yours accord.\nMake me feel as you have felt; make my soul to glow and melt with the love of Christ our Lord.\n\nWhen the body dies, O grant that the soul Your glory shall see, paradise with You. Amen." } },
+    ],
+  },
+
+  // ===== St. Francis of Assisi =====
+
+  {
+    slug: "canticle-of-sun",
+    category: "devotion",
+    icon: "wb_sunny",
+    title: { de: "Sonnengesang — Franz von Assisi", en: "Canticle of the Sun — Francis of Assisi" },
+    description: { de: "Lobpreis der Schöpfung", en: "Praise of creation" },
+    steps: [
+      { text: { de: "Höchster, allmächtiger, guter Herr, dein ist das Lob, die Herrlichkeit und Ehre und jeglicher Segen.\nDir allein, Höchster, gebühren sie, und kein Mensch ist würdig, dich zu nennen.\n\nGelobt seist du, mein Herr, mit allen deinen Geschöpfen,\nzumal dem Herrn Bruder Sonne,\nder uns den Tag schenkt, und durch den du uns leuchtest.\nUnd schön ist er und strahlend mit großem Glanz: Von dir, Höchster, ist er ein Sinnbild.\n\nGelobt seist du, mein Herr, durch Schwester Mond und die Sterne; am Himmel hast du sie gebildet, klar und kostbar und schön.\nGelobt seist du, mein Herr, durch Bruder Wind und durch die Luft, Wolken, heiteres und jegliches Wetter, durch das du deinen Geschöpfen Unterhalt gibst.\nGelobt seist du, mein Herr, durch Schwester Wasser, gar nützlich ist sie und demütig und kostbar und keusch.\nGelobt seist du, mein Herr, durch Bruder Feuer, durch das du die Nacht erleuchtest;\nund schön ist es und fröhlich und kraftvoll und stark.\nGelobt seist du, mein Herr, durch unsere Schwester, Mutter Erde, die uns erhält und lenkt und vielfältige Frucht hervorbringt und bunte Blumen und Kräuter.\n\nGelobt seist du, mein Herr, durch jene, die verzeihen um deiner Liebe willen\nund Krankheit und Trübsal ertragen.\nSelig jene, die solches ertragen in Frieden, denn von dir, Höchster, werden sie gekrönt.\nGelobt seist du, mein Herr, durch unsere Schwester, den leiblichen Tod,\ndem kein lebender Mensch entrinnen kann.\n\nLobt und preist meinen Herrn und dankt und dient ihm mit großer Demut. Amen.", en: "Most High, all-powerful, all good Lord, all praise is Yours, all glory, all honor and all blessing. To You alone, Most High, do they belong, and no human is worthy to mention Your name.\n\nPraised be You, my Lord, with all Your creatures, especially Sir Brother Sun, who brings the day, and through whom You give us light. How beautiful he is, radiant with great splendor; of You, Most High, he bears the likeness.\n\nPraised be You, my Lord, through Sister Moon and the stars; in the heavens You have made them, precious and beautiful.\nPraised be You, my Lord, through Brother Wind, and through the air, cloudy and serene, and every kind of weather, by which You give sustenance to Your creatures.\nPraised be You, my Lord, through Sister Water, so useful, humble, precious, and chaste.\nPraised be You, my Lord, through Brother Fire, through whom You light the night; he is beautiful and playful and robust and strong.\nPraised be You, my Lord, through our Sister Mother Earth, who sustains and governs us, and who produces varied fruits with colored flowers and herbs.\n\nPraised be You, my Lord, through those who give pardon for Your love, and bear infirmity and tribulation. Blessed are those who endure in peace, for by You, Most High, they shall be crowned.\n\nPraised be You, my Lord, through our Sister Bodily Death, from whom no one living can escape.\n\nPraise and bless my Lord, and give Him thanks, and serve Him with great humility. Amen." } },
+    ],
+  },
+
+  {
+    slug: "peace-prayer",
+    category: "devotion",
+    icon: "spa",
+    title: { de: "Friedensgebet — Franz von Assisi", en: "Peace Prayer of St. Francis" },
+    description: { de: "Werkzeug des Friedens Gottes sein", en: "Becoming an instrument of God's peace" },
+    steps: [
+      { text: { de: "Herr, mach mich zu einem Werkzeug deines Friedens,\ndass ich Liebe bringe, wo man hasst,\ndass ich verzeihe, wo man beleidigt,\ndass ich verbinde, wo Streit ist,\ndass ich die Wahrheit sage, wo Irrtum ist,\ndass ich Glauben bringe, wo Zweifel droht,\ndass ich Hoffnung wecke, wo Verzweiflung quält,\ndass ich Licht entzünde, wo Finsternis regiert,\ndass ich Freude bringe, wo der Kummer wohnt.\n\nHerr, lass mich trachten,\nnicht dass ich getröstet werde, sondern dass ich tröste,\nnicht dass ich verstanden werde, sondern dass ich verstehe,\nnicht dass ich geliebt werde, sondern dass ich liebe.\n\nDenn wer gibt, der empfängt.\nWer sich selbst vergisst, der findet.\nWer verzeiht, dem wird verziehen.\nUnd wer stirbt, der erwacht zum ewigen Leben. Amen.", en: "Lord, make me an instrument of Your peace;\nwhere there is hatred, let me sow love;\nwhere there is injury, pardon;\nwhere there is doubt, faith;\nwhere there is despair, hope;\nwhere there is darkness, light;\nand where there is sadness, joy.\n\nO Divine Master, grant that I may not so much seek\nto be consoled, as to console;\nto be understood, as to understand;\nto be loved, as to love.\n\nFor it is in giving that we receive;\nit is in pardoning that we are pardoned;\nand it is in dying that we are born to eternal life. Amen." } },
+    ],
+  },
 ];
