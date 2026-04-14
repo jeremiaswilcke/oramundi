@@ -9,6 +9,7 @@ import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { ReminderSettings } from "@/components/reminder-settings";
 import { Friends } from "@/components/friends";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { SosPoolToggle } from "@/components/sos-pool-toggle";
 import Link from "next/link";
 
 interface Stats {
@@ -218,6 +219,7 @@ export default function ProfilePage() {
 
       {/* Reminder Settings */}
       <LanguageSwitcher />
+      <SosPoolToggle />
       <ReminderSettings />
 
       {/* Legal Links as Cards */}

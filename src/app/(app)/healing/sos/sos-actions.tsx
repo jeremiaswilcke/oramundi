@@ -83,7 +83,6 @@ export function SosActions() {
     if (!match || match.length === 0) {
       setError(t("noPartnerAvailable"));
       setLoading(null);
-      // session remains pending; user can retry or switch to alone
       return;
     }
 
