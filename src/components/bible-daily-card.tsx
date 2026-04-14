@@ -105,14 +105,14 @@ export function BibleDailyCard() {
       </section>
 
       {open ? (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/35 p-4 backdrop-blur-sm">
+        <div className="pointer-events-auto fixed inset-0 z-[70] flex items-center justify-center bg-black/35 p-4 backdrop-blur-sm">
           <button
             aria-label={t("closePopup")}
-            className="absolute inset-0 cursor-default"
+            className="absolute inset-0 cursor-pointer"
             onClick={() => setOpen(false)}
           />
 
-          <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary via-primary/95 to-secondary text-white editorial-shadow">
+          <div className="pointer-events-auto relative z-10 w-full max-w-4xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary via-primary/95 to-secondary text-white editorial-shadow">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.1),transparent_28%)]" />
             <div className="absolute -right-10 -top-10 opacity-10">
               <MaterialIcon name="menu_book" size={240} filled />
