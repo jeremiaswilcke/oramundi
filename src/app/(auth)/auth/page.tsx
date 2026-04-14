@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MaterialIcon } from "@/components/material-icon";
 import { OraMundiLogo } from "@/components/ora-mundi-logo";
 import {
   signInWithEmail,
@@ -13,30 +12,37 @@ import {
 export default function AuthPage() {
   const [mode, setMode] = useState<"signin" | "register">("signin");
   const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const t = useTranslations("auth");
   const tc = useTranslations("common");
 
   async function handleSubmit(formData: FormData) {
     setError(null);
-    startTransition(async () => {
+    setIsPending(true);
+    try {
       const result =
         mode === "signin"
           ? await signInWithEmail(formData)
           : await signUpWithEmail(formData);
-      if (result?.error) {
-        setError(result.error);
-      }
-    });
+      if (result?.error) setError(result.error);
+    } catch (err) {
+      setError((err as Error).message ?? "Fehler beim Anmelden");
+    } finally {
+      setIsPending(false);
+    }
   }
 
-  function handleGoogle() {
-    startTransition(async () => {
+  async function handleGoogle() {
+    setError(null);
+    setIsPending(true);
+    try {
       const result = await signInWithGoogle();
-      if (result?.error) {
-        setError(result.error);
-      }
-    });
+      if (result?.error) setError(result.error);
+    } catch (err) {
+      setError((err as Error).message ?? "Fehler bei Google-Anmeldung");
+    } finally {
+      setIsPending(false);
+    }
   }
 
   return (
@@ -138,6 +144,7 @@ export default function AuthPage() {
 
             {/* Google OAuth */}
             <button
+              type="button"
               onClick={handleGoogle}
               disabled={isPending}
               className="w-full flex items-center justify-center gap-3 bg-surface-container-high text-on-surface-variant font-medium py-4 rounded-full hover:bg-surface-variant transition-all group disabled:opacity-50"
@@ -159,11 +166,11 @@ export default function AuthPage() {
         <footer className="text-center pb-8">
           <p className="text-on-surface-variant/60 text-sm mb-4">
             {mode === "signin" ? (
-              <button onClick={() => { setMode("register"); setError(null); }} className="text-primary font-semibold ml-1">
+              <button type="button" onClick={() => { setMode("register"); setError(null); }} className="text-primary font-semibold ml-1">
                 {t("joinTheCircle")}
               </button>
             ) : (
-              <button onClick={() => { setMode("signin"); setError(null); }} className="text-primary font-semibold ml-1">
+              <button type="button" onClick={() => { setMode("signin"); setError(null); }} className="text-primary font-semibold ml-1">
                 {t("alreadyHaveAccount")}
               </button>
             )}
