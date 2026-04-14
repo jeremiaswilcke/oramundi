@@ -1,20 +1,28 @@
 import { NextResponse } from "next/server";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
-const OFFICIUM_ALLOWED_TAGS = [
-  "p", "div", "span", "br", "hr",
-  "h1", "h2", "h3", "h4", "h5",
-  "table", "tbody", "thead", "tr", "td", "th",
-  "b", "i", "u", "em", "strong", "sub", "sup",
-  "ul", "ol", "li",
-  "font", "center", "small", "big",
-  "a",
-];
-
-const OFFICIUM_ALLOWED_ATTR = [
-  "class", "id", "align", "color", "size", "colspan", "rowspan", "valign",
-  "href", "title",
-];
+const OFFICIUM_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
+    "p", "div", "span", "br", "hr",
+    "h1", "h2", "h3", "h4", "h5",
+    "table", "tbody", "thead", "tr", "td", "th",
+    "b", "i", "u", "em", "strong", "sub", "sup",
+    "ul", "ol", "li",
+    "font", "center", "small", "big",
+    "a",
+  ],
+  allowedAttributes: {
+    "*": ["class", "id", "align", "valign"],
+    font: ["color", "size", "face"],
+    td: ["colspan", "rowspan", "width", "valign", "align"],
+    th: ["colspan", "rowspan", "width"],
+    a: ["href", "title"],
+  },
+  allowedSchemes: ["http", "https"],
+  allowedSchemesByTag: { a: ["http", "https", "mailto"] },
+  disallowedTagsMode: "discard",
+  enforceHtmlBoundary: false,
+};
 
 // Maps our hour slugs to divinumofficium.com command names
 const HOUR_MAP: Record<string, string> = {
@@ -91,12 +99,7 @@ export async function GET(
 
   // Allowlist-based sanitization: drops scripts, event handlers, javascript: URLs,
   // iframes, embeds, SVG/MathML payloads, and any tag/attr not explicitly permitted.
-  body = DOMPurify.sanitize(body, {
-    ALLOWED_TAGS: OFFICIUM_ALLOWED_TAGS,
-    ALLOWED_ATTR: OFFICIUM_ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP: /^(?:https?:|#)/i,
-    FORBID_TAGS: ["script", "style", "form", "iframe", "object", "embed", "svg", "math"],
-  });
+  body = sanitizeHtml(body, OFFICIUM_SANITIZE_OPTIONS);
 
   // Extract the title (e.g. "Ad Vesperas")
   const titleMatch = html.match(/<H2[^>]*>([^<]+)<\/H2>/i);
