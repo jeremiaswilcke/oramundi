@@ -19,11 +19,80 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const CANONICAL_URL = "https://oramundi.online";
+
 export const metadata: Metadata = {
-  title: "Ora Mundi — Du betest nie allein",
+  metadataBase: new URL(CANONICAL_URL),
+  title: {
+    default: "Ora Mundi — Du betest nie allein",
+    template: "%s · Ora Mundi",
+  },
   description:
     "Bete den Rosenkranz und sieh auf einer Echtzeit-Weltkarte, wo gerade Menschen beten. Teile Gebetsanliegen und bete füreinander.",
+  applicationName: "Ora Mundi",
+  keywords: [
+    "Rosenkranz",
+    "Gebet",
+    "Katholisch",
+    "Gebetsgemeinschaft",
+    "Stundengebet",
+    "Novene",
+    "Litanei",
+    "Herzensgebet",
+    "Catholic prayer",
+    "Rosary",
+  ],
+  authors: [{ name: "Ora Mundi" }],
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "/",
+    languages: {
+      de: "/",
+      en: "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Ora Mundi",
+    title: "Ora Mundi — Du betest nie allein",
+    description:
+      "Bete den Rosenkranz, verbunden mit Menschen weltweit. Gebetsanliegen teilen, Gebetsgemeinschaften, Stundengebet, Herzensgebet.",
+    url: CANONICAL_URL,
+    locale: "de_DE",
+    images: [
+      {
+        url: "/icons/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Ora Mundi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Ora Mundi — Du betest nie allein",
+    description:
+      "Bete den Rosenkranz, verbunden mit Menschen weltweit.",
+    images: ["/icons/icon-512.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/icons/icon-192.png",
+  },
 };
 
 export const viewport: Viewport = {
