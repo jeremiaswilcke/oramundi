@@ -18,55 +18,97 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  function getErrorMessage(err: unknown, fallback: string) {
+    if (err instanceof Error && err.message) return err.message;
+    return fallback;
+  }
 
   async function loadCollections() {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setCollections([]); return; }
+    setError(null);
 
-    const { data: cols } = await supabase
-      .from("user_prayer_collections")
-      .select("id, name")
-      .eq("user_id", user.id)
-      .order("sort_order", { ascending: true });
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-    if (!cols) { setCollections([]); return; }
+      if (userError) throw userError;
 
-    const { data: items } = await supabase
-      .from("user_prayer_collection_items")
-      .select("collection_id")
-      .eq("prayer_slug", slug);
+      if (!user) {
+        setCollections([]);
+        setError("Bitte melde dich an, um Gebete zu Sammlungen hinzuzufügen.");
+        return;
+      }
 
-    const containedIn = new Set((items ?? []).map((i) => i.collection_id));
-    setCollections(cols.map((c) => ({
-      id: c.id,
-      name: c.name,
-      containsSlug: containedIn.has(c.id),
-    })));
+      const { data: cols, error: collectionsError } = await supabase
+        .from("user_prayer_collections")
+        .select("id, name")
+        .eq("user_id", user.id)
+        .order("sort_order", { ascending: true });
+
+      if (collectionsError) throw collectionsError;
+
+      if (!cols || cols.length === 0) {
+        setCollections([]);
+        return;
+      }
+
+      const { data: items, error: itemsError } = await supabase
+        .from("user_prayer_collection_items")
+        .select("collection_id")
+        .eq("prayer_slug", slug);
+
+      if (itemsError) throw itemsError;
+
+      const containedIn = new Set((items ?? []).map((item) => item.collection_id));
+      setCollections(
+        cols.map((collection) => ({
+          id: collection.id,
+          name: collection.name,
+          containsSlug: containedIn.has(collection.id),
+        }))
+      );
+    } catch (err) {
+      setCollections([]);
+      setError(getErrorMessage(err, "Sammlungen konnten nicht geladen werden."));
+    }
   }
 
   useEffect(() => {
-    if (open && collections === null) loadCollections();
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!open) return;
 
-  async function toggle(c: Collection) {
+    setCollections(null);
+    void loadCollections();
+  }, [open, slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function toggle(collection: Collection) {
     setBusy(true);
+    setError(null);
+
     try {
       const supabase = createClient();
-      if (c.containsSlug) {
-        const { error } = await supabase
-          .from("user_prayer_collection_items")
-          .delete()
-          .eq("collection_id", c.id)
-          .eq("prayer_slug", slug);
-        if (error) { alert(`Fehler: ${error.message}`); return; }
-      } else {
-        const { error } = await supabase
-          .from("user_prayer_collection_items")
-          .insert({ collection_id: c.id, prayer_slug: slug });
-        if (error) { alert(`Fehler: ${error.message}`); return; }
+      const { error: mutationError } = collection.containsSlug
+        ? await supabase
+            .from("user_prayer_collection_items")
+            .delete()
+            .eq("collection_id", collection.id)
+            .eq("prayer_slug", slug)
+        : await supabase
+            .from("user_prayer_collection_items")
+            .insert({ collection_id: collection.id, prayer_slug: slug });
+
+      if (mutationError && mutationError.code !== "23505") {
+        throw mutationError;
       }
+
       await loadCollections();
+    } catch (err) {
+      setError(
+        getErrorMessage(err, "Das Gebet konnte nicht zur Sammlung hinzugefügt werden.")
+      );
     } finally {
       setBusy(false);
     }
@@ -74,30 +116,49 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
 
   async function createCollection() {
     if (!newName.trim()) return;
+
     setBusy(true);
+    setError(null);
+
     try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: col, error } = await supabase
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) throw userError;
+
+      if (!user) {
+        setError("Bitte melde dich an, um Sammlungen anzulegen.");
+        return;
+      }
+
+      const { data: collection, error: collectionError } = await supabase
         .from("user_prayer_collections")
         .insert({ user_id: user.id, name: newName.trim() })
         .select("id")
         .single();
-      if (error || !col) {
-        alert(`Fehler: ${error?.message ?? "Anlegen fehlgeschlagen"}`);
+
+      if (collectionError || !collection) {
+        setError(collectionError?.message ?? "Anlegen fehlgeschlagen");
         return;
       }
-      const { error: itemErr } = await supabase
+
+      const { error: itemError } = await supabase
         .from("user_prayer_collection_items")
-        .insert({ collection_id: col.id, prayer_slug: slug });
-      if (itemErr) {
-        alert(`Fehler: ${itemErr.message}`);
+        .insert({ collection_id: collection.id, prayer_slug: slug });
+
+      if (itemError) {
+        setError(itemError.message);
         return;
       }
+
       setNewName("");
       setCreating(false);
       await loadCollections();
+    } catch (err) {
+      setError(getErrorMessage(err, "Die Sammlung konnte nicht angelegt werden."));
     } finally {
       setBusy(false);
     }
@@ -106,7 +167,13 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setError(null);
+          setCollections(null);
+          setCreating(false);
+          setNewName("");
+          setOpen(true);
+        }}
         aria-label="Zu Sammlung hinzufügen"
         className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
       >
@@ -116,28 +183,38 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
       {open && (
         <div
           className="fixed inset-0 z-[100] flex items-end md:items-center justify-center"
-          onClick={() => { setOpen(false); setCreating(false); }}
+          onClick={() => {
+            setOpen(false);
+            setCreating(false);
+          }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <div
             className="relative w-full max-w-md bg-background rounded-t-[2rem] md:rounded-[2rem] p-6 shadow-2xl border border-outline-variant/30 mx-3 md:mx-0"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="w-12 h-1 bg-outline-variant/40 rounded-full mx-auto mb-5 md:hidden" />
             <h3 className="font-headline italic text-2xl text-on-surface mb-4">
               Zu Sammlung hinzufügen
             </h3>
 
+            {error && (
+              <p className="mb-4 rounded-2xl bg-error-container px-4 py-3 text-sm text-on-error-container">
+                {error}
+              </p>
+            )}
+
             {collections === null ? (
               <p className="text-center text-on-surface-variant py-6">Lade…</p>
             ) : collections.length === 0 && !creating ? (
               <>
                 <p className="text-sm text-on-surface-variant mb-4">
-                  Noch keine Sammlungen. Leg dir z. B. „Mein Morgengebet" an.
+                  Noch keine Sammlungen. Leg dir z. B. „Mein Morgengebet“ an.
                 </p>
                 <button
                   onClick={() => setCreating(true)}
-                  className="w-full py-3 rounded-full bg-primary text-on-primary font-medium"
+                  disabled={busy}
+                  className="w-full py-3 rounded-full bg-primary text-on-primary font-medium disabled:opacity-60"
                 >
                   Neue Sammlung anlegen
                 </button>
@@ -145,24 +222,31 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
             ) : (
               <>
                 <div className="space-y-2 max-h-80 overflow-y-auto mb-4">
-                  {collections.map((c) => (
+                  {collections.map((collection) => (
                     <button
-                      key={c.id}
-                      onClick={() => toggle(c)}
+                      key={collection.id}
+                      onClick={() => toggle(collection)}
                       disabled={busy}
                       className={`w-full flex items-center gap-3 p-3 rounded-2xl text-left transition-colors ${
-                        c.containsSlug
+                        collection.containsSlug
                           ? "bg-primary/10"
                           : "bg-surface-container-low hover:bg-surface-container-high"
                       } disabled:opacity-60`}
                     >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        c.containsSlug ? "bg-primary text-on-primary" : "bg-surface-container-high text-on-surface-variant"
-                      }`}>
-                        <MaterialIcon name={c.containsSlug ? "check" : "folder"} size={16} />
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          collection.containsSlug
+                            ? "bg-primary text-on-primary"
+                            : "bg-surface-container-high text-on-surface-variant"
+                        }`}
+                      >
+                        <MaterialIcon
+                          name={collection.containsSlug ? "check" : "folder"}
+                          size={16}
+                        />
                       </div>
                       <span className="flex-1 text-sm font-semibold text-on-surface truncate">
-                        {c.name}
+                        {collection.name}
                       </span>
                     </button>
                   ))}
@@ -173,15 +257,17 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
                     <input
                       type="text"
                       value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === "Enter") createCollection(); }}
+                      onChange={(event) => setNewName(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") void createCollection();
+                      }}
                       placeholder="Name der Sammlung"
                       maxLength={80}
                       autoFocus
                       className="flex-1 bg-surface-container-low rounded-xl py-2.5 px-3 text-on-surface text-sm outline-none border border-outline-variant/10 focus:border-primary/30"
                     />
                     <button
-                      onClick={createCollection}
+                      onClick={() => void createCollection()}
                       disabled={busy || !newName.trim()}
                       className="px-4 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-semibold disabled:opacity-60"
                     >
@@ -200,7 +286,10 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
             )}
 
             <button
-              onClick={() => { setOpen(false); setCreating(false); }}
+              onClick={() => {
+                setOpen(false);
+                setCreating(false);
+              }}
               className="w-full mt-4 py-2 text-sm text-on-surface-variant hover:text-primary"
             >
               Schließen
@@ -208,7 +297,10 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
 
             {collections && collections.length > 0 && (
               <button
-                onClick={() => { setOpen(false); router.push("/collections"); }}
+                onClick={() => {
+                  setOpen(false);
+                  router.push("/collections");
+                }}
                 className="w-full mt-2 py-2 text-xs text-on-surface-variant/60 hover:text-primary"
               >
                 Alle Sammlungen verwalten →
