@@ -211,10 +211,10 @@ export default function CollectionDetailPage({
             Noch keine Gebete in dieser Sammlung.
           </p>
           <Link
-            href="/library"
+            href={`/collections/${id}/add`}
             className="inline-block px-6 py-3 rounded-full bg-primary text-on-primary font-medium"
           >
-            Zur Bibliothek
+            Gebete auswählen
           </Link>
           <p className="text-xs text-on-surface-variant/60 mt-4 max-w-xs mx-auto leading-relaxed">
             In der Gebetsbibliothek über das Lesezeichen-Symbol Gebete zu dieser Sammlung hinzufügen.
@@ -302,7 +302,7 @@ export default function CollectionDetailPage({
         {isOwner && (
           <>
             <Link
-              href="/library"
+              href={`/collections/${id}/add`}
               className="block w-full py-3 rounded-full bg-surface-container-high text-on-surface-variant text-center text-sm font-medium hover:bg-surface-container-highest"
             >
               Gebet aus Bibliothek hinzufügen
