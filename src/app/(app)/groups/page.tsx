@@ -110,29 +110,28 @@ export default function GroupsPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Find group by invite code
-      const { data: group, error: findError } = await supabase
-        .from("groups")
-        .select("id")
-        .eq("invite_code", joinCode.trim().toUpperCase())
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("join_group_by_code", {
+        p_code: joinCode.trim().toUpperCase(),
+      });
 
-      if (findError || !group) {
+      if (error) {
+        alert(`Fehler: ${error.message}`);
+        return;
+      }
+      const row = Array.isArray(data) ? data[0] : null;
+      if (!row || row.status === "not_found") {
         alert("Code ungültig oder Gruppe nicht gefunden.");
         return;
       }
-
-      // Join
-      const { error: joinError } = await supabase
-        .from("group_members")
-        .insert({ group_id: group.id, user_id: user.id, role: "member" });
-
-      if (joinError) {
-        if (joinError.code === "23505") {
-          alert("Du bist bereits Mitglied dieser Gruppe.");
-        } else {
-          alert(`Fehler: ${joinError.message}`);
-        }
+      if (row.status === "already_member") {
+        alert("Du bist bereits Mitglied dieser Gruppe.");
+        setShowJoin(false);
+        setJoinCode("");
+        load();
+        return;
+      }
+      if (row.status === "full") {
+        alert("Diese Gruppe hat ihre maximale Mitgliederzahl erreicht.");
         return;
       }
 
