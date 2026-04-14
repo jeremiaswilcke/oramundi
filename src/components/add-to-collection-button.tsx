@@ -54,15 +54,17 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
     try {
       const supabase = createClient();
       if (c.containsSlug) {
-        await supabase
+        const { error } = await supabase
           .from("user_prayer_collection_items")
           .delete()
           .eq("collection_id", c.id)
           .eq("prayer_slug", slug);
+        if (error) { alert(`Fehler: ${error.message}`); return; }
       } else {
-        await supabase
+        const { error } = await supabase
           .from("user_prayer_collection_items")
           .insert({ collection_id: c.id, prayer_slug: slug });
+        if (error) { alert(`Fehler: ${error.message}`); return; }
       }
       await loadCollections();
     } finally {
