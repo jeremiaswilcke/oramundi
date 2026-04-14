@@ -29,14 +29,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect unauthenticated users away from protected routes
-  const isProtectedRoute =
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/onboarding") &&
-    !request.nextUrl.pathname.startsWith("/legal") &&
-    !request.nextUrl.pathname.startsWith("/api");
+  const path = request.nextUrl.pathname;
 
-  if (!user && isProtectedRoute) {
+  // Paths that must stay publicly accessible (SEO, crawlers, TWA verification)
+  const isPublicPath =
+    path.startsWith("/auth") ||
+    path.startsWith("/onboarding") ||
+    path.startsWith("/legal") ||
+    path.startsWith("/api") ||
+    path.startsWith("/.well-known") ||
+    path === "/sitemap.xml" ||
+    path === "/robots.txt" ||
+    path === "/manifest.json";
+
+  if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
     return NextResponse.redirect(url);

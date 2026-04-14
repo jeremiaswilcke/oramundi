@@ -56,7 +56,8 @@ export default function MapPage() {
   // Show recent prayers from DB; live presence is already included
   // (active users have started_at within the last 30 min)
   const displayPrayers = recentPrayers.length > 0 ? recentPrayers : livePrayers;
-  const displayCount = Math.max(count, recentPrayers.length);
+  const liveCount = count;
+  const recentCount = recentPrayers.length;
 
   // Quick log
   const [quickLogging, setQuickLogging] = useState(false);
@@ -218,15 +219,26 @@ export default function MapPage() {
       <div className="absolute inset-0 z-10 p-6 flex flex-col pointer-events-none">
         <div className="flex justify-between items-start w-full">
           {/* Soul Collective Counter */}
-          <div className="pointer-events-auto glass-card p-6 rounded-3xl flex flex-col gap-1 max-w-[200px]">
+          <div className="pointer-events-auto glass-card p-5 rounded-3xl flex flex-col gap-2 max-w-[220px]">
             <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">
               {td("soulCollective")}
             </span>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-headline text-on-surface italic">
-                {displayCount.toLocaleString(locale)}
+                {liveCount.toLocaleString(locale)}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-on-surface-variant">
+                {locale === "de" ? "live" : "live"}
               </span>
               <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-headline text-on-surface-variant italic">
+                {recentCount.toLocaleString(locale)}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-on-surface-variant/70">
+                {locale === "de" ? "letzte 30 Min" : "last 30 min"}
+              </span>
             </div>
             <p className="text-[11px] leading-tight text-on-surface-variant/80">
               {td("believersReflecting")}
