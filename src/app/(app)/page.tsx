@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
+import { BibleDailyCard } from "@/components/bible-daily-card";
 import { usePrayerPresence, useGeolocation, type PrayerPresence } from "@/lib/realtime";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { createClient } from "@/lib/supabase/client";
@@ -256,6 +257,10 @@ export default function MapPage() {
               </p>
             </div>
           )}
+        </div>
+
+        <div className="mt-6 flex justify-center">
+          <BibleDailyCard />
         </div>
 
         {/* Bottom Card */}

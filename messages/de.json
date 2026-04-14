@@ -168,5 +168,38 @@
       "endWithThanks": "Amen",
       "endEarly": "Beenden"
     }
+  },
+  "bible": {
+    "yearTitle": "Bibel in einem Jahr",
+    "dayOfYear": "Tag {day} von 365",
+    "dayNumberOnly": "Tag {day}",
+    "todayReading": "Heute lesen",
+    "browseBible": "In der Bibel st\u00F6bern",
+    "libraryTitle": "Bibel",
+    "librarySubtitle": "Allioli-Arndt 1914 mit Tageslesung - heute Tag {day}",
+    "readMode": "Lesen",
+    "planMode": "Tagestext",
+    "readerIntro": "Allioli-Arndt 1914, mit Tagesplan und Streak.",
+    "oldTestament": "Altes Testament",
+    "newTestament": "Neues Testament",
+    "searchBooks": "Buch suchen",
+    "noBooksFound": "Kein Buch gefunden.",
+    "previousDay": "Vorheriger Tag",
+    "nextDay": "N\u00E4chster Tag",
+    "todayButton": "Heute (Tag {day})",
+    "noneToday": "Heute kein Abschnitt",
+    "chapterCopy": "Kapitel kopieren",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "goToReadMode": "Zum Lesemodus",
+    "previousChapter": "Vorheriges Kapitel",
+    "nextChapter": "N\u00E4chstes Kapitel",
+    "readTodayMark": "Als heute gelesen markieren",
+    "todayAlreadyRead": "Heute bereits gelesen.",
+    "onlyTodayCounts": "Nur der heutige Tag z\u00E4hlt f\u00FCr die Serie.",
+    "saving": "Speichere...",
+    "saveFailed": "Konnte den Lesetag nicht speichern.",
+    "streakDays": "{count, plural, one {# Tag in Folge} other {# Tage in Folge}}",
+    "streakTodayRead": "{count, plural, one {# Tag in Folge - heute gelesen} other {# Tage in Folge - heute gelesen}}"
   }
 }

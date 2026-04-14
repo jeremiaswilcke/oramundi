@@ -168,5 +168,38 @@
       "endWithThanks": "Amen",
       "endEarly": "End"
     }
+  },
+  "bible": {
+    "yearTitle": "Bible in a Year",
+    "dayOfYear": "Day {day} of 365",
+    "dayNumberOnly": "Day {day}",
+    "todayReading": "Read today",
+    "browseBible": "Browse the Bible",
+    "libraryTitle": "Bible",
+    "librarySubtitle": "Allioli-Arndt 1914 with daily reading - today is day {day}",
+    "readMode": "Read",
+    "planMode": "Daily plan",
+    "readerIntro": "Allioli-Arndt 1914, with a daily plan and streak.",
+    "oldTestament": "Old Testament",
+    "newTestament": "New Testament",
+    "searchBooks": "Search books",
+    "noBooksFound": "No book found.",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
+    "todayButton": "Today (Day {day})",
+    "noneToday": "No reading today",
+    "chapterCopy": "Copy chapter",
+    "copy": "Copy",
+    "copied": "Copied",
+    "goToReadMode": "Open in read mode",
+    "previousChapter": "Previous chapter",
+    "nextChapter": "Next chapter",
+    "readTodayMark": "Mark today's reading",
+    "todayAlreadyRead": "Today's reading is already marked.",
+    "onlyTodayCounts": "Only today's reading counts toward the streak.",
+    "saving": "Saving...",
+    "saveFailed": "Could not save the reading day.",
+    "streakDays": "{count, plural, one {# day in a row} other {# days in a row}}",
+    "streakTodayRead": "{count, plural, one {# day in a row - read today} other {# days in a row - read today}}"
   }
 }

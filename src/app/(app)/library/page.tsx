@@ -1,13 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
+import { getPlanDayForDate } from "@/lib/bible-date";
 import { PRAYER_LIBRARY } from "@/data/prayer-library";
 
 export default function LibraryPage() {
   const locale = useLocale() as "de" | "en";
   const t = useTranslations("library");
+  const tb = useTranslations("bible");
+  const [currentBibleDay, setCurrentBibleDay] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentBibleDay(getPlanDayForDate());
+  }, []);
 
   const devotions = PRAYER_LIBRARY.filter((p) => p.category === "devotion");
   const litanies = PRAYER_LIBRARY.filter((p) => p.category === "litany");
@@ -58,6 +66,24 @@ export default function LibraryPage() {
             <h3 className="font-headline italic text-xl text-on-surface mb-0.5">Officium Divinum</h3>
             <p className="text-xs text-on-surface-variant">
               Stundengebet · Latein und Deutsch · Brevier 1962
+            </p>
+          </div>
+          <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/60" />
+        </div>
+      </Link>
+
+      <Link
+        href={currentBibleDay === null ? "/bibel/lesen" : `/bibel/lesen?tag=${currentBibleDay}`}
+        className="block mb-8 rounded-3xl p-5 bg-gradient-to-br from-secondary-fixed to-secondary-fixed-dim text-on-secondary-container hover:brightness-105 transition-all active:scale-[0.99]"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="menu_book" size={28} className="text-secondary" filled />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-headline italic text-xl text-on-surface mb-0.5">{tb("libraryTitle")}</h3>
+            <p className="text-xs text-on-surface-variant">
+              {currentBibleDay === null ? tb("yearTitle") : tb("librarySubtitle", { day: currentBibleDay })}
             </p>
           </div>
           <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/60" />

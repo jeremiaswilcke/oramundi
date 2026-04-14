@@ -142,6 +142,26 @@ export interface Database {
         };
         Update: Record<string, never>;
       };
+      user_bible_day_reads: {
+        Row: {
+          id: string;
+          user_id: string;
+          read_on: string;
+          plan_day: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          read_on: string;
+          plan_day: number;
+          created_at?: string;
+        };
+        Update: {
+          read_on?: string;
+          plan_day?: number;
+        };
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
