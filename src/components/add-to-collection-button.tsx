@@ -115,12 +115,12 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end md:items-center justify-center"
+          className="fixed inset-0 z-[100] flex items-end md:items-center justify-center"
           onClick={() => { setOpen(false); setCreating(false); }}
         >
-          <div className="absolute inset-0 bg-on-surface/40 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <div
-            className="relative w-full max-w-md bg-surface-container-lowest rounded-t-[2rem] md:rounded-[2rem] p-6 editorial-shadow"
+            className="relative w-full max-w-md bg-background rounded-t-[2rem] md:rounded-[2rem] p-6 shadow-2xl border border-outline-variant/30 mx-3 md:mx-0"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-1 bg-outline-variant/40 rounded-full mx-auto mb-5 md:hidden" />
