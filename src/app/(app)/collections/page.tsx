@@ -18,6 +18,7 @@ export default function CollectionsPage() {
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const supabase = createClient();
@@ -50,13 +51,18 @@ export default function CollectionsPage() {
   async function createCollection() {
     if (!newName.trim()) return;
     setBusy(true);
+    setError(null);
     try {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      await supabase
+      if (!user) { setError("Nicht angemeldet."); return; }
+      const { error: insertErr } = await supabase
         .from("user_prayer_collections")
         .insert({ user_id: user.id, name: newName.trim() });
+      if (insertErr) {
+        setError(insertErr.message);
+        return;
+      }
       setNewName("");
       setCreating(false);
       await load();
@@ -107,6 +113,9 @@ export default function CollectionsPage() {
 
       {creating && (
         <div className="glass-card rounded-2xl p-4 mb-4">
+          {error && (
+            <p className="text-xs text-error mb-2">{error}</p>
+          )}
           <div className="flex gap-2">
             <input
               type="text"

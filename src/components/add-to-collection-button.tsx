@@ -82,10 +82,17 @@ export function AddToCollectionButton({ slug }: { slug: string }) {
         .insert({ user_id: user.id, name: newName.trim() })
         .select("id")
         .single();
-      if (error || !col) return;
-      await supabase
+      if (error || !col) {
+        alert(`Fehler: ${error?.message ?? "Anlegen fehlgeschlagen"}`);
+        return;
+      }
+      const { error: itemErr } = await supabase
         .from("user_prayer_collection_items")
         .insert({ collection_id: col.id, prayer_slug: slug });
+      if (itemErr) {
+        alert(`Fehler: ${itemErr.message}`);
+        return;
+      }
       setNewName("");
       setCreating(false);
       await loadCollections();
