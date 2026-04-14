@@ -13,7 +13,6 @@ import Link from "next/link";
 const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "ybWg0XgugDk1LNoPvkfL";
 
 export default function MapPage() {
-  const [mode, setMode] = useState<"guided" | "quick">("guided");
   const { prayers: livePrayers, count } = usePrayerPresence();
   const position = useGeolocation();
   const todayType = getTodaysMysteryType();

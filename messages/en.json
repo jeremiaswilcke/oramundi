@@ -172,6 +172,7 @@
   "bible": {
     "yearTitle": "Bible in a Year",
     "dayOfYear": "Day {day} of 365",
+    "dayOfYearShort": "Day {day}",
     "dayNumberOnly": "Day {day}",
     "todayReading": "Read today",
     "browseBible": "Browse the Bible",
@@ -199,6 +200,7 @@
     "onlyTodayCounts": "Only today's reading counts toward the streak.",
     "saving": "Saving...",
     "saveFailed": "Could not save the reading day.",
+    "closePopup": "Close Bible popup",
     "streakDays": "{count, plural, one {# day in a row} other {# days in a row}}",
     "streakTodayRead": "{count, plural, one {# day in a row - read today} other {# days in a row - read today}}"
   }

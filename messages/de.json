@@ -172,6 +172,7 @@
   "bible": {
     "yearTitle": "Bibel in einem Jahr",
     "dayOfYear": "Tag {day} von 365",
+    "dayOfYearShort": "Tag {day}",
     "dayNumberOnly": "Tag {day}",
     "todayReading": "Heute lesen",
     "browseBible": "In der Bibel st\u00F6bern",
@@ -199,6 +200,7 @@
     "onlyTodayCounts": "Nur der heutige Tag z\u00E4hlt f\u00FCr die Serie.",
     "saving": "Speichere...",
     "saveFailed": "Konnte den Lesetag nicht speichern.",
+    "closePopup": "Bibel-Popup schlie\u00DFen",
     "streakDays": "{count, plural, one {# Tag in Folge} other {# Tage in Folge}}",
     "streakTodayRead": "{count, plural, one {# Tag in Folge - heute gelesen} other {# Tage in Folge - heute gelesen}}"
   }
