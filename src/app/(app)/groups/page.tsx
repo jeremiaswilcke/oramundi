@@ -119,18 +119,18 @@ export default function GroupsPage() {
         return;
       }
       const row = Array.isArray(data) ? data[0] : null;
-      if (!row || row.status === "not_found") {
+      if (!row || row.join_status === "not_found") {
         alert("Code ungültig oder Gruppe nicht gefunden.");
         return;
       }
-      if (row.status === "already_member") {
+      if (row.join_status === "already_member") {
         alert("Du bist bereits Mitglied dieser Gruppe.");
         setShowJoin(false);
         setJoinCode("");
         load();
         return;
       }
-      if (row.status === "full") {
+      if (row.join_status === "full") {
         alert("Diese Gruppe hat ihre maximale Mitgliederzahl erreicht.");
         return;
       }

@@ -4,8 +4,10 @@
 --   SELECT id FROM groups WHERE invite_code = ?
 -- which failed for private groups the user wasn't a member of yet.
 
+DROP FUNCTION IF EXISTS public.join_group_by_code(TEXT);
+
 CREATE OR REPLACE FUNCTION public.join_group_by_code(p_code TEXT)
-RETURNS TABLE (group_id UUID, status TEXT)
+RETURNS TABLE (joined_group_id UUID, join_status TEXT)
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
@@ -20,34 +22,35 @@ BEGIN
     RAISE EXCEPTION 'not authenticated';
   END IF;
 
-  SELECT id, max_members INTO v_group_id, v_max
-    FROM groups
-   WHERE invite_code = p_code
+  SELECT g.id, g.max_members INTO v_group_id, v_max
+    FROM groups g
+   WHERE g.invite_code = p_code
    LIMIT 1;
 
   IF v_group_id IS NULL THEN
-    group_id := NULL;
-    status := 'not_found';
+    joined_group_id := NULL;
+    join_status := 'not_found';
     RETURN NEXT;
     RETURN;
   END IF;
 
-  -- Already a member?
   IF EXISTS (
-    SELECT 1 FROM group_members
-    WHERE group_id = v_group_id AND user_id = v_user
+    SELECT 1 FROM group_members gm
+    WHERE gm.group_id = v_group_id AND gm.user_id = v_user
   ) THEN
-    group_id := v_group_id;
-    status := 'already_member';
+    joined_group_id := v_group_id;
+    join_status := 'already_member';
     RETURN NEXT;
     RETURN;
   END IF;
 
-  -- Capacity check
-  SELECT COUNT(*) INTO v_current FROM group_members WHERE group_id = v_group_id;
+  SELECT COUNT(*) INTO v_current
+    FROM group_members gm
+   WHERE gm.group_id = v_group_id;
+
   IF v_current >= v_max THEN
-    group_id := v_group_id;
-    status := 'full';
+    joined_group_id := v_group_id;
+    join_status := 'full';
     RETURN NEXT;
     RETURN;
   END IF;
@@ -55,8 +58,8 @@ BEGIN
   INSERT INTO group_members (group_id, user_id, role)
     VALUES (v_group_id, v_user, 'member');
 
-  group_id := v_group_id;
-  status := 'joined';
+  joined_group_id := v_group_id;
+  join_status := 'joined';
   RETURN NEXT;
 END;
 $$;
