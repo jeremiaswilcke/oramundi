@@ -62,6 +62,7 @@
   "pray": {
     "decadeOf": "Gesätz {current} von {total}",
     "beadOf": "Perle {current} von {total}",
+    "signOfCross": "Kreuzzeichen",
     "apostlesCreed": "Apostolisches Glaubensbekenntnis",
     "ourFather": "Vater unser",
     "hailMary": "Gegrüßet seist du, Maria",

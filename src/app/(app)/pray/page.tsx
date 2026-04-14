@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import {
   MYSTERY_SETS,
   PRAYERS,
+  OPENING_INTENTIONS,
   getTodaysMysteryType,
   type MysteryType,
 } from "@/data/rosary";
@@ -16,12 +17,17 @@ import {
   INSERTIONS_LATIN,
   MYSTERY_NAMES_LATIN,
   PRAYER_TITLES_LATIN,
+  OPENING_INTENTIONS_LATIN,
 } from "@/data/prayers-latin";
 
 type PrayerLang = "de" | "en" | "la";
 
 type PrayerStep =
+  | { type: "sign-of-cross" }
   | { type: "creed" }
+  | { type: "opening-our-father" }
+  | { type: "opening-hail-mary"; bead: number }
+  | { type: "opening-glory-be" }
   | { type: "our-father"; decade: number }
   | { type: "hail-mary"; decade: number; bead: number }
   | { type: "glory-be"; decade: number }
@@ -29,7 +35,15 @@ type PrayerStep =
   | { type: "hail-holy-queen" };
 
 function buildPrayerSequence(): PrayerStep[] {
-  const steps: PrayerStep[] = [{ type: "creed" }];
+  const steps: PrayerStep[] = [
+    { type: "sign-of-cross" },
+    { type: "creed" },
+    { type: "opening-our-father" },
+    { type: "opening-hail-mary", bead: 0 },
+    { type: "opening-hail-mary", bead: 1 },
+    { type: "opening-hail-mary", bead: 2 },
+    { type: "opening-glory-be" },
+  ];
   for (let decade = 0; decade < 5; decade++) {
     steps.push({ type: "our-father", decade });
     for (let bead = 0; bead < 10; bead++) {
@@ -69,6 +83,12 @@ export default function PrayPage() {
 
   const currentDecade = "decade" in step ? step.decade : 0;
   const mystery = mysterySet.mysteries[currentDecade];
+  const isOpening =
+    step.type === "sign-of-cross" ||
+    step.type === "creed" ||
+    step.type === "opening-our-father" ||
+    step.type === "opening-hail-mary" ||
+    step.type === "opening-glory-be";
 
   const completedHailMarys = SEQUENCE.slice(0, currentStep).filter(
     (s) => s.type === "hail-mary"
@@ -260,7 +280,11 @@ export default function PrayPage() {
         if (step.type === "hail-mary") return PRAYER_TITLES_LATIN.divineMercy;
       }
       const keys: Record<PrayerStep["type"], string> = {
+        "sign-of-cross": "signOfCross",
         "creed": "apostlesCreed",
+        "opening-our-father": "ourFather",
+        "opening-hail-mary": "hailMary",
+        "opening-glory-be": "gloryBe",
         "our-father": "ourFather",
         "hail-mary": "hailMary",
         "glory-be": "gloryBe",
@@ -274,7 +298,11 @@ export default function PrayPage() {
       if (step.type === "hail-mary") return locale === "de" ? "Barmherzigkeit" : "Divine Mercy";
     }
     const keys: Record<PrayerStep["type"], string> = {
+      "sign-of-cross": "signOfCross",
       "creed": "apostlesCreed",
+      "opening-our-father": "ourFather",
+      "opening-hail-mary": "hailMary",
+      "opening-glory-be": "gloryBe",
       "our-father": "ourFather",
       "hail-mary": "hailMary",
       "glory-be": "gloryBe",
@@ -282,6 +310,12 @@ export default function PrayPage() {
       "hail-holy-queen": "hailHolyQueen",
     };
     return t(keys[step.type]);
+  }
+
+  function getOpeningSubtitle(): string | null {
+    if (step.type !== "opening-hail-mary") return null;
+    if (prayerLang === "la") return OPENING_INTENTIONS_LATIN[step.bead];
+    return OPENING_INTENTIONS[step.bead][locale];
   }
 
   function getHailMaryWithInsertion(): string {
@@ -313,7 +347,11 @@ export default function PrayPage() {
         if (step.type === "hail-mary") return PRAYERS_LATIN.divineMercy;
       }
       switch (step.type) {
+        case "sign-of-cross": return PRAYERS_LATIN.signOfCross;
         case "creed": return PRAYERS_LATIN.apostlesCreed;
+        case "opening-our-father": return PRAYERS_LATIN.ourFather;
+        case "opening-hail-mary": return PRAYERS_LATIN.hailMary;
+        case "opening-glory-be": return PRAYERS_LATIN.gloryBe;
         case "our-father": return PRAYERS_LATIN.ourFather;
         case "hail-mary": return getHailMaryWithInsertion();
         case "glory-be": return PRAYERS_LATIN.gloryBe;
@@ -326,7 +364,11 @@ export default function PrayPage() {
       if (step.type === "hail-mary") return PRAYERS.divineMercy[locale];
     }
     switch (step.type) {
+      case "sign-of-cross": return PRAYERS.signOfCross[locale];
       case "creed": return PRAYERS.apostlesCreed[locale];
+      case "opening-our-father": return PRAYERS.ourFather[locale];
+      case "opening-hail-mary": return PRAYERS.hailMary[locale];
+      case "opening-glory-be": return PRAYERS.gloryBe[locale];
       case "our-father": return PRAYERS.ourFather[locale];
       case "hail-mary": return getHailMaryWithInsertion();
       case "glory-be": return PRAYERS.gloryBe[locale];
@@ -459,7 +501,91 @@ export default function PrayPage() {
         </div>
       </div>
 
+      {/* Opening chain (Sign of Cross → Creed → OF → 3× HM → GB) */}
+      {isOpening && (
+        <div className="flex-1 flex items-center justify-center py-4 relative z-10">
+          <div className="relative flex flex-col items-center gap-3">
+            {/* Crucifix (Sign of Cross + Creed) */}
+            <button
+              onClick={() => {
+                const idx = SEQUENCE.findIndex((s) => s.type === "sign-of-cross");
+                if (idx >= 0) setCurrentStep(idx);
+              }}
+              aria-label={t("signOfCross")}
+              className={`transition-all duration-300 ${
+                step.type === "sign-of-cross" || step.type === "creed"
+                  ? "text-primary scale-110"
+                  : currentStep > SEQUENCE.findIndex((s) => s.type === "creed")
+                    ? "text-primary/40"
+                    : "text-outline-variant/30"
+              }`}
+            >
+              <svg width="44" height="60" viewBox="0 0 48 64" fill="none">
+                <rect x="18" y="0" width="12" height="64" rx="3" fill="currentColor" />
+                <rect x="0" y="14" width="48" height="12" rx="3" fill="currentColor" />
+              </svg>
+            </button>
+
+            {/* Opening Our Father (big bead) */}
+            <button
+              onClick={() => {
+                const idx = SEQUENCE.findIndex((s) => s.type === "opening-our-father");
+                if (idx >= 0) setCurrentStep(idx);
+              }}
+              aria-label={t("ourFather")}
+              className={`w-7 h-7 rounded-full transition-all duration-300 ${
+                step.type === "opening-our-father"
+                  ? "bg-primary glow-active ring-4 ring-primary/20 scale-125"
+                  : currentStep > SEQUENCE.findIndex((s) => s.type === "opening-our-father")
+                    ? "bg-primary/40"
+                    : "bg-outline-variant/30"
+              }`}
+            />
+
+            {/* 3 Hail Marys (small beads) */}
+            {[0, 1, 2].map((bead) => {
+              const beadStep = SEQUENCE.findIndex(
+                (s) => s.type === "opening-hail-mary" && "bead" in s && s.bead === bead
+              );
+              const isActive = step.type === "opening-hail-mary" && "bead" in step && step.bead === bead;
+              const isCompleted = beadStep < currentStep;
+              return (
+                <button
+                  key={bead}
+                  onClick={() => beadStep >= 0 && setCurrentStep(beadStep)}
+                  aria-label={`${t("hailMary")} ${bead + 1}/3`}
+                  className={`w-5 h-5 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? "bg-primary glow-active ring-4 ring-primary/20 scale-125"
+                      : isCompleted
+                        ? "bg-primary/40"
+                        : "bg-outline-variant/30"
+                  }`}
+                />
+              );
+            })}
+
+            {/* Opening Glory Be (big bead, transition to decades) */}
+            <button
+              onClick={() => {
+                const idx = SEQUENCE.findIndex((s) => s.type === "opening-glory-be");
+                if (idx >= 0) setCurrentStep(idx);
+              }}
+              aria-label={t("gloryBe")}
+              className={`w-7 h-7 rounded-full transition-all duration-300 ${
+                step.type === "opening-glory-be"
+                  ? "bg-primary glow-active ring-4 ring-primary/20 scale-125"
+                  : currentStep > SEQUENCE.findIndex((s) => s.type === "opening-glory-be")
+                    ? "bg-primary/40"
+                    : "bg-outline-variant/30"
+              }`}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Rosary Bead Circle with Cross */}
+      {!isOpening && (
       <div className="flex-1 flex items-center justify-center py-4 relative z-10">
         <div className="relative w-72 h-72">
           {/* The 10 beads in a circle */}
@@ -517,6 +643,7 @@ export default function PrayPage() {
           </svg>
         </div>
       </div>
+      )}
 
       {/* Prayer Text Card */}
       <div className="relative z-10 mb-4">
@@ -527,6 +654,11 @@ export default function PrayPage() {
           {step.type === "hail-mary" && "bead" in step && (
             <p className="text-on-surface-variant text-xs mb-2">
               {t("beadOf", { current: step.bead + 1, total: 10 })}
+            </p>
+          )}
+          {getOpeningSubtitle() && (
+            <p className="text-on-surface-variant text-xs mb-2 italic">
+              {getOpeningSubtitle()}
             </p>
           )}
           <p className="prayer-text text-on-surface-variant text-sm leading-[1.8] max-h-28 overflow-y-auto">

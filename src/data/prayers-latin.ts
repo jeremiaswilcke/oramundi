@@ -2,6 +2,8 @@
 // Used as overlay on top of de/en — selected via the prayer language picker.
 
 export const PRAYERS_LATIN = {
+  signOfCross:
+    "In nomine Patris, et Filii, et Spiritus Sancti. Amen.",
   ourFather:
     "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
   hailMary:
@@ -79,7 +81,14 @@ export const MYSTERY_NAMES_LATIN: Record<string, string> = {
   joseph: "Rosarium Sancti Ioseph",
 };
 
+export const OPENING_INTENTIONS_LATIN: string[] = [
+  "pro augmento fidei",
+  "pro augmento spei",
+  "pro augmento caritatis",
+];
+
 export const PRAYER_TITLES_LATIN: Record<string, string> = {
+  signOfCross: "Signum Crucis",
   apostlesCreed: "Symbolum Apostolorum",
   ourFather: "Pater Noster",
   hailMary: "Ave Maria",

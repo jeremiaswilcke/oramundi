@@ -290,6 +290,10 @@ export const PRAYERS = {
     de: "Ehre sei dem Vater und dem Sohn und dem Heiligen Geist, wie im Anfang, so auch jetzt und alle Zeit und in Ewigkeit. Amen.",
     en: "Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
   },
+  signOfCross: {
+    de: "Im Namen des Vaters und des Sohnes und des Heiligen Geistes. Amen.",
+    en: "In the name of the Father, and of the Son, and of the Holy Spirit. Amen.",
+  },
   apostlesCreed: {
     de: "Ich glaube an Gott, den Vater, den Allmächtigen, den Schöpfer des Himmels und der Erde, und an Jesus Christus, seinen eingeborenen Sohn, unsern Herrn, empfangen durch den Heiligen Geist, geboren von der Jungfrau Maria, gelitten unter Pontius Pilatus, gekreuzigt, gestorben und begraben, hinabgestiegen in das Reich des Todes, am dritten Tage auferstanden von den Toten, aufgefahren in den Himmel; er sitzt zur Rechten Gottes, des allmächtigen Vaters; von dort wird er kommen, zu richten die Lebenden und die Toten. Ich glaube an den Heiligen Geist, die heilige katholische Kirche, Gemeinschaft der Heiligen, Vergebung der Sünden, Auferstehung der Toten und das ewige Leben. Amen.",
     en: "I believe in God, the Father Almighty, Creator of heaven and earth, and in Jesus Christ, His only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died and was buried; He descended into hell; on the third day He rose again from the dead; He ascended into heaven, and is seated at the right hand of God the Father Almighty; from there He will come to judge the living and the dead. I believe in the Holy Spirit, the Holy Catholic Church, the communion of Saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
@@ -317,6 +321,12 @@ export const PRAYERS = {
     en: "Saint Joseph, faithful guardian of Jesus and chaste spouse of Mary, pray for us and for the dying of this day (this night). Amen.",
   },
 } as const;
+
+export const OPENING_INTENTIONS: { de: string; en: string }[] = [
+  { de: "um Vermehrung des Glaubens", en: "for the increase of Faith" },
+  { de: "um Vermehrung der Hoffnung", en: "for the increase of Hope" },
+  { de: "um Vermehrung der Liebe", en: "for the increase of Love" },
+];
 
 export function getTodaysMysteryType(): MysteryType {
   const days: MysteryType[] = [

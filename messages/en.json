@@ -62,6 +62,7 @@
   "pray": {
     "decadeOf": "Decade {current} of {total}",
     "beadOf": "Bead {current} of {total}",
+    "signOfCross": "Sign of the Cross",
     "apostlesCreed": "Apostles' Creed",
     "ourFather": "Our Father",
     "hailMary": "Hail Mary",
