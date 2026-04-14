@@ -12,6 +12,8 @@ interface Collection {
   id: string;
   name: string;
   description: string | null;
+  is_public: boolean;
+  user_id: string;
 }
 
 interface Item {
@@ -34,12 +36,16 @@ export default function CollectionDetailPage({
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [cloning, setCloning] = useState(false);
 
   const load = useCallback(async () => {
     const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    setUserId(user?.id ?? null);
     const { data: col } = await supabase
       .from("user_prayer_collections")
-      .select("id, name, description")
+      .select("id, name, description, is_public, user_id")
       .eq("id", id)
       .maybeSingle();
     if (!col) { setLoading(false); return; }
@@ -107,6 +113,35 @@ export default function CollectionDetailPage({
     router.push("/collections");
   }
 
+  async function togglePublic() {
+    if (!collection) return;
+    const supabase = createClient();
+    await supabase
+      .from("user_prayer_collections")
+      .update({ is_public: !collection.is_public, updated_at: new Date().toISOString() })
+      .eq("id", id);
+    await load();
+  }
+
+  async function cloneCollection() {
+    setCloning(true);
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.rpc("clone_prayer_collection", {
+        p_source_id: id,
+      });
+      if (error) {
+        alert(`Fehler: ${error.message}`);
+        return;
+      }
+      router.push(`/collections/${data}`);
+    } finally {
+      setCloning(false);
+    }
+  }
+
+  const isOwner = collection && userId === collection.user_id;
+
   if (loading) {
     return <div className="min-h-[calc(100vh-7.5rem)] flex items-center justify-center text-on-surface-variant">Lade…</div>;
   }
@@ -130,7 +165,7 @@ export default function CollectionDetailPage({
       </Link>
 
       <div className="mb-6">
-        {editing ? (
+        {editing && isOwner ? (
           <div className="flex gap-2">
             <input
               type="text"
@@ -152,14 +187,19 @@ export default function CollectionDetailPage({
           <div className="flex items-center justify-between gap-2">
             <h1 className="font-headline italic text-3xl text-on-surface flex-1 min-w-0 truncate">
               {collection.name}
+              {collection.is_public && (
+                <MaterialIcon name="public" size={20} className="inline ml-2 text-primary" />
+              )}
             </h1>
-            <button
-              onClick={() => setEditing(true)}
-              aria-label="Umbenennen"
-              className="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary"
-            >
-              <MaterialIcon name="edit" size={18} />
-            </button>
+            {isOwner && (
+              <button
+                onClick={() => setEditing(true)}
+                aria-label="Umbenennen"
+                className="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary"
+              >
+                <MaterialIcon name="edit" size={18} />
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -251,18 +291,47 @@ export default function CollectionDetailPage({
       )}
 
       <div className="space-y-2">
-        <Link
-          href="/library"
-          className="block w-full py-3 rounded-full bg-surface-container-high text-on-surface-variant text-center text-sm font-medium hover:bg-surface-container-highest"
-        >
-          Gebet aus Bibliothek hinzufügen
-        </Link>
-        <button
-          onClick={deleteCollection}
-          className="block w-full py-3 rounded-full bg-error-container text-on-error-container text-sm font-medium hover:opacity-90"
-        >
-          Sammlung löschen
-        </button>
+        {items.length > 0 && (
+          <Link
+            href={`/collections/${id}/play`}
+            className="block w-full py-3 rounded-full bg-primary text-on-primary text-center font-semibold hover:opacity-90 active:scale-[0.99] transition-all"
+          >
+            Sammlung beten
+          </Link>
+        )}
+        {isOwner && (
+          <>
+            <Link
+              href="/library"
+              className="block w-full py-3 rounded-full bg-surface-container-high text-on-surface-variant text-center text-sm font-medium hover:bg-surface-container-highest"
+            >
+              Gebet aus Bibliothek hinzufügen
+            </Link>
+            <button
+              onClick={togglePublic}
+              className="block w-full py-3 rounded-full bg-surface-container-high text-on-surface-variant text-sm font-medium hover:bg-surface-container-highest"
+            >
+              {collection.is_public
+                ? "Nicht mehr öffentlich teilen"
+                : "Öffentlich teilen"}
+            </button>
+            <button
+              onClick={deleteCollection}
+              className="block w-full py-3 rounded-full bg-error-container text-on-error-container text-sm font-medium hover:opacity-90"
+            >
+              Sammlung löschen
+            </button>
+          </>
+        )}
+        {!isOwner && (
+          <button
+            onClick={cloneCollection}
+            disabled={cloning}
+            className="block w-full py-3 rounded-full bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 disabled:opacity-60"
+          >
+            {cloning ? "Kopiere…" : "In meine Sammlungen kopieren"}
+          </button>
+        )}
       </div>
     </div>
   );

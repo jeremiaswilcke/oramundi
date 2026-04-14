@@ -85,6 +85,26 @@ export default function CollectionsPage() {
         </button>
       </div>
 
+      <Link
+        href="/collections/discover"
+        className="block mb-4 rounded-2xl p-4 bg-surface-container-high hover:bg-surface-container-highest transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <MaterialIcon name="public" size={20} className="text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-on-surface">
+              Geteilte Sammlungen entdecken
+            </p>
+            <p className="text-[11px] text-on-surface-variant">
+              Von anderen öffentlich gemacht — kopier eine in deine eigenen
+            </p>
+          </div>
+          <MaterialIcon name="chevron_right" size={20} className="text-on-surface-variant/40" />
+        </div>
+      </Link>
+
       {creating && (
         <div className="glass-card rounded-2xl p-4 mb-4">
           <div className="flex gap-2">
