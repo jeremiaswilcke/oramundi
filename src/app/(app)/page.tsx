@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
 import { PrayerMap } from "@/components/prayer-map";
 import { BibleDailyCard } from "@/components/bible-daily-card";
-import { usePrayerPresence, useGeolocation, type PrayerPresence } from "@/lib/realtime";
+import { useGeolocation, type PrayerPresence } from "@/lib/realtime";
 import { MYSTERY_SETS, getTodaysMysteryType } from "@/data/rosary";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -13,7 +13,6 @@ import Link from "next/link";
 const MAP_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "ybWg0XgugDk1LNoPvkfL";
 
 export default function MapPage() {
-  const { prayers: livePrayers, count } = usePrayerPresence();
   const position = useGeolocation();
   const todayType = getTodaysMysteryType();
   const todayMystery = MYSTERY_SETS.find((m) => m.type === todayType)!;
@@ -23,22 +22,31 @@ export default function MapPage() {
   const tl = useTranslations("library");
   const locale = useLocale() as "de" | "en";
 
-  // Recent prayers from DB (last 30 minutes) so the map isn't empty
-  // and you remain visible after finishing
+  // Unified public snapshot from DB so map and counters share the same semantics.
   const [recentPrayers, setRecentPrayers] = useState<PrayerPresence[]>([]);
+  const [liveCount, setLiveCount] = useState(0);
+  const [recentCount, setRecentCount] = useState(0);
   useEffect(() => {
     let cancelled = false;
     async function loadRecent() {
       const supabase = createClient();
-      const { data } = await supabase.rpc("get_public_active_prayers");
+      const { data } = await supabase.rpc("get_public_prayer_map_snapshot");
       if (cancelled || !data) return;
-      const mapped: PrayerPresence[] = (data as Array<{
-        latitude: number;
-        longitude: number;
-        mystery_type: string | null;
-        mode: string | null;
-        started_at: string;
-      }>).map((s, idx) => ({
+
+      const snapshot = data as {
+        live_count: number;
+        recent_count: number;
+        items: Array<{
+          latitude: number;
+          longitude: number;
+          mystery_type: string | null;
+          mode: string | null;
+          started_at: string;
+          is_live: boolean;
+        }>;
+      };
+
+      const mapped: PrayerPresence[] = snapshot.items.map((s, idx) => ({
         userId: `public-${idx}-${s.started_at}`,
         latitude: s.latitude,
         longitude: s.longitude,
@@ -47,17 +55,15 @@ export default function MapPage() {
         startedAt: s.started_at,
       }));
       setRecentPrayers(mapped);
+      setLiveCount(snapshot.live_count ?? 0);
+      setRecentCount(snapshot.recent_count ?? mapped.length);
     }
     loadRecent();
     const interval = setInterval(loadRecent, 60_000);
     return () => { cancelled = true; clearInterval(interval); };
   }, []);
 
-  // Show recent prayers from DB; live presence is already included
-  // (active users have started_at within the last 30 min)
-  const displayPrayers = recentPrayers.length > 0 ? recentPrayers : livePrayers;
-  const liveCount = count;
-  const recentCount = recentPrayers.length;
+  const displayPrayers = recentPrayers;
 
   // Quick log
   const [quickLogging, setQuickLogging] = useState(false);
@@ -228,7 +234,7 @@ export default function MapPage() {
                 {liveCount.toLocaleString(locale)}
               </span>
               <span className="text-[10px] uppercase tracking-wider text-on-surface-variant">
-                {locale === "de" ? "live" : "live"}
+                {locale === "de" ? "aktiv" : "active"}
               </span>
               <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
             </div>
@@ -237,7 +243,7 @@ export default function MapPage() {
                 {recentCount.toLocaleString(locale)}
               </span>
               <span className="text-[10px] uppercase tracking-wider text-on-surface-variant/70">
-                {locale === "de" ? "letzte 30 Min" : "last 30 min"}
+                {locale === "de" ? "Rosenkränze / 30 Min" : "rosaries / 30 min"}
               </span>
             </div>
             <p className="text-[11px] leading-tight text-on-surface-variant/80">
