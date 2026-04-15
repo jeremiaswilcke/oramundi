@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
@@ -203,6 +204,46 @@ export default function PrayPage() {
     }, 300);
     return () => clearTimeout(timeout);
   }, [currentStep, sessionId]);
+
+  // Geolocation can resolve after the session has already started.
+  // Backfill the stored coordinates so the map can show the prayer later on.
+  useEffect(() => {
+    if (!sessionId || !position) return;
+
+    let cancelled = false;
+    const currentPosition = position;
+
+    async function syncSessionLocation() {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from("prayer_sessions")
+        .update({
+          latitude: currentPosition.lat,
+          longitude: currentPosition.lng,
+          last_active_at: new Date().toISOString(),
+        })
+        .eq("id", sessionId)
+        .is("ended_at", null);
+
+      if (!cancelled && error) {
+        console.error("Failed to sync prayer location:", error);
+      }
+
+      await startPraying({
+        latitude: currentPosition.lat,
+        longitude: currentPosition.lng,
+        mysteryType,
+        mode: "guided",
+        startedAt: new Date().toISOString(),
+      });
+    }
+
+    syncSessionLocation();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId, position, mysteryType, startPraying]);
 
   // Save on tab close / app background using sendBeacon
   useEffect(() => {
@@ -694,13 +735,13 @@ export default function PrayPage() {
         </button>
 
         {isFinished ? (
-          <a
+          <Link
             href="/"
             className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-xl active:scale-90 transition-all"
             aria-label={t("finish")}
           >
             <MaterialIcon name="check" filled size={32} />
-          </a>
+          </Link>
         ) : (
           <button
             onClick={handleNext}
