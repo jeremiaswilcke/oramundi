@@ -128,13 +128,10 @@ export function getPlanForDay(day: number): PlanDay {
 }
 
 export function dayOfYear(date = new Date()): number {
-  const yearStart = new Date(date.getFullYear(), 0, 1);
-  yearStart.setHours(0, 0, 0, 0);
-
-  const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  localDate.setHours(0, 0, 0, 0);
-
-  const day = Math.floor((localDate.getTime() - yearStart.getTime()) / 86_400_000) + 1;
+  const year = date.getFullYear();
+  const utcCurrent = Date.UTC(year, date.getMonth(), date.getDate());
+  const utcYearStart = Date.UTC(year, 0, 1);
+  const day = Math.floor((utcCurrent - utcYearStart) / 86_400_000) + 1;
   return Math.min(Math.max(day, 1), 365);
 }
 
