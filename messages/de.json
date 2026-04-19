@@ -155,6 +155,7 @@
     "dailyGround": "Tägliche Grundlage",
     "rosaryToday": "Rosenkranz heute beten",
     "bibleInYear": "Bibel in einem Jahr",
+    "dayOfYear": "Tag {day}",
     "sos": {
       "back": "Zurück",
       "title": "Herzensgebet",

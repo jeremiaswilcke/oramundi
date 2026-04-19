@@ -155,6 +155,7 @@
     "dailyGround": "Daily ground",
     "rosaryToday": "Pray today's Rosary",
     "bibleInYear": "Bible in a year",
+    "dayOfYear": "Day {day}",
     "sos": {
       "back": "Back",
       "title": "The Jesus Prayer",

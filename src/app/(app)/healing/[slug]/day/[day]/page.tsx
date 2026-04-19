@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getTranslations, getLocale } from "next-intl/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { MaterialIcon } from "@/components/material-icon";
+import { getPlanDayForDate } from "@/lib/bible-date";
 import { CompleteDayButton } from "./complete-day-button";
 
 export default async function HealingDayPage({
@@ -143,12 +144,17 @@ export default async function HealingDayPage({
                 <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/50" />
               </Link>
               <Link
-                href="/bible"
+                href={`/bibel/lesen?tag=${getPlanDayForDate()}`}
                 className="flex items-center justify-between gap-3 rounded-2xl bg-surface/60 px-4 py-3 hover:bg-surface transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <MaterialIcon name="menu_book" size={20} className="text-primary" />
-                  <span className="text-sm text-on-surface">{t("bibleInYear")}</span>
+                  <span className="text-sm text-on-surface">
+                    {t("bibleInYear")}
+                    <span className="ml-2 text-xs text-on-surface-variant/70">
+                      · {t("dayOfYear", { day: getPlanDayForDate() })}
+                    </span>
+                  </span>
                 </div>
                 <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/50" />
               </Link>
