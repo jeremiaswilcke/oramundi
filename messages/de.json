@@ -16,6 +16,7 @@
   "nav": {
     "sanctuary": "Karte",
     "rituals": "Beten",
+    "ways": "Wege",
     "journal": "Intention",
     "settings": "Einstellungen"
   },
@@ -145,10 +146,15 @@
     "saving": "Speichere...",
     "dayNotAvailable": "Dieser Tag ist noch nicht verfügbar.",
     "scripture": "Schriftwort",
+    "impulse": "Impuls",
     "prayer": "Gebet",
+    "action": "Handlung",
     "prayerRefsPlaceholder": "Gebetseinheit wird ausgearbeitet.",
     "reflection": "Betrachtung",
     "intention": "Tagesintention",
+    "dailyGround": "Tägliche Grundlage",
+    "rosaryToday": "Rosenkranz heute beten",
+    "bibleInYear": "Bibel in einem Jahr",
     "sos": {
       "back": "Zurück",
       "title": "Herzensgebet",

@@ -16,6 +16,7 @@
   "nav": {
     "sanctuary": "Map",
     "rituals": "Pray",
+    "ways": "Paths",
     "journal": "Intentions",
     "settings": "Settings"
   },
@@ -145,10 +146,15 @@
     "saving": "Saving...",
     "dayNotAvailable": "This day is not yet available.",
     "scripture": "Scripture",
+    "impulse": "Impulse",
     "prayer": "Prayer",
+    "action": "Action",
     "prayerRefsPlaceholder": "Prayer content is being prepared.",
     "reflection": "Reflection",
     "intention": "Daily Intention",
+    "dailyGround": "Daily ground",
+    "rosaryToday": "Pray today's Rosary",
+    "bibleInYear": "Bible in a year",
     "sos": {
       "back": "Back",
       "title": "The Jesus Prayer",

@@ -30,7 +30,9 @@ export default async function HealingDayPage({
 
   const { data: dayData } = await supabase
     .from("healing_program_days")
-    .select("scripture_ref, scripture_de, scripture_en, prayer_refs, reflection_de, reflection_en, intention_de, intention_en")
+    .select(
+      "scripture_ref, scripture_de, scripture_en, prayer_refs, reflection_de, reflection_en, intention_de, intention_en, prayer_de, prayer_en, action_de, action_en"
+    )
     .eq("program_id", program.id)
     .eq("day_number", dayNumber)
     .maybeSingle();
@@ -46,10 +48,14 @@ export default async function HealingDayPage({
       ? dayData.reflection_de
       : dayData.reflection_en
     : null;
-  const intention = dayData
+  const prayer = dayData
+    ? (locale === "de" ? dayData.prayer_de : dayData.prayer_en) ??
+      (locale === "de" ? dayData.intention_de : dayData.intention_en)
+    : null;
+  const action = dayData
     ? locale === "de"
-      ? dayData.intention_de
-      : dayData.intention_en
+      ? dayData.action_de
+      : dayData.action_en
     : null;
 
   return (
@@ -88,22 +94,10 @@ export default async function HealingDayPage({
             </section>
           )}
 
-          {/* prayer_refs rendering is stubbed; content will be wired after priest input */}
-          {Array.isArray(dayData.prayer_refs) && dayData.prayer_refs.length > 0 && (
-            <section className="rounded-3xl glass-card p-5">
-              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
-                {t("prayer")}
-              </h2>
-              <p className="text-xs text-on-surface-variant">
-                {t("prayerRefsPlaceholder")}
-              </p>
-            </section>
-          )}
-
           {reflection && (
             <section className="rounded-3xl glass-card p-5">
               <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
-                {t("reflection")}
+                {t("impulse")}
               </h2>
               <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
                 {reflection}
@@ -111,16 +105,55 @@ export default async function HealingDayPage({
             </section>
           )}
 
-          {intention && (
+          {prayer && (
             <section className="rounded-3xl glass-card p-5">
               <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
-                {t("intention")}
+                {t("prayer")}
               </h2>
               <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
-                {intention}
+                {prayer}
               </p>
             </section>
           )}
+
+          {action && (
+            <section className="rounded-3xl glass-card p-5">
+              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
+                {t("action")}
+              </h2>
+              <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
+                {action}
+              </p>
+            </section>
+          )}
+
+          <section className="rounded-3xl bg-primary-container/20 border border-primary/10 p-5">
+            <h2 className="text-[10px] uppercase tracking-widest font-semibold text-primary mb-3">
+              {t("dailyGround")}
+            </h2>
+            <div className="space-y-2">
+              <Link
+                href="/pray"
+                className="flex items-center justify-between gap-3 rounded-2xl bg-surface/60 px-4 py-3 hover:bg-surface transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <MaterialIcon name="auto_awesome" size={20} className="text-primary" />
+                  <span className="text-sm text-on-surface">{t("rosaryToday")}</span>
+                </div>
+                <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/50" />
+              </Link>
+              <Link
+                href="/bible"
+                className="flex items-center justify-between gap-3 rounded-2xl bg-surface/60 px-4 py-3 hover:bg-surface transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <MaterialIcon name="menu_book" size={20} className="text-primary" />
+                  <span className="text-sm text-on-surface">{t("bibleInYear")}</span>
+                </div>
+                <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/50" />
+              </Link>
+            </div>
+          </section>
         </div>
       )}
 

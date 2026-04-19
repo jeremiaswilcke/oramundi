@@ -8,6 +8,7 @@ import { MaterialIcon } from "./material-icon";
 const NAV_ITEMS = [
   { href: "/", icon: "map", labelKey: "sanctuary" },
   { href: "/pray", icon: "church", labelKey: "rituals" },
+  { href: "/healing", icon: "spa", labelKey: "ways" },
   { href: "/intentions", icon: "favorite", labelKey: "journal" },
   { href: "/profile", icon: "settings", labelKey: "settings" },
 ] as const;
