@@ -50,13 +50,13 @@ export default function PrayerDetailPage({ params }: { params: Promise<{ slug: s
         </div>
 
         {step.title && (
-          <h2 className="font-headline italic text-xl text-on-surface mb-2">
+          <h2 className="prayer-title text-on-surface mb-2">
             {step.title[locale]}
           </h2>
         )}
 
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+          <span className="mess-eyebrow--serif-caps text-on-surface-variant liturgical-number">
             {currentStep + 1} / {prayer.steps.length}
           </span>
         </div>
@@ -72,7 +72,11 @@ export default function PrayerDetailPage({ params }: { params: Promise<{ slug: s
       {/* Prayer text */}
       <div className="flex-1 relative z-10">
         <div className="w-full bg-surface-container-lowest/60 backdrop-blur-md rounded-3xl p-6 md:p-8">
-          <p className="prayer-text text-on-surface text-base md:text-lg leading-[1.9] whitespace-pre-line">
+          <p
+            className={`prayer-text text-on-surface text-base md:text-lg whitespace-pre-line ${
+              step.text[locale].length > 220 ? "prayer-body--leading" : ""
+            }`}
+          >
             {step.text[locale]}
           </p>
         </div>

@@ -23,10 +23,11 @@ export default function LibraryPage() {
 
   return (
     <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
-      <h1 className="font-headline italic text-4xl text-on-surface mb-2">
+      <p className="mess-eyebrow--serif-caps text-primary mb-3">Ora Mundi</p>
+      <h1 className="mess-display mess-display--xl text-on-surface mb-3">
         {t("title")}
       </h1>
-      <p className="text-on-surface-variant text-sm mb-6">
+      <p className="text-on-surface-variant text-sm mb-6 italic font-[var(--font-display)]">
         {t("subtitle")}
       </p>
 
@@ -63,7 +64,7 @@ export default function LibraryPage() {
             <MaterialIcon name="auto_stories" size={28} className="text-primary" filled />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-headline italic text-xl text-on-surface mb-0.5">Officium Divinum</h3>
+            <h3 className="prayer-title text-on-surface mb-0.5">Officium Divinum</h3>
             <p className="text-xs text-on-surface-variant">
               Stundengebet · Latein und Deutsch · Brevier 1962
             </p>
@@ -81,7 +82,7 @@ export default function LibraryPage() {
             <MaterialIcon name="menu_book" size={28} className="text-secondary" filled />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-headline italic text-xl text-on-surface mb-0.5">{tb("libraryTitle")}</h3>
+            <h3 className="prayer-title text-on-surface mb-0.5">{tb("libraryTitle")}</h3>
             <p className="text-xs text-on-surface-variant">
               {currentBibleDay === null ? tb("yearTitle") : tb("librarySubtitle", { day: currentBibleDay })}
             </p>
@@ -93,7 +94,7 @@ export default function LibraryPage() {
       {/* Devotions / Daily prayers */}
       {devotions.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
+          <h2 className="mess-eyebrow--serif-caps text-on-surface-variant mb-3">
             {t("devotions")}
           </h2>
           <div className="space-y-3">
@@ -107,7 +108,7 @@ export default function LibraryPage() {
                   <MaterialIcon name={p.icon} size={24} className="text-tertiary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-headline italic text-lg text-on-surface mb-0.5">
+                  <h3 className="prayer-title prayer-title--sm text-on-surface mb-0.5">
                     {p.title[locale]}
                   </h3>
                   <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -137,7 +138,7 @@ export default function LibraryPage() {
                 <MaterialIcon name={p.icon} size={24} className="text-primary" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-headline italic text-lg text-on-surface mb-0.5">
+                <h3 className="prayer-title prayer-title--sm text-on-surface mb-0.5">
                   {p.title[locale]}
                 </h3>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -166,7 +167,7 @@ export default function LibraryPage() {
                 <MaterialIcon name={p.icon} size={24} className="text-secondary" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-headline italic text-lg text-on-surface mb-0.5">
+                <h3 className="prayer-title prayer-title--sm text-on-surface mb-0.5">
                   {p.title[locale]}
                 </h3>
                 <p className="text-xs text-on-surface-variant leading-relaxed">

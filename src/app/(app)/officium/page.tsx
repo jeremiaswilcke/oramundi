@@ -11,8 +11,9 @@ export default function OfficiumIndex() {
   const currentBibleDay = getPlanDayForDate();
   return (
     <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
-      <h1 className="font-headline italic text-4xl text-on-surface">Officium Divinum</h1>
-      <p className="text-on-surface-variant text-sm mt-1 mb-2">
+      <p className="mess-eyebrow--serif-caps text-primary mb-3">Horae Canonicae</p>
+      <h1 className="mess-display mess-display--xl text-on-surface">Officium Divinum</h1>
+      <p className="text-on-surface-variant text-sm mt-3 mb-2 italic font-[var(--font-display)]">
         Traditionelles Stundengebet nach dem Römischen Brevier 1962
       </p>
       <p className="text-[11px] text-on-surface-variant/70 italic mb-6">
@@ -29,7 +30,7 @@ export default function OfficiumIndex() {
             <MaterialIcon name="today" size={28} filled />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-headline italic text-xl mb-0.5">Heutiges Offizium</h3>
+            <h3 className="prayer-title mb-0.5">Heutiges Offizium</h3>
             <p className="text-xs opacity-80">
               Alle Horen für jeden Tag · Tagesheilige · Festkalender
             </p>
@@ -47,7 +48,7 @@ export default function OfficiumIndex() {
             <MaterialIcon name="menu_book" size={28} className="text-secondary" filled />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-headline italic text-xl text-on-surface mb-0.5">Bibel in einem Jahr</h3>
+            <h3 className="prayer-title text-on-surface mb-0.5">Bibel in einem Jahr</h3>
             <p className="text-xs text-on-surface-variant">
               Tageslesung der Schrift · heute Tag {currentBibleDay}
             </p>
@@ -56,7 +57,7 @@ export default function OfficiumIndex() {
         </div>
       </Link>
 
-      <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-3">
+      <h2 className="mess-eyebrow--serif-caps text-on-surface-variant mb-3">
         Statische Vorlagen
       </h2>
       <div className="space-y-3">
@@ -71,10 +72,10 @@ export default function OfficiumIndex() {
                 <MaterialIcon name={office.icon} size={24} className="text-primary" filled />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-headline italic text-xl text-on-surface mb-0.5">
+                <h3 className="prayer-title text-on-surface mb-0.5">
                   {office.name.de}
                 </h3>
-                <p className="text-[11px] uppercase tracking-widest text-on-surface-variant font-semibold mb-1">
+                <p className="mess-eyebrow--serif-caps text-on-surface-variant mb-1">
                   {office.name.la}
                 </p>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
@@ -88,7 +89,7 @@ export default function OfficiumIndex() {
       </div>
 
       <div className="mt-8 p-5 rounded-3xl bg-secondary-container/30 border border-secondary/20">
-        <h3 className="font-headline italic text-lg text-on-surface mb-2">In Vorbereitung</h3>
+        <h3 className="prayer-title prayer-title--sm text-on-surface mb-2">In Vorbereitung</h3>
         <p className="text-xs text-on-surface-variant leading-relaxed">
           Laudes Matutinae · Prima · Tertia · Sexta · Nona · Matutinum
         </p>

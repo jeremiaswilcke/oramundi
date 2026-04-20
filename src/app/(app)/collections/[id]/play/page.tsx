@@ -120,11 +120,11 @@ export default function PlayCollectionPage({
         </Link>
 
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+          <span className="mess-eyebrow--serif-caps text-on-surface-variant liturgical-number">
             Gebet {step.prayerIdx + 1}/{prayers.length} · Schritt {step.stepIdx + 1}/{step.prayerStepsLength}
           </span>
         </div>
-        <p className="font-headline italic text-lg text-on-surface mb-2 truncate">
+        <p className="prayer-title prayer-title--sm text-on-surface mb-2 truncate">
           {step.prayer.title[locale]}
         </p>
         {step.stepTitle && (
@@ -145,11 +145,15 @@ export default function PlayCollectionPage({
       <div className="flex-1 relative z-10">
         <div className="w-full bg-surface-container-lowest/60 backdrop-blur-md rounded-3xl p-6 md:p-8">
           {isPrayerTransition && step.prayerIdx > 0 && (
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-primary mb-3">
+            <p className="mess-eyebrow--serif-caps text-primary mb-3">
               Nächstes Gebet
             </p>
           )}
-          <p className="prayer-text text-on-surface text-base md:text-lg leading-[1.9] whitespace-pre-line">
+          <p
+            className={`prayer-text text-on-surface text-base md:text-lg whitespace-pre-line ${
+              step.stepText[locale].length > 220 ? "prayer-body--leading" : ""
+            }`}
+          >
             {step.stepText[locale]}
           </p>
         </div>

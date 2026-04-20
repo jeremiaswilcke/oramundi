@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import sanitizeHtml from "sanitize-html";
+import {
+  fetchOfficiumDay,
+  OFFICIUM_LANGUAGE_LABEL,
+  type OfficiumDay,
+  type OfficiumHour,
+  type OfficiumLanguageSlug,
+} from "@/lib/officium";
 
 const OFFICIUM_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
@@ -24,27 +31,34 @@ const OFFICIUM_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   enforceHtmlBoundary: false,
 };
 
-// Maps our hour slugs to divinumofficium.com command names
-const HOUR_MAP: Record<string, string> = {
-  matutinum: "prayMatutinum",
-  laudes: "prayLaudes",
-  prima: "prayPrima",
-  tertia: "prayTertia",
-  sexta: "praySexta",
-  nona: "prayNona",
-  vesperae: "prayVesperae",
-  completorium: "prayCompletorium",
+const LANG_SLUG: Record<string, OfficiumLanguageSlug | "parallel"> = {
+  la: "latin",
+  de: "deutsch",
+  en: "english",
+  latin: "latin",
+  deutsch: "deutsch",
+  english: "english",
+  parallel: "parallel",
 };
 
-// Maps our locale to divinumofficium.com lang2 parameter
-const LANG_MAP: Record<string, string> = {
-  la: "Latin",
-  de: "Deutsch",
-  en: "English",
-  parallel: "Latin-Deutsch",
-};
+const HOURS = [
+  "matutinum", "laudes", "prima", "tertia", "sexta",
+  "nona", "vesperae", "completorium",
+];
 
-export const revalidate = 21600; // cache 6 hours
+export const revalidate = 3600;
+
+function pickHour(day: OfficiumDay, hour: string): OfficiumHour | null {
+  return day.hours[hour] ?? null;
+}
+
+function cleanHtml(raw: string): string {
+  return sanitizeHtml(raw, OFFICIUM_SANITIZE_OPTIONS).trim();
+}
+
+function parallelHtml(left: OfficiumHour, right: OfficiumHour, leftLabel: string, rightLabel: string): string {
+  return `<div class="officium-parallel"><div class="officium-parallel-col"><p class="officium-parallel-label">${leftLabel}</p>${cleanHtml(left.html)}</div><div class="officium-parallel-col"><p class="officium-parallel-label">${rightLabel}</p>${cleanHtml(right.html)}</div></div>`;
+}
 
 export async function GET(
   req: Request,
@@ -52,71 +66,62 @@ export async function GET(
 ) {
   const { date, hour } = await params;
   const url = new URL(req.url);
-  const lang = url.searchParams.get("lang") ?? "parallel";
+  const langParam = url.searchParams.get("lang") ?? "parallel";
 
-  const command = HOUR_MAP[hour];
-  if (!command) {
+  if (!HOURS.includes(hour)) {
     return NextResponse.json({ error: "Unknown hour" }, { status: 400 });
   }
-  const lang2 = LANG_MAP[lang] ?? "Latin-Deutsch";
-
-  // Convert YYYY-MM-DD to MM-DD-YYYY (their format)
-  const [y, m, d] = date.split("-");
-  if (!y || !m || !d) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: "Date must be YYYY-MM-DD" }, { status: 400 });
   }
-  const dofDate = `${m}-${d}-${y}`;
 
-  const fetchUrl = `https://divinumofficium.com/cgi-bin/horas/officium.pl?date1=${dofDate}&command=${command}&version=Rubrics+1960&lang2=${encodeURIComponent(lang2)}&plures=`;
+  const langSlug = LANG_SLUG[langParam];
+  if (!langSlug) {
+    return NextResponse.json({ error: "Unknown lang" }, { status: 400 });
+  }
 
-  let html: string;
   try {
-    const res = await fetch(fetchUrl, {
-      headers: { "User-Agent": "Ora-Mundi/1.0 (+https://oramundi.online)" },
-      next: { revalidate: 21600 },
+    if (langSlug === "parallel") {
+      const [la, de] = await Promise.all([
+        fetchOfficiumDay({ date, languageSlug: "latin" }),
+        fetchOfficiumDay({ date, languageSlug: "deutsch" }),
+      ]);
+      const laHour = pickHour(la, hour);
+      const deHour = pickHour(de, hour);
+      if (!laHour || !deHour) {
+        return NextResponse.json({ error: "Hour not available for this day" }, { status: 404 });
+      }
+      return NextResponse.json({
+        date,
+        hour,
+        title: laHour.label,
+        liturgicalDay: la.hours[hour]?.headline ?? "",
+        bodyHtml: parallelHtml(laHour, deHour, OFFICIUM_LANGUAGE_LABEL.latin, OFFICIUM_LANGUAGE_LABEL.deutsch),
+        sourceUrl: null,
+      }, {
+        headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400" },
+      });
+    }
+
+    const day = await fetchOfficiumDay({ date, languageSlug: langSlug });
+    const h = pickHour(day, hour);
+    if (!h) {
+      return NextResponse.json({ error: "Hour not available for this day" }, { status: 404 });
+    }
+    return NextResponse.json({
+      date,
+      hour,
+      title: h.label,
+      liturgicalDay: h.headline,
+      bodyHtml: cleanHtml(h.html),
+      sourceUrl: null,
+    }, {
+      headers: { "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400" },
     });
-    if (!res.ok) throw new Error(`Upstream ${res.status}`);
-    html = await res.text();
   } catch (err) {
     return NextResponse.json({
       error: "Could not fetch office",
       details: (err as Error).message,
     }, { status: 502 });
   }
-
-  // Extract the prayer body. The actual content lives inside a TABLE block
-  // with cells ID'd like "Vespera1", "Vespera2", etc. for Vespers.
-  // We extract everything between <H2> ID=...top and </FORM>.
-
-  const bodyMatch = html.match(/<H2[^>]*ID=['"]?\w+top['"]?[^>]*>([\s\S]*?)<\/FORM>/i);
-  let body = bodyMatch ? bodyMatch[1] : html;
-
-  // Trim nav fragments before handing to the sanitizer
-  body = body.split(/<FORM[\s\S]*?>/i)[0];
-  body = body.split(/<INPUT TYPE=/i)[0];
-  body = body.split(/<P ALIGN=CENTER><A HREF=/i)[0];
-  body = body.replace(/<DIV ALIGN=['"]?right['"]?>[\s\S]*?<\/DIV>/gi, "");
-
-  // Allowlist-based sanitization: drops scripts, event handlers, javascript: URLs,
-  // iframes, embeds, SVG/MathML payloads, and any tag/attr not explicitly permitted.
-  body = sanitizeHtml(body, OFFICIUM_SANITIZE_OPTIONS);
-
-  // Extract the title (e.g. "Ad Vesperas")
-  const titleMatch = html.match(/<H2[^>]*>([^<]+)<\/H2>/i);
-  const title = titleMatch ? titleMatch[1].trim() : "";
-
-  // Extract the day's liturgical info (top of page)
-  const liturgicalMatch = html.match(/<P ALIGN=CENTER><FONT COLOR="red">([^<]+)<\/FONT>/i);
-  const liturgicalDay = liturgicalMatch ? liturgicalMatch[1].trim() : "";
-
-  return NextResponse.json({
-    date,
-    hour,
-    title,
-    liturgicalDay,
-    bodyHtml: body.trim(),
-    sourceUrl: fetchUrl,
-  }, {
-    headers: { "Cache-Control": "public, max-age=21600, s-maxage=21600" },
-  });
 }

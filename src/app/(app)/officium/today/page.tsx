@@ -106,11 +106,11 @@ export default function TodaysOfficiumPage() {
             <MaterialIcon name="chevron_left" size={20} />
           </button>
           <div className="flex-1 text-center">
-            <p className="font-headline italic text-base text-on-surface">
+            <p className="prayer-title prayer-title--sm text-on-surface">
               {formatDisplay(date, "de-DE")}
             </p>
             {data?.liturgicalDay && (
-              <p className="text-[11px] text-secondary font-semibold uppercase tracking-wider mt-0.5">
+              <p className="mess-eyebrow--serif-caps text-secondary mt-0.5">
                 {data.liturgicalDay}
               </p>
             )}
@@ -186,7 +186,7 @@ export default function TodaysOfficiumPage() {
         {!loading && !error && data && (
           <>
             {data.title && (
-              <h2 className="font-headline italic text-2xl text-on-surface text-center mb-6">
+              <h2 className="prayer-title text-on-surface text-center mb-6">
                 {data.title}
               </h2>
             )}

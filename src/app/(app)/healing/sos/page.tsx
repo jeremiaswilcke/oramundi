@@ -16,10 +16,11 @@ export default async function SosPage() {
         {t("back")}
       </Link>
 
-      <h1 className="font-headline italic text-4xl text-on-surface mb-2">
+      <p className="mess-eyebrow--serif-caps text-primary mb-3">Ora Mundi</p>
+      <h1 className="mess-display mess-display--xl text-on-surface mb-3">
         {t("title")}
       </h1>
-      <p className="text-on-surface-variant text-sm mb-8 leading-relaxed">
+      <p className="text-on-surface-variant text-sm mb-8 leading-relaxed italic font-[var(--font-display)]">
         {t("intro")}
       </p>
 

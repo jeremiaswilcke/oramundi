@@ -55,8 +55,8 @@ export default function OfficiumDetailPage({ params }: { params: Promise<{ hour:
           className="flex items-center gap-2 text-on-surface-variant text-sm mb-3 hover:text-primary transition-colors"
         >
           <MaterialIcon name="chevron_left" size={20} />
-          <span className="font-headline italic">{office.name.de}</span>
-          <span className="text-xs opacity-60">· {office.name.la}</span>
+          <span className="font-[var(--font-display)] italic">{office.name.de}</span>
+          <span className="mess-eyebrow--serif-caps opacity-60">· {office.name.la}</span>
         </button>
 
         {/* Language toggle */}
@@ -80,7 +80,7 @@ export default function OfficiumDetailPage({ params }: { params: Promise<{ hour:
               </button>
             ))}
           </div>
-          <span className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+          <span className="mess-eyebrow--serif-caps text-on-surface-variant liturgical-number">
             {stepIdx + 1} / {office.steps.length}
           </span>
         </div>
@@ -98,12 +98,12 @@ export default function OfficiumDetailPage({ params }: { params: Promise<{ hour:
               <MaterialIcon name={STEP_ICONS[step.type]} size={16} className="text-primary" />
             </div>
             {step.title && (
-              <h2 className="font-headline italic text-lg text-on-surface">
+              <h2 className="prayer-title prayer-title--sm text-on-surface">
                 {view === "la" ? step.title.la : view === "de" ? step.title.de : step.title.la}
               </h2>
             )}
             {step.reference && (
-              <span className="ml-auto text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant">
+              <span className="ml-auto mess-eyebrow--serif-caps text-on-surface-variant">
                 {step.reference}
               </span>
             )}
@@ -112,13 +112,13 @@ export default function OfficiumDetailPage({ params }: { params: Promise<{ hour:
           {view === "parallel" ? (
             <div className="grid md:grid-cols-2 gap-4 md:gap-8">
               <div>
-                <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">Latein</p>
+                <p className="mess-eyebrow--serif-caps text-on-surface-variant mb-2">Latein</p>
                 <p className="prayer-text text-on-surface text-sm md:text-base leading-[1.9] whitespace-pre-line">
                   {step.la}
                 </p>
               </div>
               <div className="md:border-l md:border-outline-variant/20 md:pl-8 pt-4 md:pt-0 border-t md:border-t-0 border-outline-variant/20">
-                <p className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">Deutsch</p>
+                <p className="mess-eyebrow--serif-caps text-on-surface-variant mb-2">Deutsch</p>
                 <p className="prayer-text text-on-surface text-sm md:text-base leading-[1.9] whitespace-pre-line">
                   {step.de}
                 </p>

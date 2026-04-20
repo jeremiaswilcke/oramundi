@@ -198,9 +198,47 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+/* Gebetskoerper im Messbuch-Stil: Old-Style-Ziffern, ruhiger Duktus,
+   leichtes letter-spacing fuer die EB-Garamond-Kursive. */
 .prayer-text {
-  font-family: "Noto Serif", serif;
-  line-height: 1.8;
+  font-family: var(--font-display);
+  font-feature-settings: "onum", "pnum", "liga", "calt";
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+}
+.prayer-text em,
+.prayer-text i {
+  font-style: italic;
+}
+/* Titel eines Gebets — Messbuch-Ueberschrift. */
+.prayer-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  font-size: clamp(1.35rem, 3.2vw, 1.8rem);
+}
+.prayer-title--sm {
+  font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+}
+/* Responsorien-Marker R. / V. / Oremus — in Kapitaelchen. */
+.prayer-response {
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+/* Initialbuchstabe im Fliesstext eines laengeren Gebets. */
+.prayer-body--leading::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.4rem, 5.5vw, 3.2rem);
+  line-height: 0.85;
+  padding: 0.05em 0.1em 0 0;
+  color: var(--color-primary);
 }
 
 .sacred-glow-box {
@@ -223,8 +261,10 @@ body {
 
 /* === Officium Divinum embedded content (from divinumofficium.com) === */
 .officium-content {
-  font-family: "Noto Serif", serif;
-  line-height: 1.8;
+  font-family: var(--font-display);
+  font-feature-settings: "onum", "pnum", "liga";
+  line-height: 1.75;
+  letter-spacing: 0.005em;
   color: var(--color-on-surface);
 }
 .officium-content table {
@@ -243,15 +283,22 @@ body {
   border-left: 1px solid var(--color-outline-variant);
 }
 .officium-content h2 {
+  font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.25rem;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+  letter-spacing: 0.01em;
   text-align: center;
   margin: 2rem 0 1rem;
   color: var(--color-primary);
 }
 .officium-content h3 {
-  font-style: italic;
-  font-size: 1rem;
+  font-family: var(--font-display);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  font-size: 0.95rem;
   margin: 1rem 0 0.5rem;
   color: var(--color-on-surface-variant);
 }
@@ -291,6 +338,30 @@ body {
   .officium-content tr { display: block; }
   .officium-content td { display: block; padding: 0.5rem 0; }
   .officium-content td + td { border-left: none; border-top: 1px solid var(--color-outline-variant); padding-top: 0.75rem; margin-top: 0.5rem; }
+}
+
+/* Parallelansicht fuer Officium (Latein + Deutsch nebeneinander). */
+.officium-parallel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 900px) {
+  .officium-parallel { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .officium-parallel .officium-parallel-col + .officium-parallel-col {
+    border-left: 1px solid var(--color-outline-variant);
+    padding-left: 2.5rem;
+  }
+}
+.officium-parallel-label {
+  font-family: var(--font-display);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  font-size: 0.85rem;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 0.75rem;
 }
 
 /* === Skeleton Shimmer === */

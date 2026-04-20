@@ -451,7 +451,7 @@ export default function PrayPage() {
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7.5rem)] px-6 pb-20">
         <div className="w-full max-w-md glass-card rounded-3xl p-8 text-center editorial-shadow">
           <MaterialIcon name="restart_alt" size={48} className="text-primary mb-4 mx-auto" />
-          <h2 className="font-headline italic text-2xl text-on-surface mb-2">
+          <h2 className="prayer-title text-on-surface mb-2">
             {locale === "de" ? "Gebet fortsetzen?" : "Resume prayer?"}
           </h2>
           <p className="text-on-surface-variant text-sm mb-1">
@@ -541,7 +541,7 @@ export default function PrayPage() {
           </div>
         )}
 
-        <h3 className="font-headline italic text-lg text-on-surface mb-1">
+        <h3 className="prayer-title prayer-title--sm text-on-surface mb-1">
           {mystery.title[locale]}
         </h3>
         <p className="text-xs text-on-surface-variant italic">
@@ -704,7 +704,7 @@ export default function PrayPage() {
       {/* Prayer Text Card */}
       <div className="relative z-10 mb-4">
         <div className="w-full bg-surface-container-lowest/60 backdrop-blur-md rounded-3xl p-6 text-center">
-          <h2 className="font-headline text-2xl text-on-surface italic mb-2">
+          <h2 className="prayer-title text-on-surface mb-2">
             {getPrayerTitle()}
           </h2>
           {step.type === "hail-mary" && "bead" in step && (
