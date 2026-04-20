@@ -209,6 +209,18 @@
     "saveFailed": "Konnte den Lesetag nicht speichern.",
     "closePopup": "Bibel-Popup schlie\u00DFen",
     "streakDays": "{count, plural, one {# Tag in Folge} other {# Tage in Folge}}",
-    "streakTodayRead": "{count, plural, one {# Tag in Folge - heute gelesen} other {# Tage in Folge - heute gelesen}}"
+    "streakTodayRead": "{count, plural, one {# Tag in Folge - heute gelesen} other {# Tage in Folge - heute gelesen}}",
+    "startDialogTitle": "Wo m\u00F6chten Sie einsteigen?",
+    "startDialogDescription": "Der Bibelplan umfasst 365 Tage. Wenn Sie heute neu beginnen, w\u00E4ren Sie bei Tag {day} - so passt die Lesung zum Kalenderjahr. Sie k\u00F6nnen aber auch einen beliebigen Tag w\u00E4hlen und von dort ausgehen.",
+    "startDialogTodayLabel": "Heute einsteigen",
+    "startDialogCustomLabel": "Oder anderen Tag w\u00E4hlen",
+    "startDialogConfirm": "Bei Tag {day} starten",
+    "startDialogCancel": "Abbrechen",
+    "startDialogErrorGeneric": "Konnte den Starttag nicht speichern.",
+    "changePlanStart": "Plan verschieben",
+    "fontSizeLabel": "Schrift",
+    "fontSizeSmall": "S",
+    "fontSizeMedium": "M",
+    "fontSizeLarge": "L"
   }
 }

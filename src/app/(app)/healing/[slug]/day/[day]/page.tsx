@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations, getLocale } from "next-intl/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { MaterialIcon } from "@/components/material-icon";
-import { getPlanDayForDate } from "@/lib/bible-date";
+import { fetchServerPlanDay } from "@/lib/bible-plan";
 import { CompleteDayButton } from "./complete-day-button";
 
 const ROMAN_NUMERALS = [
@@ -57,6 +57,8 @@ export default async function HealingDayPage({
 
   if (!program) notFound();
   if (dayNumber > program.duration_days) notFound();
+
+  const bibleDay = await fetchServerPlanDay(supabase);
 
   const { data: dayData } = await supabase
     .from("healing_program_days")
@@ -193,7 +195,7 @@ export default async function HealingDayPage({
                 <MaterialIcon name="chevron_right" size={18} className="text-on-surface-variant/50" />
               </Link>
               <Link
-                href={`/bibel/lesen?tag=${getPlanDayForDate()}`}
+                href={`/bibel/lesen?tag=${bibleDay}`}
                 className="flex items-center justify-between gap-3 rounded-2xl bg-surface/60 px-4 py-3 hover:bg-surface transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -201,7 +203,7 @@ export default async function HealingDayPage({
                   <span className="text-sm text-on-surface">
                     {t("bibleInYear")}
                     <span className="ml-2 text-xs text-on-surface-variant/70">
-                      · {t("dayOfYear", { day: getPlanDayForDate() })}
+                      · {t("dayOfYear", { day: bibleDay })}
                     </span>
                   </span>
                 </div>

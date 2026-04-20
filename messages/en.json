@@ -209,6 +209,18 @@
     "saveFailed": "Could not save the reading day.",
     "closePopup": "Close Bible popup",
     "streakDays": "{count, plural, one {# day in a row} other {# days in a row}}",
-    "streakTodayRead": "{count, plural, one {# day in a row - read today} other {# days in a row - read today}}"
+    "streakTodayRead": "{count, plural, one {# day in a row - read today} other {# days in a row - read today}}",
+    "startDialogTitle": "Where would you like to begin?",
+    "startDialogDescription": "The Bible plan has 365 days. If you start today, you would be on day {day} - aligned with the calendar year. You can also pick any other day to begin from.",
+    "startDialogTodayLabel": "Begin today",
+    "startDialogCustomLabel": "Or pick another day",
+    "startDialogConfirm": "Start at day {day}",
+    "startDialogCancel": "Cancel",
+    "startDialogErrorGeneric": "Could not save the start day.",
+    "changePlanStart": "Change start",
+    "fontSizeLabel": "Text size",
+    "fontSizeSmall": "S",
+    "fontSizeMedium": "M",
+    "fontSizeLarge": "L"
   }
 }

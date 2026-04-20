@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
-import { getPlanDayForDate } from "@/lib/bible-date";
+import { defaultAnchorToday, getEffectivePlanDay } from "@/lib/bible-plan";
+import { useBiblePlanAnchor } from "@/lib/use-bible-plan-anchor";
 import { OFFICIUM_OFFICES } from "@/data/officium-divinum";
 
 export default function OfficiumIndex() {
   const locale = useLocale() as "de" | "en";
-  const currentBibleDay = getPlanDayForDate();
+  const { anchor } = useBiblePlanAnchor();
+  const currentBibleDay = getEffectivePlanDay(anchor ?? defaultAnchorToday());
   return (
     <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
       <p className="mess-eyebrow--serif-caps text-primary mb-3">Horae Canonicae</p>

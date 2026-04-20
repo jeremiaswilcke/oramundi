@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { getPlanDayForDate } from "@/lib/bible-date";
+import { defaultAnchorToday, getEffectivePlanDay } from "@/lib/bible-plan";
+import { useBiblePlanAnchor } from "@/lib/use-bible-plan-anchor";
 import type { DayResponse } from "@/lib/bible-types";
 
 import { BibleStreakBadge } from "./bible-streak-badge";
@@ -20,14 +21,16 @@ function previewText(verses: DayResponse["at"][number]["verses"]) {
 export function BibleDailyCard() {
   const t = useTranslations("bible");
   const locale = useLocale();
+  const { anchor, loaded } = useBiblePlanAnchor();
   const [currentDay, setCurrentDay] = useState<number | null>(null);
   const [dayData, setDayData] = useState<DayResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setCurrentDay(getPlanDayForDate());
-  }, []);
+    if (!loaded) return;
+    setCurrentDay(getEffectivePlanDay(anchor ?? defaultAnchorToday()));
+  }, [anchor, loaded]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { MaterialIcon } from "@/components/material-icon";
-import { getPlanDayForDate } from "@/lib/bible-date";
+import { getEffectivePlanDay, defaultAnchorToday } from "@/lib/bible-plan";
+import { useBiblePlanAnchor } from "@/lib/use-bible-plan-anchor";
 import { PRAYER_LIBRARY } from "@/data/prayer-library";
 
 export default function LibraryPage() {
   const locale = useLocale() as "de" | "en";
   const t = useTranslations("library");
   const tb = useTranslations("bible");
+  const { anchor, loaded } = useBiblePlanAnchor();
   const [currentBibleDay, setCurrentBibleDay] = useState<number | null>(null);
 
   useEffect(() => {
-    setCurrentBibleDay(getPlanDayForDate());
-  }, []);
+    if (!loaded) return;
+    setCurrentBibleDay(
+      getEffectivePlanDay(anchor ?? defaultAnchorToday()),
+    );
+  }, [anchor, loaded]);
 
   const devotions = PRAYER_LIBRARY.filter((p) => p.category === "devotion");
   const litanies = PRAYER_LIBRARY.filter((p) => p.category === "litany");

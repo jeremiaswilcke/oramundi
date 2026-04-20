@@ -4,7 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { getPlanDayForDate } from "@/lib/bible-date";
+import {
+  defaultAnchorToday,
+  getEffectivePlanDay,
+} from "@/lib/bible-plan";
+import { useBiblePlanAnchor } from "@/lib/use-bible-plan-anchor";
 import type {
   BibleMeta,
   BibleMetaBook,
@@ -15,6 +19,7 @@ import type {
 } from "@/lib/bible-types";
 
 import { BibleMarkReadButton } from "./bible-mark-read-button";
+import { BibleStartDialog } from "./bible-start-dialog";
 import { BibleStreakBadge } from "./bible-streak-badge";
 import { MaterialIcon } from "./material-icon";
 
@@ -28,7 +33,22 @@ interface BiblePosition {
 }
 
 const POSITION_KEY = "ora_mundi_bible_pos";
+const FONT_SIZE_KEY = "ora_mundi_bible_font";
 const DEUTEROCANONICAL_BOOKS = new Set([67, 68, 69, 70, 71, 72, 73]);
+
+type FontSize = "sm" | "md" | "lg";
+
+const FONT_CLASSES: Record<FontSize, string> = {
+  sm: "text-base leading-[2]",
+  md: "text-lg leading-[2.1]",
+  lg: "text-xl leading-[2.2]",
+};
+
+const DROP_CAP_CLASSES: Record<FontSize, string> = {
+  sm: "text-[4.5rem]",
+  md: "text-[5rem]",
+  lg: "text-[5.5rem]",
+};
 
 function clampDay(value: number) {
   return Math.min(Math.max(Math.trunc(value), 1), 365);
@@ -46,6 +66,7 @@ function buildChapterCopyText(portion: { name: string; c: number; verses: Verse[
 export function BibleReader({ initialDay }: BibleReaderProps) {
   const t = useTranslations("bible");
   const router = useRouter();
+  const { anchor, authenticated, loaded, setAnchor } = useBiblePlanAnchor();
   const [currentDay, setCurrentDay] = useState(initialDay ?? 1);
 
   const [mode, setMode] = useState<"read" | "plan">(initialDay ? "plan" : "read");
@@ -60,10 +81,39 @@ export function BibleReader({ initialDay }: BibleReaderProps) {
   const [chapterLoading, setChapterLoading] = useState(false);
   const [dayLoading, setDayLoading] = useState(false);
   const [copyKey, setCopyKey] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<FontSize>("md");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
-    setCurrentDay(getPlanDayForDate());
+    if (!loaded) return;
+    const effective = anchor
+      ? getEffectivePlanDay(anchor)
+      : getEffectivePlanDay(defaultAnchorToday());
+    setCurrentDay(effective);
+    if (initialDay == null) {
+      setSelectedDay(effective);
+    }
+  }, [anchor, loaded, initialDay]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    if (authenticated && !anchor) {
+      setDialogOpen(true);
+    }
+  }, [loaded, authenticated, anchor]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(FONT_SIZE_KEY);
+    if (saved === "sm" || saved === "md" || saved === "lg") {
+      setFontSize(saved);
+    }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(FONT_SIZE_KEY, fontSize);
+  }, [fontSize]);
 
   useEffect(() => {
     let cancelled = false;
@@ -243,11 +293,38 @@ export function BibleReader({ initialDay }: BibleReaderProps) {
   }
 
   function renderVerses(bookName: string, chapterNumber: number, verses: Verse[], prefix: string) {
+    const fontClass = FONT_CLASSES[fontSize];
+    const dropCapSize = DROP_CAP_CLASSES[fontSize];
+
     return (
-      <div className="prayer-text text-lg leading-[2.1] text-on-surface">
-        {verses.map((verse) => {
+      <div className={`prayer-text text-on-surface ${fontClass}`}>
+        {verses.map((verse, idx) => {
           const key = `${prefix}-${verse.n}`;
           const copied = copyKey === key;
+          const isOpening = idx === 0 && verse.t.length > 0;
+
+          if (isOpening) {
+            const firstChar = verse.t.charAt(0);
+            const rest = verse.t.slice(1);
+            return (
+              <button
+                key={verse.n}
+                onClick={() => copyText(key, buildVerseCopyText(bookName, chapterNumber, verse))}
+                className={`mb-1 inline rounded-xl px-1 py-0.5 text-left transition-colors hover:bg-primary/5 ${
+                  copied ? "bg-primary/10 text-primary" : ""
+                }`}
+              >
+                <span
+                  className={`float-left mr-2 mt-1 font-headline italic leading-[0.85] text-primary ${dropCapSize}`}
+                  aria-hidden="true"
+                >
+                  {firstChar}
+                </span>
+                <span className="sr-only">{verse.n} </span>
+                {rest}{" "}
+              </button>
+            );
+          }
 
           return (
             <button
@@ -271,6 +348,10 @@ export function BibleReader({ initialDay }: BibleReaderProps) {
     setExpandedBook(portion.bn);
     setSelectedTestament(portion.bn <= 39 || DEUTEROCANONICAL_BOOKS.has(portion.bn) ? "at" : "nt");
     setMode("read");
+  }
+
+  async function handleAnchorConfirm(planDay: number) {
+    await setAnchor(planDay);
   }
 
   return (
@@ -297,11 +378,51 @@ export function BibleReader({ initialDay }: BibleReaderProps) {
           </div>
 
           <div className="mt-4 flex items-center justify-between gap-3">
-            <div>
+            <div className="min-w-0">
               <h1 className="font-headline text-2xl italic text-on-surface">{t("yearTitle")}</h1>
               <p className="text-sm text-on-surface-variant">{t("readerIntro")}</p>
             </div>
-            <BibleStreakBadge />
+            <div className="flex items-center gap-1.5">
+              <BibleStreakBadge />
+              {authenticated ? (
+                <button
+                  type="button"
+                  onClick={() => setDialogOpen(true)}
+                  aria-label={t("changePlanStart")}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant transition-colors hover:text-primary"
+                >
+                  <MaterialIcon name="tune" size={18} />
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-surface-container-low px-3 py-2">
+            <span className="text-[11px] uppercase tracking-[0.2em] text-on-surface-variant">
+              {t("fontSizeLabel")}
+            </span>
+            <div className="flex gap-1">
+              {(["sm", "md", "lg"] as const).map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => setFontSize(size)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                    fontSize === size
+                      ? "bg-primary text-on-primary"
+                      : "bg-surface-container-lowest text-on-surface-variant"
+                  }`}
+                >
+                  {t(
+                    size === "sm"
+                      ? "fontSizeSmall"
+                      : size === "md"
+                      ? "fontSizeMedium"
+                      : "fontSizeLarge",
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {mode === "read" ? (
@@ -599,6 +720,13 @@ export function BibleReader({ initialDay }: BibleReaderProps) {
           )}
         </section>
       </div>
+
+      <BibleStartDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onConfirm={handleAnchorConfirm}
+        initialPlanDay={anchor?.planDay}
+      />
     </div>
   );
 }
