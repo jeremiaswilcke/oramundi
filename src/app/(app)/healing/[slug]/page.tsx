@@ -39,34 +39,41 @@ export default async function HealingProgramPage({
   const intro = locale === "de" ? program.intro_de : program.intro_en;
 
   return (
-    <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
+    <div className="min-h-[calc(100vh-7.5rem)] px-5 pt-6 pb-8 sm:px-8 md:px-10 max-w-2xl mx-auto">
       <Link
         href="/healing"
-        className="inline-flex items-center gap-1 text-on-surface-variant text-sm mb-4"
+        className="inline-flex items-center gap-1 text-on-surface-variant text-sm mb-6"
       >
         <MaterialIcon name="chevron_left" size={20} />
-        {t("backToOverview")}
+        <span className="all-smallcaps">{t("backToOverview")}</span>
       </Link>
 
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <MaterialIcon name={program.icon ?? "healing"} size={28} className="text-primary" />
+      <header className="mb-8 border-b border-outline-variant/50 pb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+            <MaterialIcon name={program.icon ?? "healing"} size={28} className="text-primary" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="mess-eyebrow--serif-caps text-primary">
+              {t("daysTotal", { total: program.duration_days })}
+            </p>
+            <h1 className="mess-display mess-display--xl text-on-surface mt-3">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-3 text-on-surface-variant italic font-[var(--font-display)] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed">
+                {subtitle}
+              </p>
+            )}
+          </div>
         </div>
-        <div>
-          <h1 className="font-headline italic text-3xl text-on-surface">{title}</h1>
-          {subtitle && <p className="text-sm text-on-surface-variant">{subtitle}</p>}
-        </div>
-      </div>
+      </header>
 
       {intro && (
-        <div className="rounded-3xl glass-card p-5 mb-6 text-sm leading-relaxed text-on-surface whitespace-pre-line">
+        <div className="mb-10 drop-cap text-on-surface leading-[1.8] whitespace-pre-line text-[0.98rem] sm:text-base">
           {intro}
         </div>
       )}
-
-      <p className="text-[11px] uppercase tracking-widest text-on-surface-variant mb-4">
-        {t("daysTotal", { total: program.duration_days })}
-      </p>
 
       {progress ? (
         <Link

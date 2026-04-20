@@ -29,11 +29,18 @@ export default async function HealingPage() {
   );
 
   return (
-    <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
-      <h1 className="font-headline italic text-4xl text-on-surface mb-2">
-        {t("title")}
-      </h1>
-      <p className="text-on-surface-variant text-sm mb-6">{t("subtitle")}</p>
+    <div className="min-h-[calc(100vh-7.5rem)] px-5 pt-6 pb-8 sm:px-8 md:px-10 max-w-2xl mx-auto">
+      <header className="mb-8 border-b border-outline-variant/50 pb-6">
+        <p className="mess-eyebrow--serif-caps text-primary">
+          Ora Mundi
+        </p>
+        <h1 className="mess-display mess-display--xl text-on-surface mt-3">
+          {t("title")}
+        </h1>
+        <p className="mt-4 text-on-surface-variant italic font-[var(--font-display)] text-[clamp(1rem,2vw,1.15rem)] leading-relaxed">
+          {t("subtitle")}
+        </p>
+      </header>
 
       <Link
         href="/healing/sos"

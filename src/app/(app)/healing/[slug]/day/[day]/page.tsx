@@ -6,6 +6,35 @@ import { MaterialIcon } from "@/components/material-icon";
 import { getPlanDayForDate } from "@/lib/bible-date";
 import { CompleteDayButton } from "./complete-day-button";
 
+const ROMAN_NUMERALS = [
+  ["M", 1000],
+  ["CM", 900],
+  ["D", 500],
+  ["CD", 400],
+  ["C", 100],
+  ["XC", 90],
+  ["L", 50],
+  ["XL", 40],
+  ["X", 10],
+  ["IX", 9],
+  ["V", 5],
+  ["IV", 4],
+  ["I", 1],
+] as const;
+
+function toRoman(n: number): string {
+  if (!Number.isFinite(n) || n <= 0) return "";
+  let remainder = Math.floor(n);
+  let out = "";
+  for (const [symbol, value] of ROMAN_NUMERALS) {
+    while (remainder >= value) {
+      out += symbol;
+      remainder -= value;
+    }
+  }
+  return out;
+}
+
 export default async function HealingDayPage({
   params,
 }: {
@@ -59,77 +88,97 @@ export default async function HealingDayPage({
       : dayData.action_en
     : null;
 
+  const dayRoman = toRoman(dayNumber);
+  const totalRoman = toRoman(program.duration_days);
+
   return (
-    <div className="min-h-[calc(100vh-7.5rem)] px-6 pt-6 pb-8">
+    <div className="min-h-[calc(100vh-7.5rem)] px-5 pt-6 pb-8 sm:px-8 md:px-10 max-w-2xl mx-auto">
       <Link
         href={`/healing/${slug}`}
-        className="inline-flex items-center gap-1 text-on-surface-variant text-sm mb-4"
+        className="inline-flex items-center gap-1 text-on-surface-variant text-sm mb-6"
       >
         <MaterialIcon name="chevron_left" size={20} />
-        {title}
+        <span className="all-smallcaps">{title}</span>
       </Link>
 
-      <p className="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
-        {t("dayOf", { current: dayNumber, total: program.duration_days })}
-      </p>
+      <header className="mb-10 border-b border-outline-variant/50 pb-6">
+        <p className="mess-eyebrow--serif-caps text-primary">
+          {t("dayOf", { current: dayNumber, total: program.duration_days })}
+        </p>
+        <div className="mt-3 flex items-baseline gap-4">
+          <span
+            className="liturgical-number text-primary/70"
+            style={{ fontSize: "clamp(2.4rem, 7vw, 3.75rem)" }}
+            aria-hidden="true"
+          >
+            {dayRoman}
+            <span className="text-outline/70">
+              {" / "}
+              {totalRoman}
+            </span>
+          </span>
+        </div>
+      </header>
 
       {!dayData ? (
-        <div className="rounded-3xl glass-card p-6 mt-6 text-center">
+        <div className="rounded-3xl glass-card p-6 text-center">
           <p className="text-sm text-on-surface-variant">{t("dayNotAvailable")}</p>
         </div>
       ) : (
-        <div className="space-y-6 mt-6">
+        <div className="space-y-8">
           {scripture && (
-            <section className="rounded-3xl glass-card p-5">
-              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
+            <section>
+              <h2 className="mess-eyebrow--serif-caps text-primary">
                 {t("scripture")}
                 {dayData.scripture_ref && (
-                  <span className="ml-2 text-on-surface-variant/60 normal-case tracking-normal">
+                  <span className="ml-2 text-on-surface-variant/70 normal-case tracking-normal">
                     · {dayData.scripture_ref}
                   </span>
                 )}
               </h2>
-              <p className="font-headline italic text-lg text-on-surface leading-relaxed whitespace-pre-line">
-                {scripture}
-              </p>
+              <blockquote className="mt-4 border-l-2 border-primary/30 pl-5 py-1">
+                <p className="font-[var(--font-display)] italic text-on-surface leading-relaxed whitespace-pre-line text-[clamp(1.1rem,2.3vw,1.35rem)]">
+                  {scripture}
+                </p>
+              </blockquote>
             </section>
           )}
 
           {reflection && (
-            <section className="rounded-3xl glass-card p-5">
-              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
+            <section>
+              <h2 className="mess-eyebrow--serif-caps text-primary">
                 {t("impulse")}
               </h2>
-              <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
+              <p className="mt-4 drop-cap text-on-surface leading-[1.75] whitespace-pre-line text-[0.98rem] sm:text-base">
                 {reflection}
               </p>
             </section>
           )}
 
           {prayer && (
-            <section className="rounded-3xl glass-card p-5">
-              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
+            <section className="rounded-2xl bg-surface-container-low/70 p-6 border border-outline-variant/30">
+              <h2 className="mess-eyebrow--serif-caps text-primary mb-3">
                 {t("prayer")}
               </h2>
-              <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
+              <p className="font-[var(--font-display)] text-on-surface italic leading-relaxed whitespace-pre-line text-[clamp(1rem,2vw,1.15rem)]">
                 {prayer}
               </p>
             </section>
           )}
 
           {action && (
-            <section className="rounded-3xl glass-card p-5">
-              <h2 className="text-[10px] uppercase tracking-widest font-semibold text-on-surface-variant mb-2">
+            <section>
+              <h2 className="mess-eyebrow--serif-caps text-primary">
                 {t("action")}
               </h2>
-              <p className="text-sm text-on-surface leading-relaxed whitespace-pre-line">
+              <p className="mt-4 text-on-surface leading-[1.7] whitespace-pre-line text-[0.98rem] sm:text-base">
                 {action}
               </p>
             </section>
           )}
 
-          <section className="rounded-3xl bg-primary-container/20 border border-primary/10 p-5">
-            <h2 className="text-[10px] uppercase tracking-widest font-semibold text-primary mb-3">
+          <section className="mt-10 rounded-3xl bg-primary-container/20 border border-primary/10 p-5">
+            <h2 className="mess-eyebrow--serif-caps text-primary mb-3">
               {t("dailyGround")}
             </h2>
             <div className="space-y-2">
@@ -163,7 +212,7 @@ export default async function HealingDayPage({
         </div>
       )}
 
-      <div className="mt-8">
+      <div className="mt-10">
         <CompleteDayButton
           programId={program.id}
           slug={slug}

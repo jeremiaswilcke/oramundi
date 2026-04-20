@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
+import { EB_Garamond, Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { CookieBanner } from "@/components/cookie-banner";
@@ -16,6 +16,16 @@ const notoSerif = Noto_Serif({
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// EB Garamond — Messbuch-Display mit Kapitaelchen und Old-Style-Figures.
+// Laeuft im CSS als var(--font-eb-garamond) bzw. var(--font-display).
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -113,7 +123,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${notoSerif.variable} ${plusJakarta.variable} h-full antialiased`}
+      className={`${notoSerif.variable} ${plusJakarta.variable} ${ebGaramond.variable} h-full antialiased`}
     >
       <head>
         <link
